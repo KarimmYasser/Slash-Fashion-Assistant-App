@@ -1,6 +1,8 @@
 import 'package:fashion_assistant/screens/home_screen.dart';
+import 'package:fashion_assistant/screens/login_screen.dart';
 import 'package:fashion_assistant/screens/total_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:fashion_assistant/utils/theme/theme.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 void main() {
@@ -16,7 +18,10 @@ class FashionAssistant extends StatelessWidget {
         designSize: const Size(375, 812),
         minTextAdapt: true,
         builder: (context, child) {
-          return const MaterialApp(home: TotalScreens());
+          return MaterialApp(
+            home: const TotalScreens(),
+            theme: SAppTheme.lightTheme,
+          );
         });
   }
 }

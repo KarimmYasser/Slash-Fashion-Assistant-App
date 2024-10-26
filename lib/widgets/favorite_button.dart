@@ -33,7 +33,7 @@ class _FavoriteButtonState extends State<FavoriteButton> {
             : Icon(
                 Icons.favorite_border,
                 key: ValueKey('unliked'),
-                color: Colors.grey,
+                color: OurColors.iconPrimary,
                 size: 28,
               ),
       ),

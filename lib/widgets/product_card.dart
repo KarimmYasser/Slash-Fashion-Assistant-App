@@ -45,7 +45,7 @@ class _ProductCardState extends State<ProductCard> {
               borderRadius: BorderRadius.circular(40.r),
               boxShadow: [
                 BoxShadow(
-                  color: const Color.fromARGB(255, 248, 243, 243),
+                  color: OurColors.softGrey,
                   blurRadius: 10.r,
                   offset: const Offset(0, 5),
                 ),

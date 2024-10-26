@@ -16,7 +16,7 @@ class _TotalScreensState extends State<TotalScreens> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: OurColors.backgroundColor,
       body: PageView(
         controller: _pageController,
         onPageChanged: (index) {

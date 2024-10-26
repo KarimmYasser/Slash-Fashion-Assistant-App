@@ -23,7 +23,7 @@ class HomeScreen extends StatelessWidget {
               onPressed: () {},
               icon: Icon(
                 FontAwesomeIcons.searchengin,
-                color: Colors.grey,
+                color: OurColors.iconPrimary,
               ),
             ),
           ],

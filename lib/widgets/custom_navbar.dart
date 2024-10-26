@@ -38,11 +38,11 @@ class _CustomNavbarState extends State<CustomNavbar> {
         widget.activeScreen == 2
             ? Icon(
                 FontAwesomeIcons.solidComment,
-                color: Colors.white,
+                color: OurColors.white,
               )
             : Icon(
                 FontAwesomeIcons.comment,
-                color: Colors.grey,
+                color: OurColors.iconPrimary,
               ),
         widget.activeScreen == 3
             ? Image.asset('assets/icons/cartw.png',
