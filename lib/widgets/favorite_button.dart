@@ -1,3 +1,4 @@
+import 'package:fashion_assistant/constants.dart';
 import 'package:flutter/material.dart';
 
 class FavoriteButton extends StatefulWidget {
@@ -26,13 +27,13 @@ class _FavoriteButtonState extends State<FavoriteButton> {
             ? Icon(
                 Icons.favorite,
                 key: ValueKey('liked'),
-                color: Colors.red,
+                color: OurColors.primaryColor,
                 size: 28,
               )
             : Icon(
                 Icons.favorite_border,
                 key: ValueKey('unliked'),
-                color: Colors.black54,
+                color: Colors.grey,
                 size: 28,
               ),
       ),

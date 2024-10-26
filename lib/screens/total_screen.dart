@@ -1,5 +1,5 @@
+import 'package:fashion_assistant/constants.dart';
 import 'package:fashion_assistant/tap_map.dart';
-import 'package:fashion_assistant/widgets/custom_button.dart';
 import 'package:fashion_assistant/widgets/custom_navbar.dart';
 import 'package:flutter/material.dart';
 

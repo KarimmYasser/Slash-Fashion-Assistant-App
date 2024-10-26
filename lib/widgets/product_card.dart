@@ -1,3 +1,4 @@
+import 'package:fashion_assistant/constants.dart';
 import 'package:fashion_assistant/widgets/favorite_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -8,10 +9,16 @@ class ProductCard extends StatefulWidget {
       required this.brandShowcase,
       required this.description,
       required this.height,
-      required this.width});
+      required this.width,
+      required this.discount,
+      required this.price,
+      required this.coin,
+      required this.image});
   final String brandShowcase;
   final String description;
+  final String discount, price, coin;
   final double height, width;
+  final String image;
   @override
   State<ProductCard> createState() => _ProductCardState();
 }
@@ -34,11 +41,11 @@ class _ProductCardState extends State<ProductCard> {
             margin: EdgeInsets.all(16),
             padding: EdgeInsets.all(12),
             decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(50.r),
+              color: OurColors.containerBackgroundColor,
+              borderRadius: BorderRadius.circular(40.r),
               boxShadow: [
                 BoxShadow(
-                  color: const Color.fromARGB(255, 202, 198, 198),
+                  color: const Color.fromARGB(255, 248, 243, 243),
                   blurRadius: 10.r,
                   offset: const Offset(0, 5),
                 ),
@@ -52,8 +59,8 @@ class _ProductCardState extends State<ProductCard> {
                     ClipRRect(
                       borderRadius: BorderRadius.circular(40.r),
                       child: Image.network(
-                        'https://media.istockphoto.com/id/1398610798/photo/young-woman-in-linen-shirt-shorts-and-high-heels-pointing-to-the-side-and-talking.jpg?s=1024x1024&w=is&k=20&c=IdY440I0pLdmANsNZRXhjSS7K9Q-Xxvnwf4YzH9qQbQ=',
-                        height: 120.h,
+                        widget.image,
+                        height: widget.height / 3,
                         width: double.infinity,
                         fit: BoxFit.cover,
                       ),
@@ -65,13 +72,13 @@ class _ProductCardState extends State<ProductCard> {
                         padding: EdgeInsets.symmetric(
                             horizontal: 12.w, vertical: 4.h),
                         decoration: BoxDecoration(
-                          color: Colors.white,
+                          color: OurColors.containerBackgroundColor,
                           borderRadius: BorderRadius.circular(16.r),
                         ),
                         child: const Text(
                           'Buy now',
                           style: TextStyle(
-                            color: Color.fromARGB(255, 108, 105, 105),
+                            color: OurColors.secondaryTextColor,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -80,20 +87,39 @@ class _ProductCardState extends State<ProductCard> {
                   ],
                 ),
                 SizedBox(height: 12.h),
-                Text(
-                  widget.brandShowcase,
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16.sp,
-                  ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      widget.brandShowcase,
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16.sp,
+                      ),
+                    ),
+                    Text(
+                      widget.price + ' ' + widget.coin,
+                      style: TextStyle(
+                          color: OurColors.primaryButtonBackgroundColor),
+                    )
+                  ],
                 ),
                 SizedBox(height: 4.h),
-                Text(
-                  widget.description,
-                  style: TextStyle(
-                    color: Colors.grey[600],
-                    fontSize: 14.sp,
-                  ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      widget.description,
+                      style: TextStyle(
+                        color: OurColors.secondaryTextColor,
+                        fontSize: 14.sp,
+                      ),
+                    ),
+                    Text(
+                      '-' + widget.discount + '%',
+                      style: TextStyle(color: OurColors.secondaryColor),
+                    )
+                  ],
                 ),
                 SizedBox(height: 12.h),
                 Row(
@@ -101,12 +127,12 @@ class _ProductCardState extends State<ProductCard> {
                   children: [
                     Row(
                       children: [
-                        const Icon(Icons.label, color: Colors.black54),
+                        const Icon(Icons.label, color: OurColors.textColor),
                         SizedBox(width: 4.w),
                         const Text(
                           'Browse',
                           style: TextStyle(
-                            color: Colors.black54,
+                            color: OurColors.textColor,
                             fontWeight: FontWeight.bold,
                           ),
                         ),

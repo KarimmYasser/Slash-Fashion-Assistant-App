@@ -13,13 +13,14 @@ class CustomButton extends StatelessWidget {
       child: ElevatedButton(
         onPressed: onPressed,
         style: ElevatedButton.styleFrom(
-            backgroundColor: kPrimaryColor,
+            backgroundColor: OurColors.primaryButtonBackgroundColor,
             minimumSize: Size(double.infinity, 60.h),
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12))),
         child: Text(
           text,
-          style: TextStyle(color: kButtonTextColor, fontSize: 16.sp),
+          style: TextStyle(
+              color: OurColors.primaryButtonTextColor, fontSize: 16.sp),
         ),
       ),
     );

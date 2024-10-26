@@ -2,6 +2,7 @@ import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:fashion_assistant/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class CustomNavbar extends StatefulWidget {
   const CustomNavbar(
@@ -13,14 +14,14 @@ class CustomNavbar extends StatefulWidget {
 }
 
 class _CustomNavbarState extends State<CustomNavbar> {
-  double icon_size = 30;
+  double icon_size = Sizes.iconLg;
   @override
   Widget build(BuildContext context) {
     return CurvedNavigationBar(
       index: widget.activeScreen,
-      backgroundColor: kButtonTextColor,
-      buttonBackgroundColor: kPrimaryColor,
-      color: const Color.fromARGB(255, 243, 238, 255),
+      backgroundColor: OurColors.primaryButtonTextColor,
+      buttonBackgroundColor: OurColors.primaryButtonBackgroundColor,
+      color: OurColors.containerBackgroundColor,
 
       onTap: widget.ontap,
       items: [
@@ -34,10 +35,15 @@ class _CustomNavbarState extends State<CustomNavbar> {
                 width: icon_size.w, height: icon_size.h)
             : Image.asset('assets/icons/favorite.png',
                 width: icon_size.w, height: icon_size.h),
-        Icon(
-          Icons.message_rounded,
-          color: Colors.white,
-        ),
+        widget.activeScreen == 2
+            ? Icon(
+                FontAwesomeIcons.solidComment,
+                color: Colors.white,
+              )
+            : Icon(
+                FontAwesomeIcons.comment,
+                color: Colors.grey,
+              ),
         widget.activeScreen == 3
             ? Image.asset('assets/icons/cartw.png',
                 width: icon_size.w, height: icon_size.h)
