@@ -1,6 +1,6 @@
 import 'package:fashion_assistant/constants.dart';
-import 'package:fashion_assistant/widgets/custom_button.dart';
-import 'package:fashion_assistant/widgets/custom_navbar.dart';
+// import 'package:fashion_assistant/widgets/custom_button.dart';
+// import 'package:fashion_assistant/widgets/custom_navbar.dart';
 import 'package:fashion_assistant/widgets/product_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';

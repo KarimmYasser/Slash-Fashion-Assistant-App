@@ -7,7 +7,7 @@ class SCheckboxTheme {
 
   /// Customizable Light Text Theme
   static CheckboxThemeData lightCheckboxTheme = CheckboxThemeData(
-    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(Sizes.xs)),
+    shape: const CircleBorder(eccentricity: 1),
     checkColor: WidgetStateProperty.resolveWith((states) {
       if (states.contains(WidgetState.selected)) {
         return Colors.white;
@@ -22,11 +22,13 @@ class SCheckboxTheme {
         return Colors.transparent;
       }
     }),
+    materialTapTargetSize: MaterialTapTargetSize.padded
   );
 
   /// Customizable Dark Text Theme
   static CheckboxThemeData darkCheckboxTheme = CheckboxThemeData(
-    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(Sizes.xs)),
+    shape:
+        RoundedRectangleBorder(borderRadius: BorderRadius.circular(Sizes.xs)),
     checkColor: WidgetStateProperty.resolveWith((states) {
       if (states.contains(WidgetState.selected)) {
         return Colors.white;
