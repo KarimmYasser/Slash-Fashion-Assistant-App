@@ -1,10 +1,20 @@
 import 'package:fashion_assistant/constants.dart';
+import 'package:fashion_assistant/widgets/home_page/carousel_sliders.dart';
+import 'package:fashion_assistant/widgets/home_page/hm_hzt_list.dart';
 // import 'package:fashion_assistant/widgets/custom_button.dart';
 // import 'package:fashion_assistant/widgets/custom_navbar.dart';
-import 'package:fashion_assistant/widgets/product_card.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:iconsax/iconsax.dart';
+
+final List<String> imagesPaths = [
+  "https://media.istockphoto.com/id/1398610798/photo/young-woman-in-linen-shirt-shorts-and-high-heels-pointing-to-the-side-and-talking.jpg?s=1024x1024&w=is&k=20&c=IdY440I0pLdmANsNZRXhjSS7K9Q-Xxvnwf4YzH9qQbQ=",
+  "https://media.istockphoto.com/id/1401899435/photo/image-of-young-asian-girl-posing-on-blue-background.jpg?s=2048x2048&w=is&k=20&c=PUMy-lxrA9ufa0_yjtk1_YEcj3bxd86fjD7_jCcTE3A=",
+  "https://media.istockphoto.com/id/2090871623/photo/photo-of-young-asian-woman-on-purple-background.jpg?s=2048x2048&w=is&k=20&c=lBP5Ai4G_jFo9qyYvkqkBfIWY8bFOqsNGT5oFMmyYkI=",
+  "https://media.istockphoto.com/id/1330861728/photo/asian-woman-looking-through-magnifying-glass-searching-or-investigating-something.jpg?s=2048x2048&w=is&k=20&c=I8vNRSuxc_iVlrl3HnZISMXBcuKltHpMr5C72Tkbog8=",
+  "https://media.istockphoto.com/id/2105695547/photo/photo-of-young-asian-girl-on-purple-background.jpg?s=2048x2048&w=is&k=20&c=SgL1NDoeaqYTUgryZSL9Qev1sR_TT_eZUw45N6JRcL4=",
+];
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -14,7 +24,7 @@ class HomeScreen extends StatelessWidget {
     return CustomScrollView(
       slivers: [
         SliverAppBar(
-          expandedHeight: 400.h,
+          expandedHeight: 300.h,
           pinned: true,
           toolbarHeight: Sizes.appBarHeight,
           backgroundColor: OurColors.backgroundColor,
@@ -22,7 +32,7 @@ class HomeScreen extends StatelessWidget {
             IconButton(
               onPressed: () {},
               icon: Icon(
-                FontAwesomeIcons.searchengin,
+                Iconsax.search_favorite,
                 color: OurColors.iconPrimary,
               ),
             ),
@@ -40,12 +50,9 @@ class HomeScreen extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 Expanded(
-                  child: Image.network(
-                    'https://media.istockphoto.com/id/1398610798/photo/young-woman-in-linen-shirt-shorts-and-high-heels-pointing-to-the-side-and-talking.jpg?s=1024x1024&w=is&k=20&c=IdY440I0pLdmANsNZRXhjSS7K9Q-Xxvnwf4YzH9qQbQ=',
-                    fit: BoxFit.cover,
-                    width: double.infinity,
-                  ),
-                ),
+                    child: CustomCarousalSliders(
+                  imagesPaths: imagesPaths,
+                )),
               ],
             ),
           ),
@@ -55,53 +62,66 @@ class HomeScreen extends StatelessWidget {
             padding: const EdgeInsets.all(8.0),
             child: Column(
               children: [
-                SizedBox(
-                  height: 250.h,
-                  child: ListView.builder(
-                    scrollDirection: Axis.horizontal,
-                    itemCount: 10,
-                    itemBuilder: (context, index) {
-                      return Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                        child: ProductCard(
-                          brandShowcase: 'brandShowcase',
-                          description: 'description',
-                          height: 250.h,
-                          width: 200.w,
-                          discount: '30',
-                          price: '300',
-                          coin: 'EGP',
-                          image:
-                              'https://media.istockphoto.com/id/1398610798/photo/young-woman-in-linen-shirt-shorts-and-high-heels-pointing-to-the-side-and-talking.jpg?s=1024x1024&w=is&k=20&c=IdY440I0pLdmANsNZRXhjSS7K9Q-Xxvnwf4YzH9qQbQ=',
-                        ),
-                      );
-                    },
-                  ),
-                ),
-                SizedBox(height: 16),
-                SizedBox(
-                  height: 250.h,
-                  child: ListView.builder(
-                    scrollDirection: Axis.horizontal,
-                    itemCount: 10,
-                    itemBuilder: (context, index) {
-                      return Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                        child: ProductCard(
-                          brandShowcase: 'Another Brand',
-                          description: 'Another product description',
-                          height: 250.h,
-                          width: 200.w,
-                          discount: '20',
-                          price: '150',
-                          coin: 'EGP',
-                          image:
-                              'https://media.istockphoto.com/id/1398610798/photo/young-woman-in-linen-shirt-shorts-and-high-heels-pointing-to-the-side-and-talking.jpg?s=1024x1024&w=is&k=20&c=IdY440I0pLdmANsNZRXhjSS7K9Q-Xxvnwf4YzH9qQbQ=',
-                        ),
-                      );
-                    },
-                  ),
-                ),
+                SizedBox(height: 16.h),
+                HorizontalList(
+                    title: 'Your Style',
+                    brandSHowcase: 'brandSHowcase',
+                    description: 'description',
+                    discount: '30',
+                    image:
+                        'https://media.istockphoto.com/id/1398610798/photo/young-woman-in-linen-shirt-shorts-and-high-heels-pointing-to-the-side-and-talking.jpg?s=1024x1024&w=is&k=20&c=IdY440I0pLdmANsNZRXhjSS7K9Q-Xxvnwf4YzH9qQbQ=',
+                    price: '300',
+                    coin: 'EGP',
+                    height: 250.h,
+                    width: 250.w),
+                SizedBox(height: 16.h),
+                HorizontalList(
+                    title: 'Trendy',
+                    brandSHowcase: 'brandSHowcase',
+                    description: 'description',
+                    discount: '30',
+                    image:
+                        'https://media.istockphoto.com/id/1398610798/photo/young-woman-in-linen-shirt-shorts-and-high-heels-pointing-to-the-side-and-talking.jpg?s=1024x1024&w=is&k=20&c=IdY440I0pLdmANsNZRXhjSS7K9Q-Xxvnwf4YzH9qQbQ=',
+                    price: '300',
+                    coin: 'EGP',
+                    height: 250.h,
+                    width: 250.w),
+                SizedBox(height: 16.h),
+                HorizontalList(
+                    title: 'Casual',
+                    brandSHowcase: 'brandSHowcase',
+                    description: 'description',
+                    discount: '30',
+                    image:
+                        'https://media.istockphoto.com/id/1398610798/photo/young-woman-in-linen-shirt-shorts-and-high-heels-pointing-to-the-side-and-talking.jpg?s=1024x1024&w=is&k=20&c=IdY440I0pLdmANsNZRXhjSS7K9Q-Xxvnwf4YzH9qQbQ=',
+                    price: '300',
+                    coin: 'EGP',
+                    height: 250.h,
+                    width: 250.w),
+                SizedBox(height: 16.h),
+                HorizontalList(
+                    title: 'Formal',
+                    brandSHowcase: 'brandSHowcase',
+                    description: 'description',
+                    discount: '30',
+                    image:
+                        'https://media.istockphoto.com/id/1398610798/photo/young-woman-in-linen-shirt-shorts-and-high-heels-pointing-to-the-side-and-talking.jpg?s=1024x1024&w=is&k=20&c=IdY440I0pLdmANsNZRXhjSS7K9Q-Xxvnwf4YzH9qQbQ=',
+                    price: '300',
+                    coin: 'EGP',
+                    height: 250.h,
+                    width: 250.w),
+                SizedBox(height: 16.h),
+                HorizontalList(
+                    title: 'Classical',
+                    brandSHowcase: 'brandSHowcase',
+                    description: 'description',
+                    discount: '30',
+                    image:
+                        'https://media.istockphoto.com/id/1398610798/photo/young-woman-in-linen-shirt-shorts-and-high-heels-pointing-to-the-side-and-talking.jpg?s=1024x1024&w=is&k=20&c=IdY440I0pLdmANsNZRXhjSS7K9Q-Xxvnwf4YzH9qQbQ=',
+                    price: '300',
+                    coin: 'EGP',
+                    height: 250.h,
+                    width: 250.w),
               ],
             ),
           ),

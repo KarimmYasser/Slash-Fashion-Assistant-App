@@ -2,7 +2,7 @@ import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:fashion_assistant/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:iconsax/iconsax.dart';
 
 class CustomNavbar extends StatefulWidget {
   const CustomNavbar(
@@ -37,11 +37,11 @@ class _CustomNavbarState extends State<CustomNavbar> {
                 width: icon_size.w, height: icon_size.h),
         widget.activeScreen == 2
             ? Icon(
-                FontAwesomeIcons.solidComment,
+                Iconsax.message,
                 color: OurColors.white,
               )
             : Icon(
-                FontAwesomeIcons.comment,
+                Iconsax.message,
                 color: OurColors.iconPrimary,
               ),
         widget.activeScreen == 3

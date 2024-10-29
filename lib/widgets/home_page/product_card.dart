@@ -1,5 +1,5 @@
 import 'package:fashion_assistant/constants.dart';
-import 'package:fashion_assistant/widgets/favorite_button.dart';
+import 'package:fashion_assistant/widgets/home_page/favorite_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -13,12 +13,14 @@ class ProductCard extends StatefulWidget {
       required this.discount,
       required this.price,
       required this.coin,
-      required this.image});
+      required this.image,
+      required this.small});
   final String brandShowcase;
   final String description;
   final String discount, price, coin;
   final double height, width;
   final String image;
+  final bool small;
   @override
   State<ProductCard> createState() => _ProductCardState();
 }
@@ -54,37 +56,15 @@ class _ProductCardState extends State<ProductCard> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Stack(
-                  children: [
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(40.r),
-                      child: Image.network(
-                        widget.image,
-                        height: widget.height / 3,
-                        width: double.infinity,
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                    Positioned(
-                      top: 8,
-                      right: 8,
-                      child: Container(
-                        padding: EdgeInsets.symmetric(
-                            horizontal: 12.w, vertical: 4.h),
-                        decoration: BoxDecoration(
-                          color: OurColors.containerBackgroundColor,
-                          borderRadius: BorderRadius.circular(16.r),
-                        ),
-                        child: const Text(
-                          'Buy now',
-                          style: TextStyle(
-                            color: OurColors.secondaryTextColor,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                    )
-                  ],
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(40.r),
+                  child: Image.network(
+                    widget.image,
+                    height:
+                        widget.small ? widget.height / 3 : widget.height / 2,
+                    width: double.infinity,
+                    fit: BoxFit.cover,
+                  ),
                 ),
                 SizedBox(height: 12.h),
                 Row(
@@ -125,18 +105,20 @@ class _ProductCardState extends State<ProductCard> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Row(
-                      children: [
-                        const Icon(Icons.label, color: OurColors.textColor),
-                        SizedBox(width: 4.w),
-                        const Text(
-                          'Browse',
-                          style: TextStyle(
-                            color: OurColors.textColor,
-                            fontWeight: FontWeight.bold,
-                          ),
+                    Container(
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 12.w, vertical: 4.h),
+                      decoration: BoxDecoration(
+                        color: OurColors.backgroundColor,
+                        borderRadius: BorderRadius.circular(16.r),
+                      ),
+                      child: const Text(
+                        'Buy now',
+                        style: TextStyle(
+                          color: OurColors.secondaryTextColor,
+                          fontWeight: FontWeight.bold,
                         ),
-                      ],
+                      ),
                     ),
                     const FavoriteButton(),
                   ],

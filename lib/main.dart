@@ -1,6 +1,7 @@
 // import 'package:fashion_assistant/screens/home_screen.dart';
 // import 'package:fashion_assistant/screens/total_screen.dart';
-import 'screens/authentication/login_screen.dart';
+import 'package:fashion_assistant/screens/total_screen.dart';
+
 import 'package:flutter/material.dart';
 import 'package:fashion_assistant/utils/theme/theme.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -20,7 +21,7 @@ class FashionAssistant extends StatelessWidget {
         minTextAdapt: true,
         builder: (context, child) {
           return GetMaterialApp(
-            home: const LoginScreen(),
+            home: const TotalScreens(),
             theme: SAppTheme.lightTheme,
           );
         });

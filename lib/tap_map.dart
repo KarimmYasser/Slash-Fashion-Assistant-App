@@ -4,6 +4,7 @@ import 'package:fashion_assistant/screens/favorite_screen.dart';
 import 'package:fashion_assistant/screens/home_screen.dart';
 import 'package:fashion_assistant/screens/profile_screen.dart';
 
+bool inHome = true;
 final List<Map<String, dynamic>> screenDetails = [
   {
     'screenName': HomeScreen(),
