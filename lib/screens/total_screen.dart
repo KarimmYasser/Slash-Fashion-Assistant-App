@@ -1,6 +1,6 @@
 import 'package:fashion_assistant/constants.dart';
 import 'package:fashion_assistant/tap_map.dart';
-import 'package:fashion_assistant/widgets/custom_navbar.dart';
+import 'package:fashion_assistant/widgets/home_page/custom_navbar.dart';
 import 'package:flutter/material.dart';
 
 class TotalScreens extends StatefulWidget {
@@ -22,6 +22,10 @@ class _TotalScreensState extends State<TotalScreens> {
         onPageChanged: (index) {
           setState(() {
             _activeScreen = index;
+            if (_activeScreen == 0)
+              inHome = true;
+            else
+              inHome = false;
           });
         },
         children: [
