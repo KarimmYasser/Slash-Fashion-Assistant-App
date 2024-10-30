@@ -3,11 +3,17 @@ import '../../screens/authentication/terms_conditons.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 
-class SignUpForm extends StatelessWidget {
+class SignUpForm extends StatefulWidget {
   const SignUpForm({
     super.key,
   });
 
+  @override
+  State<SignUpForm> createState() => _SignUpFormState();
+}
+
+class _SignUpFormState extends State<SignUpForm> {
+  bool _isPasswordVisible = false;
   @override
   Widget build(BuildContext context) {
     return Form(
@@ -68,10 +74,19 @@ class SignUpForm extends StatelessWidget {
           ),
           const SizedBox(height: Sizes.spaceBtwInputFields),
           TextFormField(
+            obscureText: !_isPasswordVisible,
             expands: false,
             decoration: InputDecoration(
               prefixIcon: const Icon(Iconsax.password_check),
-              suffixIcon: const Icon(Iconsax.eye_slash),
+              suffixIcon: IconButton(
+                icon:
+                    Icon(_isPasswordVisible ? Iconsax.eye : Iconsax.eye_slash),
+                onPressed: () {
+                  setState(() {
+                    _isPasswordVisible = !_isPasswordVisible;
+                  });
+                },
+              ),
               label: Text('Password',
                   style: Theme.of(context).textTheme.bodyLarge),
               hintText: 'Enter your password',

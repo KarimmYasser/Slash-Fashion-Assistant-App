@@ -4,10 +4,18 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 
-class LoginPageForm extends StatelessWidget {
+class LoginPageForm extends StatefulWidget {
   const LoginPageForm({
     super.key,
   });
+
+  @override
+  State<LoginPageForm> createState() => _LoginPageFormState();
+}
+
+class _LoginPageFormState extends State<LoginPageForm> {
+  bool _isRememberMeChecked = false;
+  bool _isPasswordVisible = false;
 
   @override
   Widget build(BuildContext context) {
@@ -25,11 +33,20 @@ class LoginPageForm extends StatelessWidget {
             ),
             const SizedBox(height: Sizes.spaceBtwInputFields),
             TextFormField(
-              decoration: const InputDecoration(
-                prefixIcon: Icon(Iconsax.password_check),
+              obscureText: !_isPasswordVisible,
+              decoration: InputDecoration(
+                prefixIcon: const Icon(Iconsax.password_check),
                 labelText: 'Password',
                 hintText: 'Enter your password',
-                suffixIcon: Icon(Iconsax.eye_slash),
+                suffixIcon: IconButton(
+                  icon: Icon(
+                      _isPasswordVisible ? Iconsax.eye : Iconsax.eye_slash),
+                  onPressed: () {
+                    setState(() {
+                      _isPasswordVisible = !_isPasswordVisible;
+                    });
+                  },
+                ),
               ),
             ),
             const SizedBox(height: Sizes.spaceBtwInputFields / 2),
@@ -38,12 +55,23 @@ class LoginPageForm extends StatelessWidget {
               children: <Widget>[
                 Row(
                   children: <Widget>[
-                    Checkbox(value: false, onChanged: (bool? value) {}),
+                    Checkbox(
+                        value: _isRememberMeChecked,
+                        onChanged: (bool? value) {
+                          setState(() {
+                            _isRememberMeChecked = value ?? false;
+                          });
+                        }),
                     const Text('Remember me'),
                   ],
                 ),
                 TextButton(
-                    onPressed: () {}, child: const Text('Forgot Password?')),
+                  onPressed: () {},
+                  child: const Text(
+                    'Forgot Password?',
+                    style: TextStyle(fontWeight: FontWeight.w600),
+                  ),
+                ),
               ],
             ),
             const SizedBox(height: Sizes.spaceBtwInputFields),

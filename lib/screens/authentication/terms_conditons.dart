@@ -1,10 +1,17 @@
 import '../../constants.dart';
 import 'package:flutter/material.dart';
 
-class TermsAndConditions extends StatelessWidget {
+class TermsAndConditions extends StatefulWidget {
   const TermsAndConditions({
     super.key,
   });
+
+  @override
+  State<TermsAndConditions> createState() => _TermsAndConditionsState();
+}
+
+class _TermsAndConditionsState extends State<TermsAndConditions> {
+  bool _isTermsAndConditionsChecked = true;
 
   @override
   Widget build(BuildContext context) {
@@ -14,8 +21,12 @@ class TermsAndConditions extends StatelessWidget {
           width: 24,
           height: 24,
           child: Checkbox(
-            value: true,
-            onChanged: (bool? value) {},
+            value: _isTermsAndConditionsChecked,
+            onChanged: (bool? value) {
+              setState(() {
+                          _isTermsAndConditionsChecked = value ?? false;
+                        });
+            },
           ),
         ),
         const SizedBox(width: Sizes.spaceBtwItems),
@@ -27,24 +38,17 @@ class TermsAndConditions extends StatelessWidget {
                   style: Theme.of(context).textTheme.bodySmall),
               TextSpan(
                 text: "Privacy Policy ",
-                style: Theme.of(context)
-                    .textTheme
-                    .bodyMedium!
-                    .apply(
+                style: Theme.of(context).textTheme.bodyMedium!.apply(
                       color: OurColors.primaryColor,
                       decoration: TextDecoration.underline,
                       decorationColor: OurColors.primaryColor,
                     ),
               ),
               TextSpan(
-                  text: "and ",
-                  style: Theme.of(context).textTheme.bodySmall),
+                  text: "and ", style: Theme.of(context).textTheme.bodySmall),
               TextSpan(
                 text: "Terms of use.",
-                style: Theme.of(context)
-                    .textTheme
-                    .bodyMedium!
-                    .apply(
+                style: Theme.of(context).textTheme.bodyMedium!.apply(
                       color: OurColors.primaryColor,
                       decoration: TextDecoration.underline,
                       decorationColor: OurColors.primaryColor,
