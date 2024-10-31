@@ -1,9 +1,13 @@
 import 'dart:async';
 
+import 'package:carousel_slider/carousel_options.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:fashion_assistant/constants.dart';
+import 'package:fashion_assistant/screens/home_screen.dart';
 import 'package:fashion_assistant/tap_map.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:iconsax/iconsax.dart';
 
 late List<Widget> _pages;
 int _activePage = 0;
@@ -23,22 +27,25 @@ class CustomCarousalSliders extends StatefulWidget {
 class _CustomCarousalSlidersState extends State<CustomCarousalSliders> {
   final PageController _pageController = PageController(initialPage: 0);
   bool isAutoPlayEnabled = true;
-  void stratTimer() {
-    _timer = Timer.periodic(Duration(seconds: 3), (timer) {
-      if (inHome & isAutoPlayEnabled) {
-        setState(() {
-          showDetails = false;
-        });
-        if (_pageController.page == widget.imagesPaths.length - 1) {
-          _pageController.animateToPage(0,
-              duration: Duration(milliseconds: 500), curve: Curves.easeInOut);
-        } else {
-          _pageController.nextPage(
-              duration: Duration(milliseconds: 500), curve: Curves.easeInOut);
-        }
-      }
-    });
-  }
+  int _activePage = 0;
+  final CarouselSliderController _carouselController =
+      CarouselSliderController();
+  // void stratTimer() {
+  //   _timer = Timer.periodic(Duration(seconds: 3), (timer) {
+  //     if (inHome & isAutoPlayEnabled) {
+  //       setState(() {
+  //         showDetails = false;
+  //       });
+  //       if (_pageController.page == widget.imagesPaths.length - 1) {
+  //         _pageController.animateToPage(0,
+  //             duration: Duration(milliseconds: 500), curve: Curves.easeInOut);
+  //       } else {
+  //         _pageController.nextPage(
+  //             duration: Duration(milliseconds: 500), curve: Curves.easeInOut);
+  //       }
+  //     }
+  //   });
+  // }
 
   @override
   void initState() {
@@ -48,160 +55,145 @@ class _CustomCarousalSlidersState extends State<CustomCarousalSliders> {
         (index) => ImagePlaceholder(
               imagePath: widget.imagesPaths[index],
             ));
-    if (inHome & isAutoPlayEnabled) stratTimer();
+    //if (inHome & isAutoPlayEnabled) stratTimer();
   }
 
-  @override
-  void dispose() {
-    // Cancel the timer to avoid calling setState after widget disposal
-    _timer?.cancel();
-    _pageController.dispose();
-    super.dispose();
-  }
+  // @override
+  // void dispose() {
+  //   // Cancel the timer to avoid calling setState after widget disposal
+  //   _timer?.cancel();
+  //   _pageController.dispose();
+  //   super.dispose();
+  // }
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onLongPress: () {
-        setState(() {
-          isAutoPlayEnabled = false; // Stop sliding on long press
-        });
-      },
-      onLongPressEnd: (_) {
-        setState(() {
-          isAutoPlayEnabled = true; // Resume sliding when long press ends
-        });
-      },
-      onTap: () {
-        setState(() {
-          if (showDetails) {
-            showDetails = false;
-            isAutoPlayEnabled = true;
-          } else {
-            showDetails = true;
-            isAutoPlayEnabled = false;
-          }
-        });
-      },
-      child: Stack(
-        children: [
-          SizedBox(
-            width: double.infinity,
-            child: PageView.builder(
-              controller: _pageController,
-              itemCount: widget.imagesPaths.length,
-              onPageChanged: (value) {
-                setState(() {
-                  _activePage = value;
-                  showDetails = false;
-                });
-              },
-              itemBuilder: (context, index) {
-                return _pages[index];
-              },
-            ),
-          ),
-          if (showDetails)
-            Center(
-              child: Container(
-                width: MediaQuery.of(context).size.width *
-                    0.8, // Centered container with 80% of screen width
-                padding: EdgeInsets.only(top: 90.h),
-                decoration: BoxDecoration(
-                  color: Colors.transparent, // Background with some opacity
-                  borderRadius: BorderRadius.circular(8.0),
-                ),
-                child: Column(
-                  crossAxisAlignment:
-                      CrossAxisAlignment.start, // Align items to the left
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          'brandShowcase',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 20.sp,
+    return Stack(
+      children: [
+        GestureDetector(
+          onLongPress: () {
+            setState(() {
+              isAutoPlayEnabled = false; // Stop sliding on long press
+            });
+          },
+          onLongPressEnd: (_) {
+            setState(() {
+              isAutoPlayEnabled = true; // Resume sliding when long press ends
+            });
+          },
+          onTap: () {
+            setState(() {
+              if (showDetails) {
+                showDetails = false;
+                isAutoPlayEnabled = true;
+              } else {
+                showDetails = true;
+                isAutoPlayEnabled = false;
+              }
+            });
+          },
+          child: SizedBox(
+              width: double.infinity,
+              height: 140.h,
+              child: CarouselSlider(
+                  carouselController: _carouselController,
+                  items: [0, 1, 2, 3, 4].map((i) {
+                    return Builder(
+                      builder: (BuildContext context) {
+                        return ClipRRect(
+                          borderRadius: BorderRadius.circular(
+                              30.r), // Adjust this to control corner radius
+                          child: Container(
+                            color: OurColors.containerBackgroundColor,
+                            width: MediaQuery.of(context).size.width,
+                            margin: EdgeInsets.symmetric(horizontal: 5.0),
+                            // Make sure height is enough to see the rounded corners
                           ),
-                        ),
-                        Text(
-                          '300 EGP',
-                          style: TextStyle(
-                              color: OurColors.primaryButtonBackgroundColor,
-                              fontSize: 20.sp),
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 4.h),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          'description',
-                          style: TextStyle(
-                            color: OurColors.secondaryTextColor,
-                            fontSize: 14.sp,
-                          ),
-                        ),
-                        Text(
-                          '-30%',
-                          style: TextStyle(
-                              color: OurColors.secondaryColor, fontSize: 20.sp),
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 12.h),
-                    Container(
-                      padding: EdgeInsets.symmetric(
-                          horizontal: 25.w, vertical: 10.h),
-                      decoration: BoxDecoration(
-                        color: OurColors.primaryColor,
-                        borderRadius: BorderRadius.circular(16.r),
-                      ),
-                      child: const Text(
-                        'Buy now',
-                        style: TextStyle(
-                          color: OurColors.white,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          Positioned(
-            bottom: 10.sp,
-            left: 0.sp,
-            right: 0.sp,
+                        );
+                      },
+                    );
+                  }).toList(),
+                  options: CarouselOptions(
+                    height: 400,
+                    aspectRatio: 16 / 9,
+                    viewportFraction: 0.8,
+                    initialPage: 0,
+                    enableInfiniteScroll: true,
+                    reverse: false,
+                    autoPlay: isAutoPlayEnabled,
+                    autoPlayInterval: Duration(seconds: 3),
+                    autoPlayAnimationDuration: Duration(milliseconds: 800),
+                    autoPlayCurve: Curves.fastOutSlowIn,
+                    enlargeCenterPage: true,
+                    enlargeFactor: 0.3,
+                    scrollDirection: Axis.horizontal,
+                    onPageChanged: (index, reason) {
+                      setState(() {
+                        _activePage = index;
+                      });
+                    },
+                  ))),
+        ),
+        // Left circular button
+        Positioned(
+          left: 10,
+          top: 0,
+          bottom: 0,
+          child: Align(
+            alignment: Alignment.centerLeft,
             child: Container(
-              color: Colors.transparent,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: List<Widget>.generate(
-                    _pages.length,
-                    (index) => Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 4.w),
-                          child: InkWell(
-                            onTap: () {
-                              _pageController.animateToPage(index,
-                                  duration: Duration(milliseconds: 300),
-                                  curve: Curves.easeIn);
-                            },
-                            child: CircleAvatar(
-                              radius: 4,
-                              backgroundColor: _activePage == index
-                                  ? OurColors.primaryColor
-                                  : OurColors.grey,
-                            ),
-                          ),
-                        )),
+              width: 30.w,
+              height: 30.h,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: OurColors.backgroundColor,
+              ),
+              child: IconButton(
+                onPressed: () {
+                  _carouselController.previousPage(
+                    duration: Duration(milliseconds: 500),
+                    curve: Curves.easeInOut,
+                  );
+                },
+                icon: Image.asset(
+                  'assets/icons/arrow_left.png',
+                  scale: 2,
+                ),
               ),
             ),
           ),
-        ],
-      ),
+        ),
+
+        // Right circular button
+        Positioned(
+          right: 10,
+          top: 0,
+          bottom: 0,
+          child: Align(
+            alignment: Alignment.centerRight,
+            child: Container(
+              width: 30.w,
+              height: 30.h,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: OurColors.backgroundColor,
+              ),
+              child: IconButton(
+                onPressed: () {
+                  _carouselController.nextPage(
+                    duration: Duration(milliseconds: 500),
+                    curve: Curves.easeInOut,
+                  );
+                },
+                icon: Image.asset(
+                  'assets/icons/arrow_right.png',
+                  scale: 2,
+                ),
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 }
