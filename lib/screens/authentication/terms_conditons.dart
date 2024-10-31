@@ -11,7 +11,7 @@ class TermsAndConditions extends StatefulWidget {
 }
 
 class _TermsAndConditionsState extends State<TermsAndConditions> {
-  bool _isTermsAndConditionsChecked = true;
+  bool _isTermsAndConditionsChecked = false;
 
   @override
   Widget build(BuildContext context) {

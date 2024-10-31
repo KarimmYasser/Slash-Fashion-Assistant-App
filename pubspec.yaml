@@ -41,6 +41,10 @@ dependencies:
   insta_image_viewer: ^1.0.4
   iconsax: ^0.0.8
   get: ^4.6.6
+  smooth_page_indicator: ^1.2.0
+  intl: ^0.19.0
+  http: ^1.2.2
+  url_launcher: ^6.3.1
 
 dev_dependencies:
   flutter_test:
@@ -68,6 +72,7 @@ flutter:
   assets:
     - assets/icons/
     - assets/logo/
+    - assets/onboarding_images/
     
 
   # An image asset can refer to one or more resolution-specific "variants", see

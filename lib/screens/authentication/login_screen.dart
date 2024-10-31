@@ -1,18 +1,22 @@
+import 'package:fashion_assistant/screens/total_screen.dart';
+import 'package:get/get.dart';
+
 import '../../widgets/login_page/login_form.dart';
 import '../../widgets/login_page/page_header.dart';
 import 'package:flutter/material.dart';
 
 import '../../constants.dart';
+import '../../widgets/login_signup/form_divider.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
+    return Scaffold(
       body: SingleChildScrollView(
         child: Padding(
-          padding: EdgeInsets.fromLTRB(
+          padding: const EdgeInsets.fromLTRB(
             Sizes.defaultSpace,
             Sizes.appBarHeight,
             Sizes.defaultSpace,
@@ -21,10 +25,26 @@ class LoginScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              LoginPageHeader(),
-              LoginPageForm(),
-              //FormDivider(text: 'or sign in with',),
-              //SizedBox(height: Sizes.spaceBtwSections),
+              const LoginPageHeader(),
+              const LoginPageForm(),
+              const FormDivider(
+                text: 'Or',
+              ),
+              const SizedBox(height: Sizes.spaceBtwSections),
+              SizedBox(
+                width: double.infinity,
+                child: OutlinedButton(
+                    style: Theme.of(context)
+                        .outlinedButtonTheme
+                        .style!
+                        .copyWith(
+                            backgroundColor: const WidgetStatePropertyAll(
+                                OurColors.darkerGrey),
+                            foregroundColor:
+                                const WidgetStatePropertyAll(OurColors.light)),
+                    onPressed: () => Get.offAll(() => const TotalScreens()),
+                    child: const Text('Continue as a Guest')),
+              ),
               //SocialButtons(),
             ],
           ),
