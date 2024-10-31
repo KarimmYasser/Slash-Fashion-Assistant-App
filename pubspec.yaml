@@ -71,6 +71,7 @@ flutter:
   assets:
     - assets/icons/
     - assets/logo/
+    - assets/onboarding_images/
     
 
   # An image asset can refer to one or more resolution-specific "variants", see
