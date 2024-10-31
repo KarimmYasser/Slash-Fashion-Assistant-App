@@ -9,13 +9,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:iconsax/iconsax.dart';
 
-late List<Widget> _pages;
-int _activePage = 0;
-
-Timer? _timer;
-bool showDetails = false;
-bool taped = false;
-
 class CustomCarousalSliders extends StatefulWidget {
   const CustomCarousalSliders({super.key, required this.imagesPaths});
   final List<String> imagesPaths;
@@ -25,46 +18,10 @@ class CustomCarousalSliders extends StatefulWidget {
 }
 
 class _CustomCarousalSlidersState extends State<CustomCarousalSliders> {
-  final PageController _pageController = PageController(initialPage: 0);
   bool isAutoPlayEnabled = true;
   int _activePage = 0;
   final CarouselSliderController _carouselController =
       CarouselSliderController();
-  // void stratTimer() {
-  //   _timer = Timer.periodic(Duration(seconds: 3), (timer) {
-  //     if (inHome & isAutoPlayEnabled) {
-  //       setState(() {
-  //         showDetails = false;
-  //       });
-  //       if (_pageController.page == widget.imagesPaths.length - 1) {
-  //         _pageController.animateToPage(0,
-  //             duration: Duration(milliseconds: 500), curve: Curves.easeInOut);
-  //       } else {
-  //         _pageController.nextPage(
-  //             duration: Duration(milliseconds: 500), curve: Curves.easeInOut);
-  //       }
-  //     }
-  //   });
-  // }
-
-  @override
-  void initState() {
-    super.initState();
-    _pages = List.generate(
-        widget.imagesPaths.length,
-        (index) => ImagePlaceholder(
-              imagePath: widget.imagesPaths[index],
-            ));
-    //if (inHome & isAutoPlayEnabled) stratTimer();
-  }
-
-  // @override
-  // void dispose() {
-  //   // Cancel the timer to avoid calling setState after widget disposal
-  //   _timer?.cancel();
-  //   _pageController.dispose();
-  //   super.dispose();
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -81,33 +38,25 @@ class _CustomCarousalSlidersState extends State<CustomCarousalSliders> {
               isAutoPlayEnabled = true; // Resume sliding when long press ends
             });
           },
-          onTap: () {
-            setState(() {
-              if (showDetails) {
-                showDetails = false;
-                isAutoPlayEnabled = true;
-              } else {
-                showDetails = true;
-                isAutoPlayEnabled = false;
-              }
-            });
-          },
+          onTap: () {},
           child: SizedBox(
               width: double.infinity,
               height: 140.h,
               child: CarouselSlider(
                   carouselController: _carouselController,
-                  items: [0, 1, 2, 3, 4].map((i) {
+                  items: widget.imagesPaths.map((imagePath) {
                     return Builder(
                       builder: (BuildContext context) {
-                        return ClipRRect(
-                          borderRadius: BorderRadius.circular(
-                              30.r), // Adjust this to control corner radius
-                          child: Container(
-                            color: OurColors.containerBackgroundColor,
-                            width: MediaQuery.of(context).size.width,
-                            margin: EdgeInsets.symmetric(horizontal: 5.0),
-                            // Make sure height is enough to see the rounded corners
+                        return Container(
+                          width: 300.w,
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(20),
+                            child: Container(
+                                child: ImagePlaceholder(imagePath: imagePath)),
                           ),
                         );
                       },
