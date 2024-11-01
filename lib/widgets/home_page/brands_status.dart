@@ -1,11 +1,45 @@
+import 'package:fashion_assistant/constants.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:palette_generator/palette_generator.dart';
 
-class BrandCarousel extends StatelessWidget {
+class BrandCarousel extends StatefulWidget {
   const BrandCarousel({
     super.key,
     required this.brands,
   });
   final List<Map<String, String>> brands;
+
+  @override
+  _BrandCarouselState createState() => _BrandCarouselState();
+}
+
+class _BrandCarouselState extends State<BrandCarousel> {
+  final Map<String, Color> _dominantColors = {};
+
+  @override
+  void initState() {
+    super.initState();
+    _loadDominantColors();
+  }
+
+  Future<void> _loadDominantColors() async {
+    Map<String, Color> newDominantColors = {};
+
+    for (var brand in widget.brands) {
+      final image = NetworkImage(brand['image']!);
+      final PaletteGenerator generator =
+          await PaletteGenerator.fromImageProvider(image);
+      newDominantColors[brand['image']!] =
+          generator.dominantColor?.color.withOpacity(0.4) ?? Colors.grey;
+    }
+
+    if (mounted) {
+      setState(() {
+        _dominantColors.addAll(newDominantColors);
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -27,8 +61,11 @@ class BrandCarousel extends StatelessWidget {
                 },
                 child: Row(
                   children: [
-                    Text('See more', style: TextStyle(color: Colors.grey)),
-                    Icon(Icons.arrow_forward_ios, size: 16, color: Colors.grey),
+                    Text('See more',
+                        style: TextStyle(
+                            color: OurColors.iconPrimary, fontSize: 16.sp)),
+                    Icon(Icons.arrow_forward_ios,
+                        size: 16.sp, color: OurColors.iconPrimary),
                   ],
                 ),
               ),
@@ -40,25 +77,29 @@ class BrandCarousel extends StatelessWidget {
           height: 100, // Adjust height for circular avatars
           child: ListView.builder(
             scrollDirection: Axis.horizontal,
-            itemCount: brands.length,
+            itemCount: widget.brands.length,
             itemBuilder: (context, index) {
+              final brand = widget.brands[index];
+              final dominantColor =
+                  _dominantColors[brand['image']!] ?? Colors.grey[200];
+
               return Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8.0),
                 child: Column(
                   children: [
                     CircleAvatar(
-                      backgroundColor: Colors.grey[200], // Border color
+                      backgroundColor: dominantColor, // Dynamic border color
                       radius: 35, // Size of the circular image container
                       child: CircleAvatar(
                         radius:
-                            32, // Inner circle size (smaller for border effect)
-                        backgroundImage: AssetImage(brands[index]['image']!),
+                            30, // Inner circle size (smaller for border effect)
+                        backgroundImage: NetworkImage(brand['image']!),
                         backgroundColor: Colors.transparent,
                       ),
                     ),
                     SizedBox(height: 4.0),
                     Text(
-                      brands[index]['name']!,
+                      brand['name']!,
                       style: TextStyle(fontSize: 12),
                     ),
                   ],

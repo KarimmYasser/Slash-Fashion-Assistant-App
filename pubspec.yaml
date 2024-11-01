@@ -45,6 +45,7 @@ dependencies:
   http: ^1.2.2
   url_launcher: ^6.3.1
   carousel_slider: ^5.0.0
+  palette_generator: ^0.3.3+5
 
 dev_dependencies:
   flutter_test:
@@ -72,6 +73,7 @@ flutter:
     - assets/icons/
     - assets/logo/
     - assets/onboarding_images/
+    - assets/images/
     
 
   # An image asset can refer to one or more resolution-specific "variants", see
