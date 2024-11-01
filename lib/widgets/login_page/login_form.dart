@@ -1,3 +1,5 @@
+import 'package:fashion_assistant/screens/authentication/forget_password.dart';
+
 import '../../constants.dart';
 import '../../screens/authentication/signup_screen.dart';
 import 'package:flutter/material.dart';
@@ -66,7 +68,7 @@ class _LoginPageFormState extends State<LoginPageForm> {
                   ],
                 ),
                 TextButton(
-                  onPressed: () {},
+                  onPressed: () => Get.to(() => const ForgetPasswordScreen()),
                   child: const Text(
                     'Forgot Password?',
                     style: TextStyle(fontWeight: FontWeight.w600),

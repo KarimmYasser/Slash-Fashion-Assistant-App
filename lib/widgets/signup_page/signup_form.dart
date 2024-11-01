@@ -1,3 +1,6 @@
+import 'package:fashion_assistant/screens/authentication/verify_email.dart';
+import 'package:get/get.dart';
+
 import '../../constants.dart';
 import '../../screens/authentication/terms_conditons.dart';
 import 'package:flutter/material.dart';
@@ -98,7 +101,7 @@ class _SignUpFormState extends State<SignUpForm> {
           SizedBox(
             width: double.infinity,
             child: ElevatedButton(
-              onPressed: () {},
+              onPressed: () => Get.off(() => const VerifyEmailScreen()),
               child: const Padding(
                 padding: EdgeInsets.symmetric(vertical: Sizes.buttonHeight / 3),
                 child: Text(
