@@ -1,6 +1,9 @@
 import 'package:fashion_assistant/constants.dart';
 import 'package:fashion_assistant/widgets/home_page/brands_status.dart';
 import 'package:fashion_assistant/widgets/home_page/carousel_sliders.dart';
+import 'package:fashion_assistant/widgets/home_page/categories_section.dart';
+import 'package:fashion_assistant/widgets/home_page/flash_counterdown.dart';
+import 'package:fashion_assistant/widgets/home_page/hm_hzt_list.dart';
 
 // import 'package:fashion_assistant/widgets/custom_button.dart';
 // import 'package:fashion_assistant/widgets/custom_navbar.dart';
@@ -15,6 +18,38 @@ final List<String> imagesPaths = [
   "https://media.istockphoto.com/id/2090871623/photo/photo-of-young-asian-woman-on-purple-background.jpg?s=2048x2048&w=is&k=20&c=lBP5Ai4G_jFo9qyYvkqkBfIWY8bFOqsNGT5oFMmyYkI=",
   "https://media.istockphoto.com/id/1330861728/photo/asian-woman-looking-through-magnifying-glass-searching-or-investigating-something.jpg?s=2048x2048&w=is&k=20&c=I8vNRSuxc_iVlrl3HnZISMXBcuKltHpMr5C72Tkbog8=",
   "https://media.istockphoto.com/id/2105695547/photo/photo-of-young-asian-girl-on-purple-background.jpg?s=2048x2048&w=is&k=20&c=SgL1NDoeaqYTUgryZSL9Qev1sR_TT_eZUw45N6JRcL4=",
+];
+final List<Map<String, String>> brands = [
+  {
+    'name': 'Nike',
+    'image':
+        "https://media.istockphoto.com/id/1398610798/photo/young-woman-in-linen-shirt-shorts-and-high-heels-pointing-to-the-side-and-talking.jpg?s=1024x1024&w=is&k=20&c=IdY440I0pLdmANsNZRXhjSS7K9Q-Xxvnwf4YzH9qQbQ=",
+  },
+  {
+    'name': 'Adidas',
+    'image':
+        "https://media.istockphoto.com/id/1401899435/photo/image-of-young-asian-girl-posing-on-blue-background.jpg?s=2048x2048&w=is&k=20&c=PUMy-lxrA9ufa0_yjtk1_YEcj3bxd86fjD7_jCcTE3A=",
+  },
+  {
+    'name': 'Puma',
+    'image':
+        "https://media.istockphoto.com/id/2090871623/photo/photo-of-young-asian-woman-on-purple-background.jpg?s=2048x2048&w=is&k=20&c=lBP5Ai4G_jFo9qyYvkqkBfIWY8bFOqsNGT5oFMmyYkI=",
+  },
+  {
+    'name': 'Nike',
+    'image':
+        "https://media.istockphoto.com/id/1330861728/photo/asian-woman-looking-through-magnifying-glass-searching-or-investigating-something.jpg?s=2048x2048&w=is&k=20&c=I8vNRSuxc_iVlrl3HnZISMXBcuKltHpMr5C72Tkbog8=",
+  },
+  {
+    'name': 'Adidas',
+    'image':
+        "https://media.istockphoto.com/id/2105695547/photo/photo-of-young-asian-girl-on-purple-background.jpg?s=2048x2048&w=is&k=20&c=SgL1NDoeaqYTUgryZSL9Qev1sR_TT_eZUw45N6JRcL4=",
+  },
+  {
+    'name': 'Pumammmmmmmmmmm',
+    'image':
+        "https://media.istockphoto.com/id/1401899435/photo/image-of-young-asian-girl-posing-on-blue-background.jpg?s=2048x2048&w=is&k=20&c=PUMy-lxrA9ufa0_yjtk1_YEcj3bxd86fjD7_jCcTE3A=",
+  },
 ];
 
 class HomeScreen extends StatelessWidget {
@@ -184,8 +219,48 @@ class HomeScreen extends StatelessWidget {
               height: 16.h,
             ),
             BrandCarousel(
-              brands: [],
+              brands: brands,
             ),
+            SizedBox(
+              height: 16.h,
+            ),
+            CategoriesSection(
+              categories: brands,
+            ),
+            SizedBox(
+              height: 16.h,
+            ),
+            FlashSaleCountdown(
+              days: 2,
+              hours: 3,
+              minutes: 51,
+            ),
+            SizedBox(
+              height: 16.h,
+            ),
+            HorizontalList(
+                brandSHowcase: 'brandSHowcase',
+                description: 'description',
+                discount: 'discount',
+                image: 'image',
+                price: 'price',
+                coin: 'coin',
+                height: 30,
+                width: 30,
+                title: 'Best Selling'),
+            SizedBox(
+              height: 10.h,
+            ),
+            HorizontalList(
+                brandSHowcase: 'brandSHowcase',
+                description: 'description',
+                discount: 'discount',
+                image: 'image',
+                price: 'price',
+                coin: 'coin',
+                height: 30,
+                width: 30,
+                title: 'Hot Deals'),
           ],
         ),
       ),

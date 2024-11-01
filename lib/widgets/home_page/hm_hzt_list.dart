@@ -1,6 +1,7 @@
 import 'package:fashion_assistant/constants.dart';
 import 'package:fashion_assistant/screens/show_list_screen.dart';
-import 'package:fashion_assistant/widgets/home_page/product_card.dart';
+import 'package:fashion_assistant/widgets/product/product_card.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get_connect/http/src/utils/utils.dart';
@@ -26,13 +27,16 @@ class HorizontalList extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(title,
-            style: TextStyle(
-                color: OurColors.primaryColor,
-                fontWeight: FontWeight.bold,
-                fontSize: 18.sp)),
+        Padding(
+          padding: EdgeInsets.only(left: 10.w),
+          child: Text(title,
+              style: TextStyle(
+                  color: OurColors.textColor,
+                  fontWeight: FontWeight.w500,
+                  fontSize: Sizes.fontSizeLg)),
+        ),
         SizedBox(
-          height: 250.h,
+          height: 410.h,
           child: ListView.builder(
             scrollDirection: Axis.horizontal,
             itemCount: 11,
@@ -58,15 +62,17 @@ class HorizontalList extends StatelessWidget {
                       ),
                     )
                   : ProductCard(
-                      brandShowcase: brandSHowcase,
-                      description: description,
-                      height: height.h,
-                      width: width.h,
-                      discount: discount,
-                      price: price,
-                      coin: coin,
-                      image: image,
-                      small: true,
+                      brandImage:
+                          'https://s3-alpha-sig.figma.com/img/709b/907e/4e3118132f60e1919c5891c6e22883fe?Expires=1731283200&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=qnF7TC5k8yOoJLEs4Ahuiip23Rr0BP3HMCK6U-fRo1nkRiQxaGks3iGPIXTKfduvmvGGcamJ9aKlccNZhnIEvvif2EFsIfgxAiW9kXLEFNyuKOuOoD9YwNRT91DbkkgNZuIZjsjdzhu1JS00bxn778jDGTBnJ3E50vnghuEW3xY1MWFb24-gy88W4ZePae22MM6CwltLndPFkdLziNow5F45jn4ObRhMifbTl5puhUBUDHaLb9xO8srJZS0vJxoOoNbiBz9YT9EK5IhLoFMqcJvd3si6-TVNcD-c75zQlCSuXURnGZ65dPBQVHRWtHSgCTebju1yvjiVaETxQPwtlw__',
+                      brandName: 'Fashoni',
+                      brandShowcase: '100% Natural Cotton Suit',
+                      prevprice: '400',
+                      price: '300',
+                      discound: '20',
+                      sold: '130',
+                      numReviewers: '132',
+                      starts: '5',
+                      coin: 'EGP',
                     );
             },
           ),

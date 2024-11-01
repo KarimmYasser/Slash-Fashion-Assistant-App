@@ -1,5 +1,8 @@
 import 'package:fashion_assistant/constants.dart';
+import 'package:fashion_assistant/main.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:iconsax/iconsax.dart';
 
 class FavoriteButton extends StatefulWidget {
   const FavoriteButton({super.key});
@@ -25,16 +28,16 @@ class _FavoriteButtonState extends State<FavoriteButton> {
         },
         child: _isLiked
             ? Icon(
-                Icons.favorite,
+                Iconsax.heart5,
                 key: ValueKey('liked'),
                 color: OurColors.primaryColor,
-                size: 28,
+                size: Sizes.iconMd,
               )
             : Icon(
-                Icons.favorite_border,
+                Iconsax.heart,
                 key: ValueKey('unliked'),
-                color: OurColors.iconPrimary,
-                size: 28,
+                color: OurColors.primaryColor,
+                size: Sizes.iconMd,
               ),
       ),
     );

@@ -50,7 +50,7 @@ class _CustomCarousalSlidersState extends State<CustomCarousalSliders> {
                         return Container(
                           width: 300.w,
                           decoration: BoxDecoration(
-                            color: Colors.white,
+                            color: OurColors.white,
                             borderRadius: BorderRadius.circular(20),
                           ),
                           child: ClipRRect(
@@ -63,7 +63,7 @@ class _CustomCarousalSlidersState extends State<CustomCarousalSliders> {
                     );
                   }).toList(),
                   options: CarouselOptions(
-                    height: 400,
+                    height: 400.h,
                     aspectRatio: 16 / 9,
                     viewportFraction: 0.8,
                     initialPage: 0,
@@ -85,7 +85,7 @@ class _CustomCarousalSlidersState extends State<CustomCarousalSliders> {
         ),
         // Left circular button
         Positioned(
-          left: 10,
+          left: 10.w,
           top: 0,
           bottom: 0,
           child: Align(
