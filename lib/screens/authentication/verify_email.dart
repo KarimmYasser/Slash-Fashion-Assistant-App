@@ -1,4 +1,3 @@
-import 'package:fashion_assistant/screens/authentication/login_screen.dart';
 import 'package:fashion_assistant/screens/authentication/success_screen.dart';
 import 'package:fashion_assistant/utils/helpers/helper_functions.dart';
 import 'package:flutter/material.dart';
@@ -17,7 +16,7 @@ class VerifyEmailScreen extends StatelessWidget {
           actions: [
             IconButton(
               icon: const Icon(Icons.clear),
-              onPressed: () => Get.offAll(() => const LoginScreen()),
+              onPressed: () => Get.back(),
             ),
           ],
         ),

@@ -1,8 +1,8 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
-class THttpHelper {
-  static const String _baseUrl = 'https://your-api-base-url.com'; // Replace with your API base URL
+class HttpHelper {
+  static const String _baseUrl = 'https://hhynshsbih.us-east-1.awsapprunner.com';
 
   // Helper method to make a GET request
   static Future<Map<String, dynamic>> get(String endpoint) async {
