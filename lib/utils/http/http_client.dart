@@ -38,10 +38,10 @@ class HttpHelper {
 
   // Handle the HTTP response
   static Map<String, dynamic> _handleResponse(http.Response response) {
-    if (response.statusCode == 200) {
+    if (response.statusCode < 400) {
       return json.decode(response.body);
     } else {
-      throw Exception('Failed to load data: ${response.statusCode}');
+      throw Exception('Failed to load data: ${response.body}');
     }
   }
 }

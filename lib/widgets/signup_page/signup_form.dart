@@ -1,4 +1,5 @@
 import 'package:fashion_assistant/screens/authentication/verify_email.dart';
+import 'package:fashion_assistant/utils/http/http_client.dart';
 import 'package:get/get.dart';
 
 import '../../constants.dart';
@@ -101,7 +102,23 @@ class _SignUpFormState extends State<SignUpForm> {
           SizedBox(
             width: double.infinity,
             child: ElevatedButton(
-              onPressed: () => Get.off(() => const VerifyEmailScreen()),
+              onPressed: () async {
+                final response = await HttpHelper.post('api/auth/signup', {
+                  'email': 'karim@example.com',
+                  'username': 'karimmyasserr',
+                  'password': 'k01234444',
+                  "role": "SHOPPER",
+                  "phone": "+201144432284",
+                  "image": "http://karim.com/image.jpg",
+                  "city": "ASWAN",
+                  "preferences": {
+                    "preference1": "bahb elbahr",
+                    "preference2": "amoot ana w a3eed elsana",
+                  }
+                });
+                print(response);
+                Get.off(() => const VerifyEmailScreen());
+              },
               child: const Padding(
                 padding: EdgeInsets.symmetric(vertical: Sizes.buttonHeight / 3),
                 child: Text(

@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 
+import '../../utils/http/http_client.dart';
+
 class LoginPageForm extends StatefulWidget {
   const LoginPageForm({
     super.key,
@@ -80,7 +82,16 @@ class _LoginPageFormState extends State<LoginPageForm> {
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
-                  onPressed: () {}, child: const Text('Sign in')),
+                  onPressed: () async {
+                    final response = await HttpHelper.post('api/auth/login', {
+                      'email': 'karim@example.com',
+                      'password': 'k01234444',
+                    });
+                    print(response);
+                    final responsev1 = await HttpHelper.get('api/auth/me');
+                    print(responsev1);
+                  },
+                  child: const Text('Sign in')),
             ),
             const SizedBox(height: Sizes.spaceBtwItems),
             SizedBox(
