@@ -17,7 +17,7 @@ class SignupScreen extends StatelessWidget {
               Text("Let's create your account",
                   style: Theme.of(context).textTheme.headlineMedium),
               const SizedBox(height: Sizes.spaceBtwSections),
-              const SignUpForm(),
+              SignUpForm(),
               //const SizedBox(height: Sizes.spaceBtwSections),
               //const FormDivider(text: 'or sign up with',),
               //const SizedBox(height: Sizes.spaceBtwSections),
@@ -29,4 +29,3 @@ class SignupScreen extends StatelessWidget {
     );
   }
 }
-

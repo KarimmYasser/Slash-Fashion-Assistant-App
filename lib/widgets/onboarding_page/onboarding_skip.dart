@@ -1,4 +1,4 @@
-import 'package:fashion_assistant/screens/authentication/controllers.onboarding/onboarding_controller.dart';
+import 'package:fashion_assistant/screens/authentication/controllers/onboarding_controller.dart';
 import 'package:flutter/material.dart';
 
 import '../../constants.dart';

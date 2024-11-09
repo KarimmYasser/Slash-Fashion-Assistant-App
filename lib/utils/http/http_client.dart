@@ -2,12 +2,23 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class HttpHelper {
-  static const String _baseUrl = 'https://hhynshsbih.us-east-1.awsapprunner.com';
+  //static const String _baseUrl = 'https://hhynshsbih.us-east-1.awsapprunner.com';
+  //static const String _baseUrl = 'http://localhost:3300';
+  static const String _baseUrl = 'https://689a-2c0f-fc89-8032-6dc3-a50e-cd9-f40c-f853.ngrok-free.app';
+  static String? _token;
 
   // Helper method to make a GET request
   static Future<Map<String, dynamic>> get(String endpoint) async {
-    final response = await http.get(Uri.parse('$_baseUrl/$endpoint'));
-    return _handleResponse(response);
+    // final response = await http.get(Uri.parse('$_baseUrl/$endpoint'));
+    // return _handleResponse(response);
+    final response = await http.get(
+    Uri.parse('$_baseUrl/$endpoint'),
+    headers: {
+      'Authorization': 'Bearer $_token',
+      'Content-Type': 'application/json',
+    },
+  );
+  return _handleResponse(response);
   }
 
   // Helper method to make a POST request
@@ -43,5 +54,9 @@ class HttpHelper {
     } else {
       throw Exception('Failed to load data: ${response.body}');
     }
+  }
+
+  static void setToken(String token) {
+    _token = token;
   }
 }

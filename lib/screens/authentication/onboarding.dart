@@ -1,4 +1,4 @@
-import 'package:fashion_assistant/screens/authentication/controllers.onboarding/onboarding_controller.dart';
+import 'package:fashion_assistant/screens/authentication/controllers/onboarding_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -7,8 +7,8 @@ import '../../widgets/onboarding_page/onboarding_next_button.dart';
 import '../../widgets/onboarding_page/onboarding_page.dart';
 import '../../widgets/onboarding_page/onboarding_skip.dart';
 
-class OnboardingScreen extends StatelessWidget {
-  const OnboardingScreen({super.key});
+class OnBoardingScreen extends StatelessWidget {
+  const OnBoardingScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
