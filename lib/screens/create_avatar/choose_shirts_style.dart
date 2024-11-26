@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:fashion_assistant/screens/create_avatar/get_preferences.dart';
 import 'package:fashion_assistant/tap_map.dart';
+import 'package:fashion_assistant/utils/http/http_client.dart';
 import 'package:fashion_assistant/widgets/create_avatar/question_pubble.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -48,8 +49,10 @@ class _ChooseStyleState extends State<ChooseStyle>
   }
 
   /// Fetch product objects from the backend
+
   late List<dynamic> products = [];
   String? errorMessage;
+
   Future<void> fetchProducts() async {
     setState(() {
       isLoading = true;
@@ -57,43 +60,26 @@ class _ChooseStyleState extends State<ChooseStyle>
     });
 
     try {
-      const String token =
-          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRhYml0aGEud3Vuc2NoNDdAZXhhbXBsZS5jb20iLCJpZCI6IjBhOGZiZDgyLTBiMzEtNDAwMy04YWU2LTNhYjEyNmRlYWRhZCIsImlhdCI6MTczMjQ0NDE5MywiZXhwIjoxNzM1MDM2MTkzfQ.2E0RGf8mZAdKboqp_uVCLAjEOJ66Ofx181NMrx2uUMw";
-      const String userId = "0a8fbd82-0b31-4003-8ae6-3ab126deadad";
+      // Call the existing `get` function
+      final response = await HttpHelper.get('api/product/random-products');
 
-      final response = await http.get(
-        Uri.parse(
-            'https://a35d-2c0f-fc89-8039-92bb-40a7-a57c-bbd6-a0e3.ngrok-free.app/api/product/random-products'),
-        headers: {
-          'Authorization': 'Bearer $token',
-          'Content-Type': 'application/json',
-          'User-ID': userId,
-        },
-      );
-
-      if (response.statusCode == 200) {
-        final Map<String, dynamic> data = json.decode(response.body);
-
-        // Extract the list of products from the "Shirts" key
-        if (data.containsKey("Shirts")) {
-          products = (data["Shirts"] as List<dynamic>).map((item) {
-            return {
-              'id': item['id'],
-              'name': item['name'],
-              'price': item['price'],
-              'discount': item['discount'],
-              'rating': item['rating'],
-              'material': item['material'],
-              'returnPeriod': item['returnPeriod'],
-              'image': item['image'],
-              'category': item['category']['name'],
-            };
-          }).toList();
-        } else {
-          throw Exception('No products found under "Shirts"');
-        }
+      // Process the response
+      if (response.containsKey("Shirts")) {
+        products = (response["Shirts"] as List<dynamic>).map((item) {
+          return {
+            'id': item['id'],
+            'name': item['name'],
+            'price': item['price'],
+            'discount': item['discount'],
+            'rating': item['rating'],
+            'material': item['material'],
+            'returnPeriod': item['returnPeriod'],
+            'image': item['image'],
+            'category': item['category']['name'],
+          };
+        }).toList();
       } else {
-        throw Exception('Failed to load products: ${response.statusCode}');
+        throw Exception('No products found under "Shirts"');
       }
     } catch (error) {
       errorMessage = 'Error fetching products: $error';

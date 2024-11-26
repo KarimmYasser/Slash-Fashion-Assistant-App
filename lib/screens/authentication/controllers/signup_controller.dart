@@ -1,4 +1,5 @@
 import 'package:fashion_assistant/data/authentication.repository/user_data.dart';
+import 'package:fashion_assistant/screens/create_avatar/male_or_female.dart';
 import 'package:fashion_assistant/utils/helpers/network_manager.dart';
 import 'package:fashion_assistant/utils/popups/full_screen_loader.dart';
 import 'package:fashion_assistant/utils/popups/loaders.dart';
@@ -81,7 +82,7 @@ class SignupController extends GetxController {
             image: "assets/images/72462-check-register.json",
             title: "Your account has been created successfully.",
             subtitle: "Your Account is ready to use.",
-            onPressed: () => Get.offAll(() => const TotalScreens()),
+            onPressed: () => Get.offAll(() => const MaleOrFemale()),
           ));
     } catch (e) {
       // Stop Loading

@@ -356,7 +356,7 @@ class _ReviewCardState extends State<ReviewCard> {
                     ClipRRect(
                       borderRadius: BorderRadius.circular(8),
                       child: Image.network(
-                        'https://via.placeholder.com/50',
+                        "https://media.istockphoto.com/id/1398610798/photo/young-woman-in-linen-shirt-shorts-and-high-heels-pointing-to-the-side-and-talking.jpg?s=1024x1024&w=is&k=20&c=IdY440I0pLdmANsNZRXhjSS7K9Q-Xxvnwf4YzH9qQbQ=",
                         width: 50,
                         height: 50,
                         fit: BoxFit.cover,
@@ -366,7 +366,7 @@ class _ReviewCardState extends State<ReviewCard> {
                     ClipRRect(
                       borderRadius: BorderRadius.circular(8),
                       child: Image.network(
-                        'https://via.placeholder.com/50',
+                        "https://media.istockphoto.com/id/1398610798/photo/young-woman-in-linen-shirt-shorts-and-high-heels-pointing-to-the-side-and-talking.jpg?s=1024x1024&w=is&k=20&c=IdY440I0pLdmANsNZRXhjSS7K9Q-Xxvnwf4YzH9qQbQ=",
                         width: 50,
                         height: 50,
                         fit: BoxFit.cover,

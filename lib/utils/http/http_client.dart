@@ -3,7 +3,7 @@ import 'package:http/http.dart' as http;
 
 class HttpHelper {
   static const String _baseUrl =
-      'https://hhynshsbih.us-east-1.awsapprunner.com';
+      'https://113d-2c0f-fc89-8032-d65f-6179-900b-c52f-3aeb.ngrok-free.app';
   //static const String _baseUrl = 'http://localhost:3300';
   //static const String _baseUrl = 'https://c9b8-2c0f-fc89-8039-92bb-40a7-a57c-bbd6-a0e3.ngrok-free.app';
   static String? token;
@@ -27,7 +27,10 @@ class HttpHelper {
       String endpoint, dynamic data) async {
     final response = await http.post(
       Uri.parse('$_baseUrl/$endpoint'),
-      headers: {'Content-Type': 'application/json'},
+      headers: {
+        'Authorization': 'Bearer $token',
+        'Content-Type': 'application/json'
+      },
       body: json.encode(data),
     );
     return _handleResponse(response);

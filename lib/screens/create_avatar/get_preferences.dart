@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:fashion_assistant/constants.dart';
 import 'package:fashion_assistant/screens/create_avatar/choose_body_color.dart';
@@ -13,12 +14,14 @@ import 'package:fashion_assistant/screens/create_avatar/male_or_female.dart';
 import 'package:fashion_assistant/screens/create_avatar/photos_selection_page.dart';
 import 'package:fashion_assistant/screens/total_screen.dart';
 import 'package:fashion_assistant/tap_map.dart';
+import 'package:fashion_assistant/utils/http/http_client.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fluttermoji/fluttermojiFunctions.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:http/http.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:http/http.dart' as http;
 
@@ -38,17 +41,22 @@ class _GetPreferencesState extends State<GetPreferences> {
   // Define the total number of screens here for easy management
   final int _totalScreens =
       isMale ? 7 : 5; // Adjust based on conditional screens
-
   void _showAvatarPopup(BuildContext context) async {
     String? avatarSvg;
+    Map<String, dynamic> avatarData = {};
+
     try {
       debugPrint("isMale: $isMale");
       String avatarJson =
           json.encode(isMale ? avatarsMap['male'] : avatarsMap['female']);
       debugPrint("Avatar JSON: $avatarJson");
+
       avatarSvg =
           await FluttermojiFunctions().decodeFluttermojifromString(avatarJson);
-      debugPrint("Avatar SVG decoded successfully.");
+
+      // Parse the avatar JSON into a Map
+      avatarData = json.decode(avatarJson) as Map<String, dynamic>;
+      debugPrint("Parsed avatar data: $avatarData");
     } catch (e) {
       debugPrint("Error loading avatar SVG: $e");
     }
@@ -126,8 +134,26 @@ class _GetPreferencesState extends State<GetPreferences> {
 
                       // Okay Button
                       ElevatedButton(
-                        onPressed: () {
-                          saveSelectedProducts('Shirts');
+                        onPressed: () async {
+                          // Close the dialog
+                          saveSelectedProducts('generalProduct');
+                          try {
+                            final response = await HttpHelper.post(
+                              'api/user/avatar',
+                              avatarData,
+                            );
+
+                            if (response['message'] ==
+                                'Avatar saved successfully') {
+                              debugPrint('Avatar data sent successfully');
+                            } else {
+                              throw Exception(
+                                  'Unexpected response: ${response.toString()}');
+                            }
+                          } catch (error) {
+                            debugPrint('Error sending avatar data: $error');
+                          }
+
                           Get.offAll(() => TotalScreens());
                         },
                         style: ElevatedButton.styleFrom(
@@ -161,36 +187,28 @@ class _GetPreferencesState extends State<GetPreferences> {
           selectedProducts.map((product) => product['id'] as String).toList();
       print('Selected IDs: $selectedIds');
 
-      final payload = json.encode({
+      final payload = {
         'products': selectedIds,
-      });
+      };
 
-      const String token =
-          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRhYml0aGEud3Vuc2NoNDdAZXhhbXBsZS5jb20iLCJpZCI6IjBhOGZiZDgyLTBiMzEtNDAwMy04YWU2LTNhYjEyNmRlYWRhZCIsImlhdCI6MTczMjQ0NDE5MywiZXhwIjoxNzM1MDM2MTkzfQ.2E0RGf8mZAdKboqp_uVCLAjEOJ66Ofx181NMrx2uUMw";
-      const String userId = "0a8fbd82-0b31-4003-8ae6-3ab126deadad";
+      // Use the existing `post` function
+      final response =
+          await HttpHelper.post('api/user/style-preferences', payload);
 
-      final response = await http.post(
-        Uri.parse(
-            'https://a35d-2c0f-fc89-8039-92bb-40a7-a57c-bbd6-a0e3.ngrok-free.app/api/user/style-preferences'),
-        headers: {
-          'Authorization': 'Bearer $token',
-          'Content-Type': 'application/json',
-          'User-ID': userId,
-        },
-        body: payload,
-      );
-
-      if (response.statusCode == 200) {
+      // Check the response content instead of relying on `statusCode`
+      if (response['message'] == 'Style preferences set successfully') {
         print(
             '=================================================================');
         print(selectedIds);
-        print('sended successfully');
+        print('Sent successfully');
         print(
             '=================================================================');
       } else {
-        throw Exception('Failed to save preferences: ${response.body}');
+        throw Exception('Unexpected response: ${response.toString()}');
       }
-    } catch (error) {}
+    } catch (error) {
+      print('Error saving selected products: $error');
+    }
   }
 
   void _nextPage() {
