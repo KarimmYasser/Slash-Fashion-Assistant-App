@@ -70,8 +70,9 @@ class _CustomCarousalSlidersState extends State<CustomCarousalSliders> {
                     enableInfiniteScroll: true,
                     reverse: false,
                     autoPlay: isAutoPlayEnabled,
-                    autoPlayInterval: Duration(seconds: 3),
-                    autoPlayAnimationDuration: Duration(milliseconds: 800),
+                    autoPlayInterval: const Duration(seconds: 3),
+                    autoPlayAnimationDuration:
+                        const Duration(milliseconds: 800),
                     autoPlayCurve: Curves.fastOutSlowIn,
                     enlargeCenterPage: true,
                     enlargeFactor: 0.3,
@@ -93,14 +94,14 @@ class _CustomCarousalSlidersState extends State<CustomCarousalSliders> {
             child: Container(
               width: 30.w,
               height: 30.h,
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 shape: BoxShape.circle,
                 color: OurColors.backgroundColor,
               ),
               child: IconButton(
                 onPressed: () {
                   _carouselController.previousPage(
-                    duration: Duration(milliseconds: 500),
+                    duration: const Duration(milliseconds: 500),
                     curve: Curves.easeInOut,
                   );
                 },
@@ -123,14 +124,14 @@ class _CustomCarousalSlidersState extends State<CustomCarousalSliders> {
             child: Container(
               width: 30.w,
               height: 30.h,
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 shape: BoxShape.circle,
                 color: OurColors.backgroundColor,
               ),
               child: IconButton(
                 onPressed: () {
                   _carouselController.nextPage(
-                    duration: Duration(milliseconds: 500),
+                    duration: const Duration(milliseconds: 500),
                     curve: Curves.easeInOut,
                   );
                 },

@@ -22,18 +22,18 @@ class _FavoriteButtonState extends State<FavoriteButton> {
         });
       },
       child: AnimatedSwitcher(
-        duration: Duration(milliseconds: 300),
+        duration: const Duration(milliseconds: 300),
         transitionBuilder: (Widget child, Animation<double> animation) {
           return ScaleTransition(scale: animation, child: child);
         },
         child: _isLiked
-            ? Icon(
+            ? const Icon(
                 Iconsax.heart5,
                 key: ValueKey('liked'),
                 color: OurColors.primaryColor,
                 size: Sizes.iconMd,
               )
-            : Icon(
+            : const Icon(
                 Iconsax.heart,
                 key: ValueKey('unliked'),
                 color: OurColors.primaryColor,

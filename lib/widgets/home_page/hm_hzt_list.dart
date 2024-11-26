@@ -1,26 +1,32 @@
 import 'package:fashion_assistant/constants.dart';
+import 'package:fashion_assistant/screens/product_screen.dart';
 import 'package:fashion_assistant/screens/show_list_screen.dart';
 import 'package:fashion_assistant/widgets/product/product_card.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get/get_connect/http/src/utils/utils.dart';
-import 'package:iconsax/iconsax.dart';
 
-class HorizontalList extends StatelessWidget {
-  const HorizontalList(
-      {super.key,
-      required this.brandSHowcase,
-      required this.description,
-      required this.discount,
-      required this.image,
-      required this.price,
-      required this.coin,
-      required this.height,
-      required this.width,
-      required this.title});
-  final String title, brandSHowcase, description, discount, image, price, coin;
-  final double height, width;
+import 'package:iconsax/iconsax.dart';
+import 'package:fashion_assistant/services/get_products.dart';
+import 'package:fashion_assistant/models/product.dart';
+
+class HorizontalList extends StatefulWidget {
+  HorizontalList({super.key, required this.title});
+
+  final String title;
+
+  @override
+  State<HorizontalList> createState() => _HorizontalListState();
+}
+
+class _HorizontalListState extends State<HorizontalList> {
+  late Future<List<Product>> _products;
+  @override
+  void initState() {
+    super.initState();
+    _products = ProductService().getAllProducts();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -29,20 +35,35 @@ class HorizontalList extends StatelessWidget {
       children: [
         Padding(
           padding: EdgeInsets.only(left: 10.w),
-          child: Text(title,
-              style: TextStyle(
-                  color: OurColors.textColor,
-                  fontWeight: FontWeight.w500,
-                  fontSize: Sizes.fontSizeLg)),
+          child: Text(
+            widget.title,
+            style: TextStyle(
+                color: OurColors.textColor,
+                fontWeight: FontWeight.w500,
+                fontSize: Sizes.fontSizeLg),
+          ),
         ),
         SizedBox(
           height: 410.h,
-          child: ListView.builder(
-            scrollDirection: Axis.horizontal,
-            itemCount: 11,
-            itemBuilder: (context, index) {
-              return index == 10
-                  ? SizedBox(
+          child: FutureBuilder<List<Product>>(
+            future:
+                _products, // Make sure _products is defined elsewhere in the code
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return Center(child: CircularProgressIndicator());
+              } else if (snapshot.hasError) {
+                return Center(child: Text('Error: ${snapshot.error}'));
+              } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                return Center(child: Text('No products available'));
+              }
+
+              final products = snapshot.data!;
+              return ListView.builder(
+                scrollDirection: Axis.horizontal,
+                itemCount: products.length + 1,
+                itemBuilder: (context, index) {
+                  if (index == products.length)
+                    return SizedBox(
                       width: 100.w, // Adjust as needed
                       child: IconButton(
                         onPressed: () {
@@ -50,7 +71,7 @@ class HorizontalList extends StatelessWidget {
                             context,
                             MaterialPageRoute(
                               builder: (context) =>
-                                  ShowListScreen(title: title),
+                                  ShowListScreen(title: widget.title),
                             ),
                           );
                         },
@@ -60,20 +81,34 @@ class HorizontalList extends StatelessWidget {
                           size: 50.sp, // Adjust size as needed
                         ),
                       ),
-                    )
-                  : ProductCard(
-                      brandImage:
-                          'https://s3-alpha-sig.figma.com/img/709b/907e/4e3118132f60e1919c5891c6e22883fe?Expires=1731283200&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=qnF7TC5k8yOoJLEs4Ahuiip23Rr0BP3HMCK6U-fRo1nkRiQxaGks3iGPIXTKfduvmvGGcamJ9aKlccNZhnIEvvif2EFsIfgxAiW9kXLEFNyuKOuOoD9YwNRT91DbkkgNZuIZjsjdzhu1JS00bxn778jDGTBnJ3E50vnghuEW3xY1MWFb24-gy88W4ZePae22MM6CwltLndPFkdLziNow5F45jn4ObRhMifbTl5puhUBUDHaLb9xO8srJZS0vJxoOoNbiBz9YT9EK5IhLoFMqcJvd3si6-TVNcD-c75zQlCSuXURnGZ65dPBQVHRWtHSgCTebju1yvjiVaETxQPwtlw__',
+                    );
+                  final product = products[index];
+                  return GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ProductScreen(
+                            productID: product.id,
+                          ),
+                        ),
+                      );
+                    },
+                    child: ProductCard(
+                      brandImage: product.image,
                       brandName: 'Fashoni',
-                      brandShowcase: '100% Natural Cotton Suit',
-                      prevprice: '400',
+                      brandShowcase: product.brandShowcase,
+                      prevprice: product.prevprice,
                       price: '300',
                       discound: '20',
                       sold: '130',
                       numReviewers: '132',
-                      starts: '5',
+                      stars: '5',
                       coin: 'EGP',
-                    );
+                    ),
+                  );
+                },
+              );
             },
           ),
         ),

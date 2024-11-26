@@ -60,7 +60,7 @@ class _ShowListScreenState extends State<ShowListScreen> {
             pinned: true,
             expandedHeight: 70.h,
             leading: IconButton(
-              icon: Icon(
+              icon: const Icon(
                 Iconsax.arrow_left,
                 color: OurColors.grey,
               ),
@@ -87,7 +87,7 @@ class _ShowListScreenState extends State<ShowListScreen> {
                   color: OurColors.containerBackgroundColor,
                   borderRadius: BorderRadius.circular(50), // Circular shape
                 ),
-                child: TextField(
+                child: const TextField(
                   decoration: InputDecoration(
                     hintText: 'Search...',
                     prefixIcon: Icon(Iconsax.search_favorite,
@@ -111,12 +111,12 @@ class _ShowListScreenState extends State<ShowListScreen> {
                       'https://s3-alpha-sig.figma.com/img/709b/907e/4e3118132f60e1919c5891c6e22883fe?Expires=1731283200&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=qnF7TC5k8yOoJLEs4Ahuiip23Rr0BP3HMCK6U-fRo1nkRiQxaGks3iGPIXTKfduvmvGGcamJ9aKlccNZhnIEvvif2EFsIfgxAiW9kXLEFNyuKOuOoD9YwNRT91DbkkgNZuIZjsjdzhu1JS00bxn778jDGTBnJ3E50vnghuEW3xY1MWFb24-gy88W4ZePae22MM6CwltLndPFkdLziNow5F45jn4ObRhMifbTl5puhUBUDHaLb9xO8srJZS0vJxoOoNbiBz9YT9EK5IhLoFMqcJvd3si6-TVNcD-c75zQlCSuXURnGZ65dPBQVHRWtHSgCTebju1yvjiVaETxQPwtlw__',
                   brandName: 'Fashoni',
                   brandShowcase: '100% Natural Cotton Suit',
-                  prevprice: '400',
+                  prevprice: 400,
                   price: '300',
                   discound: '20',
                   sold: '130',
                   numReviewers: '132',
-                  starts: '5',
+                  stars: '5',
                   coin: 'EGP',
                 );
               },
@@ -129,13 +129,12 @@ class _ShowListScreenState extends State<ShowListScreen> {
       floatingActionButton: _showScrollToTopButton
           ? FloatingActionButton(
               onPressed: _scrollToTop,
+              shape: const CircleBorder(), // Ensure circular shape
+              backgroundColor: OurColors.primaryColor,
               child: Icon(
                 Iconsax.arrow_circle_up,
                 color: Colors.white,
-              ),
-              shape: CircleBorder(), // Ensure circular shape
-              backgroundColor:
-                  OurColors.primaryColor, // Optional color customization
+              ), // Optional color customization
             )
           : null,
     );

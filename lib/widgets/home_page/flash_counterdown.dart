@@ -29,7 +29,8 @@ class _FlashSaleCountdownState extends State<FlashSaleCountdown> {
       hours: widget.hours,
       minutes: widget.minutes,
     );
-    timer = Timer.periodic(Duration(seconds: 1), (_) => _updateCountdown());
+    timer =
+        Timer.periodic(const Duration(seconds: 1), (_) => _updateCountdown());
   }
 
   @override
@@ -40,8 +41,8 @@ class _FlashSaleCountdownState extends State<FlashSaleCountdown> {
 
   void _updateCountdown() {
     setState(() {
-      if (remainingTime > Duration(seconds: 1)) {
-        remainingTime = remainingTime - Duration(seconds: 1);
+      if (remainingTime > const Duration(seconds: 1)) {
+        remainingTime = remainingTime - const Duration(seconds: 1);
       } else {
         timer.cancel();
       }

@@ -74,9 +74,13 @@ class Sizes {
 
 class OurColors {
   //Color Palette
+  static const Color starColor = Color.fromARGB(255, 255, 219, 59);
+
   static const Color primaryColor = Color.fromRGBO(99, 58, 197, 1);
   static const Color secondaryColor = Color.fromRGBO(241, 90, 36, 1);
   static const Color backgroundColor = Color.fromRGBO(255, 255, 255, 1);
+  static const Color secondaryBackgroundColor =
+      Color.fromARGB(255, 252, 252, 254);
   static const Color containerBackgroundColor =
       Color.fromRGBO(248, 248, 248, 1);
   static const Color textColor = Color.fromRGBO(51, 51, 51, 1);

@@ -11,14 +11,14 @@ class CategoriesSection extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Padding(
+        const Padding(
           padding: EdgeInsets.symmetric(horizontal: 16.0),
           child: Text(
             'Categories',
             style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
           ),
         ),
-        SizedBox(height: 16.0),
+        const SizedBox(height: 16.0),
         Padding(
           padding: EdgeInsets.symmetric(horizontal: 8.w),
           child: SingleChildScrollView(
@@ -138,6 +138,5 @@ class CategoryCard extends StatelessWidget {
         ),
       ),
     );
-    ;
   }
 }

@@ -51,7 +51,7 @@ class _BrandCarouselState extends State<BrandCarousel> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
+              const Text(
                 'Brands',
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               ),
@@ -72,8 +72,8 @@ class _BrandCarouselState extends State<BrandCarousel> {
             ],
           ),
         ),
-        SizedBox(height: 8.0),
-        Container(
+        const SizedBox(height: 8.0),
+        SizedBox(
           height: 100, // Adjust height for circular avatars
           child: ListView.builder(
             scrollDirection: Axis.horizontal,
@@ -97,10 +97,10 @@ class _BrandCarouselState extends State<BrandCarousel> {
                         backgroundColor: Colors.transparent,
                       ),
                     ),
-                    SizedBox(height: 4.0),
+                    const SizedBox(height: 4.0),
                     Text(
                       brand['name']!,
-                      style: TextStyle(fontSize: 12),
+                      style: const TextStyle(fontSize: 12),
                     ),
                   ],
                 ),

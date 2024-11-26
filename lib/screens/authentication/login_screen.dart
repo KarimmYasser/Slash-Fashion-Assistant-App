@@ -1,3 +1,4 @@
+import 'package:fashion_assistant/screens/create_avatar/male_or_female.dart';
 import 'package:fashion_assistant/screens/total_screen.dart';
 import 'package:get/get.dart';
 
@@ -42,7 +43,7 @@ class LoginScreen extends StatelessWidget {
                                 OurColors.darkerGrey),
                             foregroundColor:
                                 const WidgetStatePropertyAll(OurColors.light)),
-                    onPressed: () => Get.offAll(() => const TotalScreens()),
+                    onPressed: () => Get.offAll(() => const MaleOrFemale()),
                     child: const Text('Continue as a Guest')),
               ),
               //SocialButtons(),

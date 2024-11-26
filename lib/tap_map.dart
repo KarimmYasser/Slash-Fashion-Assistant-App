@@ -5,6 +5,7 @@ import 'package:fashion_assistant/screens/home_screen.dart';
 import 'package:fashion_assistant/screens/profile_screen.dart';
 
 bool inHome = true;
+bool isMale = true;
 final List<Map<String, dynamic>> screenDetails = [
   {
     'screenName': HomeScreen(),
@@ -22,3 +23,66 @@ final List<Map<String, dynamic>> screenDetails = [
     'screenName': ProfileScreen(),
   },
 ];
+
+final Map<String, Map<String, dynamic>> avatarsMap = {
+  'noneChangedMale': {
+    "topType": 9,
+    "accessoriesType": 0,
+    "hairColor": 1,
+    "facialHairType": 0,
+    "facialHairColor": 1,
+    "clotheType": 5,
+    "eyeType": 2,
+    "eyebrowType": 10,
+    "mouthType": 8,
+    "skinColor": 1,
+    "clotheColor": 6,
+    "style": 0,
+    "graphicType": 0
+  },
+  'male': {
+    "topType": 9,
+    "accessoriesType": 0,
+    "hairColor": 1,
+    "facialHairType": 0,
+    "facialHairColor": 1,
+    "clotheType": 5,
+    "eyeType": 2,
+    "eyebrowType": 10,
+    "mouthType": 8,
+    "skinColor": 1,
+    "clotheColor": 6,
+    "style": 0,
+    "graphicType": 0
+  },
+  'noneChangedFemale': {
+    "topType": 22,
+    "accessoriesType": 0,
+    "hairColor": 1,
+    "facialHairType": 0,
+    "facialHairColor": 1,
+    "clotheType": 5,
+    "eyeType": 2,
+    "eyebrowType": 0,
+    "mouthType": 8,
+    "skinColor": 0,
+    "clotheColor": 12,
+    "style": 0,
+    "graphicType": 0
+  },
+  'female': {
+    "topType": 22,
+    "accessoriesType": 0,
+    "hairColor": 1,
+    "facialHairType": 0,
+    "facialHairColor": 1,
+    "clotheType": 5,
+    "eyeType": 2,
+    "eyebrowType": 0,
+    "mouthType": 8,
+    "skinColor": 0,
+    "clotheColor": 12,
+    "style": 0,
+    "graphicType": 0
+  },
+};

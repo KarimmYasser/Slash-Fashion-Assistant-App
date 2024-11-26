@@ -1,8 +1,12 @@
 import 'package:fashion_assistant/constants.dart';
 import 'package:fashion_assistant/main.dart';
+import 'package:fashion_assistant/screens/create_avatar/male_or_female.dart';
+import 'package:fashion_assistant/screens/product_screen.dart';
 import 'package:fashion_assistant/widgets/home_page/favorite_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:iconsax/iconsax.dart';
 
 class ProductCard extends StatelessWidget {
@@ -16,7 +20,7 @@ class ProductCard extends StatelessWidget {
     required this.discound,
     required this.prevprice,
     required this.sold,
-    required this.starts,
+    required this.stars,
     required this.numReviewers,
   });
   final String brandName,
@@ -25,16 +29,16 @@ class ProductCard extends StatelessWidget {
       price,
       coin,
       discound,
-      prevprice,
       sold,
-      starts,
+      stars,
       numReviewers;
+  final double prevprice;
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       child: Container(
         width: 180.w,
-        padding: EdgeInsets.all(12),
+        padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
           color: const Color.fromARGB(255, 252, 252, 254),
           borderRadius: BorderRadius.circular(16),
@@ -48,7 +52,7 @@ class ProductCard extends StatelessWidget {
                 ClipRRect(
                   borderRadius: BorderRadius.circular(12),
                   child: Image.network(
-                    'https://s3-alpha-sig.figma.com/img/709b/907e/4e3118132f60e1919c5891c6e22883fe?Expires=1731283200&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=qnF7TC5k8yOoJLEs4Ahuiip23Rr0BP3HMCK6U-fRo1nkRiQxaGks3iGPIXTKfduvmvGGcamJ9aKlccNZhnIEvvif2EFsIfgxAiW9kXLEFNyuKOuOoD9YwNRT91DbkkgNZuIZjsjdzhu1JS00bxn778jDGTBnJ3E50vnghuEW3xY1MWFb24-gy88W4ZePae22MM6CwltLndPFkdLziNow5F45jn4ObRhMifbTl5puhUBUDHaLb9xO8srJZS0vJxoOoNbiBz9YT9EK5IhLoFMqcJvd3si6-TVNcD-c75zQlCSuXURnGZ65dPBQVHRWtHSgCTebju1yvjiVaETxQPwtlw__',
+                    "https://media.istockphoto.com/id/1398610798/photo/young-woman-in-linen-shirt-shorts-and-high-heels-pointing-to-the-side-and-talking.jpg?s=1024x1024&w=is&k=20&c=IdY440I0pLdmANsNZRXhjSS7K9Q-Xxvnwf4YzH9qQbQ=",
                     //"https://media.istockphoto.com/id/1401899435/photo/image-of-young-asian-girl-posing-on-blue-background.jpg?s=2048x2048&w=is&k=20&c=PUMy-lxrA9ufa0_yjtk1_YEcj3bxd86fjD7_jCcTE3A=",
                     // Replace with actual image URL
                     width: double.infinity,
@@ -67,7 +71,7 @@ class ProductCard extends StatelessWidget {
                           shape: BoxShape.circle,
                           color: OurColors.white.withOpacity(0.6),
                         ),
-                        child: Center(child: FavoriteButton()))),
+                        child: const Center(child: FavoriteButton()))),
                 SizedBox(height: 8.h),
                 // Rating and Review Count
                 Positioned(
@@ -84,15 +88,15 @@ class ProductCard extends StatelessWidget {
                       children: [
                         SizedBox(width: 4.w),
                         Text(
-                          starts,
-                          style: TextStyle(
+                          stars,
+                          style: const TextStyle(
                             color: OurColors.textColor,
                           ),
                         ),
                         Icon(Iconsax.star1,
                             color: OurColors.primaryColor, size: 16.sp),
                         Text(
-                          "(" + numReviewers + ")",
+                          "($numReviewers)",
                           style: TextStyle(
                             color: OurColors.textColor,
                             fontSize: 12.sp,
@@ -119,7 +123,7 @@ class ProductCard extends StatelessWidget {
               ],
             ),
 
-            SizedBox(height: 4),
+            const SizedBox(height: 4),
             // Product Title
             Text(
               brandShowcase,
@@ -127,7 +131,7 @@ class ProductCard extends StatelessWidget {
                 fontSize: 16.sp,
               ),
             ),
-            SizedBox(height: 4),
+            const SizedBox(height: 4),
             // Brand Name
             Row(
               children: [
@@ -156,7 +160,7 @@ class ProductCard extends StatelessWidget {
                 ),
               ],
             ),
-            SizedBox(height: 8),
+            const SizedBox(height: 8),
             // Price and Discount
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -187,7 +191,7 @@ class ProductCard extends StatelessWidget {
                         Padding(
                           padding: EdgeInsets.only(top: 10.h),
                           child: Text(
-                            discound + "% off",
+                            "$discound% off",
                             style: TextStyle(
                                 fontSize: 14.sp,
                                 color: OurColors.primaryColor,
@@ -213,7 +217,7 @@ class ProductCard extends StatelessWidget {
                 // Cart Icon
               ],
             ),
-            SizedBox(height: 8),
+            const SizedBox(height: 8),
             // Sold Recently Text
             Row(
               children: [
@@ -225,8 +229,8 @@ class ProductCard extends StatelessWidget {
                   width: 5.w,
                 ),
                 Text(
-                  sold + "+ Sold Recently",
-                  style: TextStyle(
+                  "$sold+ Sold Recently",
+                  style: const TextStyle(
                     fontSize: 12,
                     color: OurColors.textColor,
                   ),

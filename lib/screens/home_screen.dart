@@ -63,7 +63,7 @@ class HomeScreen extends StatelessWidget {
         toolbarHeight: Sizes.appBarHeight,
         backgroundColor: OurColors.backgroundColor,
         elevation: 0,
-        title: Text(
+        title: const Text(
           'Slash Hub.',
           style: TextStyle(
             color: OurColors.textColor,
@@ -74,13 +74,13 @@ class HomeScreen extends StatelessWidget {
         actions: [
           // Points Container
           Container(
-            margin: EdgeInsets.only(right: 16.0),
-            padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
+            margin: const EdgeInsets.only(right: 16.0),
+            padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
             decoration: BoxDecoration(
               color: OurColors.containerBackgroundColor,
               borderRadius: BorderRadius.circular(8.r),
             ),
-            child: Row(
+            child: const Row(
               children: [
                 Icon(
                   Icons.card_giftcard,
@@ -102,7 +102,7 @@ class HomeScreen extends StatelessWidget {
           Stack(
             children: [
               IconButton(
-                icon: Icon(
+                icon: const Icon(
                   Iconsax.notification,
                   color: Colors.black,
                   size: Sizes.iconMd,
@@ -115,12 +115,12 @@ class HomeScreen extends StatelessWidget {
                 right: 15,
                 top: 15,
                 child: Container(
-                  padding: EdgeInsets.all(2),
-                  decoration: BoxDecoration(
+                  padding: const EdgeInsets.all(2),
+                  decoration: const BoxDecoration(
                     color: Colors.red,
                     shape: BoxShape.circle,
                   ),
-                  constraints: BoxConstraints(
+                  constraints: const BoxConstraints(
                     minWidth: 8,
                     minHeight: 8,
                   ),
@@ -147,7 +147,7 @@ class HomeScreen extends StatelessWidget {
                       borderRadius:
                           BorderRadius.circular(16.r), // Circular shape
                     ),
-                    child: TextField(
+                    child: const TextField(
                       decoration: InputDecoration(
                         hintText: 'Search here..',
                         prefixIcon: Icon(Iconsax.search_favorite,
@@ -186,7 +186,7 @@ class HomeScreen extends StatelessWidget {
             ),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 10.w),
-              child: Text('Special Offers',
+              child: const Text('Special Offers',
                   style: TextStyle(
                       color: OurColors.textColor,
                       fontWeight: FontWeight.w500,
@@ -203,7 +203,7 @@ class HomeScreen extends StatelessWidget {
             ),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 10.w),
-              child: Text('Events This Month',
+              child: const Text('Events This Month',
                   style: TextStyle(
                       color: OurColors.textColor,
                       fontWeight: FontWeight.w500,
@@ -230,7 +230,7 @@ class HomeScreen extends StatelessWidget {
             SizedBox(
               height: 16.h,
             ),
-            FlashSaleCountdown(
+            const FlashSaleCountdown(
               days: 2,
               hours: 3,
               minutes: 51,
@@ -238,29 +238,11 @@ class HomeScreen extends StatelessWidget {
             SizedBox(
               height: 16.h,
             ),
-            HorizontalList(
-                brandSHowcase: 'brandSHowcase',
-                description: 'description',
-                discount: 'discount',
-                image: 'image',
-                price: 'price',
-                coin: 'coin',
-                height: 30,
-                width: 30,
-                title: 'Best Selling'),
+            HorizontalList(title: 'Best Selling'),
             SizedBox(
               height: 10.h,
             ),
-            HorizontalList(
-                brandSHowcase: 'brandSHowcase',
-                description: 'description',
-                discount: 'discount',
-                image: 'image',
-                price: 'price',
-                coin: 'coin',
-                height: 30,
-                width: 30,
-                title: 'Hot Deals'),
+            HorizontalList(title: 'Hot Deals'),
           ],
         ),
       ),

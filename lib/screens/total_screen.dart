@@ -22,10 +22,11 @@ class _TotalScreensState extends State<TotalScreens> {
         onPageChanged: (index) {
           setState(() {
             _activeScreen = index;
-            if (_activeScreen == 0)
+            if (_activeScreen == 0) {
               inHome = true;
-            else
+            } else {
               inHome = false;
+            }
           });
         },
         children: [

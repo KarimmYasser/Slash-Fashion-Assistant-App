@@ -32,11 +32,11 @@ class _CustomNavbarState extends State<CustomNavbar> {
       items: [
         BottomNavigationBarItem(
           icon: widget.activeScreen == 0
-              ? Icon(
+              ? const Icon(
                   Iconsax.home,
                   color: OurColors.primaryColor,
                 )
-              : Icon(
+              : const Icon(
                   Iconsax.home,
                   color: OurColors.iconPrimary,
                 ),
@@ -44,11 +44,11 @@ class _CustomNavbarState extends State<CustomNavbar> {
         ),
         BottomNavigationBarItem(
           icon: widget.activeScreen == 1
-              ? Icon(
+              ? const Icon(
                   Iconsax.heart,
                   color: OurColors.primaryColor,
                 )
-              : Icon(
+              : const Icon(
                   Iconsax.heart,
                   color: OurColors.iconPrimary,
                 ),
@@ -65,11 +65,11 @@ class _CustomNavbarState extends State<CustomNavbar> {
         ),
         BottomNavigationBarItem(
           icon: widget.activeScreen == 3
-              ? Icon(
+              ? const Icon(
                   Iconsax.shopping_cart,
                   color: OurColors.primaryColor,
                 )
-              : Icon(
+              : const Icon(
                   Iconsax.shopping_cart,
                   color: OurColors.iconPrimary,
                 ),
