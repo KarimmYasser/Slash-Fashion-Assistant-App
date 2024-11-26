@@ -30,6 +30,10 @@ class Sizes {
   // AppBar height
   static const double appBarHeight = 56.0;
 
+  // Dropdown Dialog
+  static const double dropdownDialogRadius = 10.0;
+  static const double searchBarRadius = 10.0;
+
   // Image sizes
   static const double imageThumbSize = 80.0;
 
@@ -90,6 +94,7 @@ class OurColors {
   // Validations
   static const Color succesColor = Color.fromRGBO(72, 199, 116, 1);
   static const Color errorColor = Color.fromRGBO(255, 79, 79, 1);
+  static const Color errorTextColor = Color.fromARGB(255, 179, 41, 30);
   static const Color warning = Color(0xFFF57C00);
   static const Color info = Color(0xFF1976D2);
   // Background colors

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 
 import '../../constants.dart';
-import '../../screens/authentication/controllers.onboarding/onboarding_controller.dart';
+import '../../screens/authentication/controllers/onboarding_controller.dart';
 import '../../utils/device/device_utility.dart';
 
 class OnBoardingNextButton extends StatelessWidget {

@@ -8,12 +8,14 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 
-void main() async {
-  final WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
-  
-  await GetStorage.init();
+import 'bindings/general_binding.dart';
+import 'data/authentication.repository/authentication_repoistory.dart';
 
-  
+void main() async {
+  final WidgetsBinding widgetsBinding =
+      WidgetsFlutterBinding.ensureInitialized();
+
+  await GetStorage.init();
 
   runApp(const FashionAssistant());
 }
@@ -23,12 +25,15 @@ class FashionAssistant extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // ignore: unused_local_variable
+    Get.put(AuthenticationRepository());
     return ScreenUtilInit(
         designSize: const Size(375, 812),
         minTextAdapt: true,
         builder: (context, child) {
           return GetMaterialApp(
-            home: const OnboardingScreen(),
+            initialBinding: GeneralBinding(),
+            home: const OnBoardingScreen(),
             theme: SAppTheme.lightTheme,
           );
         });

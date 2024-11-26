@@ -1,32 +1,28 @@
+import 'package:get/get.dart';
+
 import '../../constants.dart';
 import 'package:flutter/material.dart';
 
-class TermsAndConditions extends StatefulWidget {
+import 'controllers/signup_controller.dart';
+
+class TermsAndConditions extends StatelessWidget {
   const TermsAndConditions({
     super.key,
   });
 
   @override
-  State<TermsAndConditions> createState() => _TermsAndConditionsState();
-}
-
-class _TermsAndConditionsState extends State<TermsAndConditions> {
-  bool _isTermsAndConditionsChecked = false;
-
-  @override
   Widget build(BuildContext context) {
+    final controller = SignupController.instance;
     return Row(
       children: [
         SizedBox(
           width: 24,
           height: 24,
-          child: Checkbox(
-            value: _isTermsAndConditionsChecked,
-            onChanged: (bool? value) {
-              setState(() {
-                          _isTermsAndConditionsChecked = value ?? false;
-                        });
-            },
+          child: Obx(
+            () => Checkbox(
+              value: controller.privacyPolicey.value,
+              onChanged: (value) => controller.togglePrivacyPolicey(),
+            ),
           ),
         ),
         const SizedBox(width: Sizes.spaceBtwItems),
