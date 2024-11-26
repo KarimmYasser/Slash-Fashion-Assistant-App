@@ -1,4 +1,3 @@
-import 'package:csc_picker/csc_picker.dart';
 import 'package:fashion_assistant/utils/helpers/validation.dart';
 import 'package:get/get.dart';
 import 'package:phone_input/phone_input_package.dart';
@@ -8,6 +7,8 @@ import '../../screens/authentication/controllers/signup_controller.dart';
 import '../../screens/authentication/terms_conditons.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
+
+import 'city_picker.dart';
 
 class SignUpForm extends StatelessWidget {
   const SignUpForm({
@@ -20,6 +21,8 @@ class SignUpForm extends StatelessWidget {
       key: controller.signupFormKey,
       child: Column(
         children: [
+
+          // First Name and Last Name
           Row(
             children: [
               Expanded(
@@ -50,6 +53,8 @@ class SignUpForm extends StatelessWidget {
             ],
           ),
           const SizedBox(height: Sizes.spaceBtwInputFields),
+
+          // Username
           TextFormField(
             validator: (value) =>
                 Validator.validateEmptyText('Username', value),
@@ -62,6 +67,8 @@ class SignUpForm extends StatelessWidget {
             ),
           ),
           const SizedBox(height: Sizes.spaceBtwInputFields),
+
+          // Email
           TextFormField(
             validator: (value) => Validator.validateEmail(value),
             controller: controller.email,
@@ -73,6 +80,8 @@ class SignUpForm extends StatelessWidget {
             ),
           ),
           const SizedBox(height: Sizes.spaceBtwInputFields),
+
+          // Password
           Obx(
             () => TextFormField(
               validator: (value) => Validator.validatePassword(value),
@@ -93,6 +102,8 @@ class SignUpForm extends StatelessWidget {
             ),
           ),
           const SizedBox(height: Sizes.spaceBtwInputFields),
+
+          // Phone Number
           PhoneInput(
             autovalidateMode: AutovalidateMode.onUserInteraction,
             validator: PhoneValidator.compose(
@@ -111,70 +122,16 @@ class SignUpForm extends StatelessWidget {
             },
           ),
           const SizedBox(height: Sizes.spaceBtwInputFields),
-          FormField<String>(
-            validator: (value) {
-              if (controller.countryValue == null ||
-                  controller.stateValue == null ||
-                  controller.cityValue == null) {
-                return 'Please select your country, state, and city.';
-              }
-              return null;
-            },
-            builder: (FormFieldState<String> state) {
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  CSCPicker(
-                    showStates: true,
-                    showCities: true,
-                    flagState: CountryFlag.ENABLE,
-                    dropdownDecoration: BoxDecoration(
-                        borderRadius: const BorderRadius.all(
-                            Radius.circular(Sizes.borderRadiusMd)),
-                        color: OurColors.white,
-                        border: Border.all(color: OurColors.grey, width: 1)),
-                    disabledDropdownDecoration: BoxDecoration(
-                        borderRadius: const BorderRadius.all(
-                            Radius.circular(Sizes.borderRadiusMd)),
-                        color: OurColors.grey,
-                        border: Border.all(color: OurColors.grey, width: 1)),
-                    countrySearchPlaceholder: "Country",
-                    stateSearchPlaceholder: "State",
-                    citySearchPlaceholder: "City",
-                    countryDropdownLabel: "Country",
-                    stateDropdownLabel: "State",
-                    cityDropdownLabel: "City",
-                    countryFilter: const [
-                      CscCountry.Egypt,
-                      CscCountry.Saudi_Arabia
-                    ],
-                    dropdownHeadingStyle:
-                        Theme.of(context).textTheme.headlineSmall,
-                    dropdownDialogRadius: Sizes.dropdownDialogRadius,
-                    searchBarRadius: Sizes.searchBarRadius,
-                    onCountryChanged: (value) =>
-                        controller.countryValue = value,
-                    onStateChanged: (value) => controller.stateValue = value,
-                    onCityChanged: (value) => controller.cityValue = value,
-                  ),
-                  if (state.hasError)
-                    Padding(
-                      padding: const EdgeInsets.only(top: 5.0),
-                      child: Text(
-                        state.errorText ?? '',
-                        style: const TextStyle(
-                          color: OurColors.errorTextColor,
-                          fontSize: 14.0,
-                        ),
-                      ),
-                    ),
-                ],
-              );
-            },
-          ),
+
+          // Country, State, and City
+          CityPicker(controller: controller),
           const SizedBox(height: Sizes.spaceBtwSections),
+
+          // Terms and Conditions
           const TermsAndConditions(),
           const SizedBox(height: Sizes.spaceBtwSections),
+
+          // Sign Up Button
           SizedBox(
             width: double.infinity,
             child: ElevatedButton(
@@ -192,3 +149,4 @@ class SignUpForm extends StatelessWidget {
     );
   }
 }
+
