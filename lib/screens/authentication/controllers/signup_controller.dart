@@ -5,9 +5,9 @@ import 'package:fashion_assistant/utils/popups/full_screen_loader.dart';
 import 'package:fashion_assistant/utils/popups/loaders.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 
 import '../../../utils/http/http_client.dart';
-import '../../total_screen.dart';
 import '../success_screen.dart';
 
 class SignupController extends GetxController {
@@ -16,6 +16,7 @@ class SignupController extends GetxController {
   // Variables
   final isPasswordVisible = true.obs;
   final privacyPolicey = true.obs;
+  final localStorage = GetStorage();
   String? phoneNumber;
   String? countryValue;
   String? stateValue;
@@ -71,9 +72,13 @@ class SignupController extends GetxController {
         'gender': "male",
         'age': 25,
       });
+      HttpHelper.setToken(response['token']);
+      localStorage.write('TOKEN', HttpHelper.token);
+
       // Save User Data
       UserData.userData = UserData(response['user']);
-
+      localStorage.write('IsLoggedIn', true);
+      
       // Stop Loading
       FullScreenLoader.stopLoading();
 

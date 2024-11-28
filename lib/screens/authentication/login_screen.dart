@@ -1,5 +1,4 @@
 import 'package:fashion_assistant/screens/create_avatar/male_or_female.dart';
-import 'package:fashion_assistant/screens/total_screen.dart';
 import 'package:get/get.dart';
 
 import '../../widgets/login_page/login_form.dart';

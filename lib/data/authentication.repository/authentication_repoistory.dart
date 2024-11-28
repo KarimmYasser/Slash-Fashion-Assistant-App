@@ -30,17 +30,22 @@ class AuthenticationRepository extends GetxController {
       print(deviceStorage.read('IsFirstTime'));
     }
 
-    deviceStorage.writeIfNull('IsFirstTime', true);
+    deviceStorage.write('IsFirstTime', true);
     deviceStorage.writeIfNull('IsLoggedIn', false);
     if (deviceStorage.read('IsFirstTime') == true) {
       Get.offAll(const OnBoardingScreen());
     } else if (deviceStorage.read('IsLoggedIn') != true) {
       Get.offAll(() => const LoginScreen());
     } else {
-      HttpHelper.setToken(deviceStorage.read('TOKEN'));
-      final response = await HttpHelper.get('api/auth/me');
-      UserData.userData = UserData(response);
-      Get.offAll(() => const TotalScreens());
+      try {
+        HttpHelper.setToken(deviceStorage.read('TOKEN'));
+        final response = await HttpHelper.get('api/auth/me');
+        UserData.userData = UserData(response);
+        Get.offAll(() => const TotalScreens());
+      } catch (e) {
+        deviceStorage.write('IsLoggedIn', false);
+        Get.offAll(() => const LoginScreen());
+      }
     }
   }
 }

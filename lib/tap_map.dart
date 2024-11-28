@@ -2,7 +2,7 @@ import 'package:fashion_assistant/screens/cart_screen.dart';
 import 'package:fashion_assistant/screens/chat_screen.dart';
 import 'package:fashion_assistant/screens/favorite_screen.dart';
 import 'package:fashion_assistant/screens/home_screen.dart';
-import 'package:fashion_assistant/screens/profile_screen.dart';
+import 'package:fashion_assistant/screens/personalization/profile_screen.dart';
 
 bool inHome = true;
 bool isMale = true;
@@ -10,19 +10,19 @@ String baseURL =
     'https://8b80-2c0f-fc89-8032-d65f-6179-900b-c52f-3aeb.ngrok-free.app';
 final List<Map<String, dynamic>> screenDetails = [
   {
-    'screenName': HomeScreen(),
+    'screenName': const HomeScreen(),
   },
   {
-    'screenName': FavoriteScreen(),
+    'screenName': const FavoriteScreen(),
   },
   {
-    'screenName': ChatScreen(),
+    'screenName': const ChatScreen(),
   },
   {
-    'screenName': CartScreen(),
+    'screenName': const CartScreen(),
   },
   {
-    'screenName': ProfileScreen(),
+    'screenName': const ProfileScreen(),
   },
 ];
 

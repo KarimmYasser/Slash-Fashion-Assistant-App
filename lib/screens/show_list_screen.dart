@@ -131,7 +131,7 @@ class _ShowListScreenState extends State<ShowListScreen> {
               onPressed: _scrollToTop,
               shape: const CircleBorder(), // Ensure circular shape
               backgroundColor: OurColors.primaryColor,
-              child: Icon(
+              child: const Icon(
                 Iconsax.arrow_circle_up,
                 color: Colors.white,
               ), // Optional color customization

@@ -8,8 +8,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 
-import '../../utils/http/http_client.dart';
-
 class LoginPageForm extends StatelessWidget {
   const LoginPageForm({
     super.key,

@@ -54,7 +54,10 @@ dependencies:
   csc_picker: ^0.2.7
   lottie: ^3.1.3
   connectivity_plus: ^6.1.0
+  cached_network_image: ^3.4.1
+  shimmer: ^3.0.0
 
+  shared_preferences: any
 dev_dependencies:
   flutter_test:
     sdk: flutter

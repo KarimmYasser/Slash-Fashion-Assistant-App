@@ -3,9 +3,7 @@ import 'package:http/http.dart' as http;
 
 class HttpHelper {
   static const String _baseUrl =
-      'https://113d-2c0f-fc89-8032-d65f-6179-900b-c52f-3aeb.ngrok-free.app';
-  //static const String _baseUrl = 'http://localhost:3300';
-  //static const String _baseUrl = 'https://c9b8-2c0f-fc89-8039-92bb-40a7-a57c-bbd6-a0e3.ngrok-free.app';
+      'https://hhynshsbih.us-east-1.awsapprunner.com';
   static String? token;
 
   // Helper method to make a GET request

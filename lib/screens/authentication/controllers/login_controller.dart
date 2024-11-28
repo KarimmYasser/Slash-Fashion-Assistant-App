@@ -1,4 +1,3 @@
-import 'package:fashion_assistant/screens/create_avatar/male_or_female.dart';
 import 'package:fashion_assistant/utils/popups/full_screen_loader.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
