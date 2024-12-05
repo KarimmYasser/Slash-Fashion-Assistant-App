@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:fashion_assistant/constants.dart';
+import 'package:fashion_assistant/screens/create_avatar/avoiding_colors.dart';
 import 'package:fashion_assistant/screens/create_avatar/choose_body_color.dart';
 import 'package:fashion_assistant/screens/create_avatar/choose_facial_hair.dart';
 import 'package:fashion_assistant/screens/create_avatar/choose_facialhair_color.dart';
@@ -26,6 +27,8 @@ import 'package:iconsax/iconsax.dart';
 import 'package:http/http.dart' as http;
 
 List<Map<String, dynamic>> selectedProducts = [];
+List<String> selectedColors = [];
+List<String> avoidedSelectedColors = [];
 
 class GetPreferences extends StatefulWidget {
   const GetPreferences({super.key});
@@ -40,7 +43,7 @@ class _GetPreferencesState extends State<GetPreferences> {
 
   // Define the total number of screens here for easy management
   final int _totalScreens =
-      isMale ? 7 : 5; // Adjust based on conditional screens
+      isMale ? 9 : 7; // Adjust based on conditional screens
   void _showAvatarPopup(BuildContext context) async {
     String? avatarSvg;
     Map<String, dynamic> avatarData = {};
@@ -136,6 +139,7 @@ class _GetPreferencesState extends State<GetPreferences> {
                       ElevatedButton(
                         onPressed: () async {
                           // Close the dialog
+                          _sendColorsToBackend();
                           saveSelectedProducts('generalProduct');
                           try {
                             final response = await HttpHelper.post(
@@ -179,6 +183,26 @@ class _GetPreferencesState extends State<GetPreferences> {
         );
       },
     );
+  }
+
+  Future<void> _sendColorsToBackend() async {
+    final url = 'color_perefrereneces';
+    final body = {
+      'avoidedColors': avoidedSelectedColors,
+      'selectedColors': selectedColors,
+    };
+
+    try {
+      final response = await HttpHelper.post(url, body);
+
+      if (response['statusCode'] == 200) {
+        debugPrint('Colors sent successfully');
+      } else {
+        debugPrint('Failed to send colors: ${response['meassage']}');
+      }
+    } catch (e) {
+      debugPrint('Error sending colors: $e');
+    }
   }
 
   Future<void> saveSelectedProducts(String generalProduct) async {
@@ -261,6 +285,8 @@ class _GetPreferencesState extends State<GetPreferences> {
           ChooseFavColor(
             onSelection: _nextPage,
           ),
+          ChooseFavColors(),
+          AvoidingColors(),
           ChooseStyle(),
         ],
       ),

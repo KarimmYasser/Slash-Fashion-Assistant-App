@@ -30,19 +30,7 @@ class TrustedWithVideoReviews extends StatelessWidget {
           SizedBox(
             width: 5.w,
           ),
-          const Text('This item is trusted by '),
-          const Text(
-            'Video Reviews',
-            style: TextStyle(fontWeight: FontWeight.bold),
-          ),
-          const Spacer(),
-          IconButton(
-            icon: Icon(
-              Icons.question_mark,
-              size: 18.sp,
-            ),
-            onPressed: () {},
-          )
+          const Text('You\'ll get 100 points for completing your review'),
         ],
       ),
     );

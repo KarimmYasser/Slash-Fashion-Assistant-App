@@ -1,4 +1,6 @@
 import 'package:fashion_assistant/constants.dart';
+import 'package:fashion_assistant/screens/add_review_screen.dart';
+import 'package:fashion_assistant/screens/reviews_screen.dart';
 import 'package:fashion_assistant/screens/show_list_screen.dart';
 import 'package:fashion_assistant/widgets/product_details/five_stars.dart';
 import 'package:flutter/material.dart';
@@ -268,7 +270,9 @@ class Reviews extends StatelessWidget {
                   return Padding(
                     padding: const EdgeInsets.only(
                         right: 16.0), // Add spacing between cards
-                    child: ReviewCard(),
+                    child: ReviewCard(
+                      isExpanded: false,
+                    ),
                   );
                 }
               },
@@ -279,8 +283,8 @@ class Reviews extends StatelessWidget {
 }
 
 class ReviewCard extends StatefulWidget {
-  const ReviewCard({super.key});
-
+  const ReviewCard({super.key, required this.isExpanded});
+  final bool isExpanded;
   @override
   State<ReviewCard> createState() => _ReviewCardState();
 }
@@ -288,7 +292,6 @@ class ReviewCard extends StatefulWidget {
 class _ReviewCardState extends State<ReviewCard> {
   int helpfulCount = 2;
   bool isHelpfulClicked = false;
-  bool isExpanded = false;
 
   void _toggleHelpfulCount() {
     setState(() {
@@ -303,10 +306,10 @@ class _ReviewCardState extends State<ReviewCard> {
 
   void _navigateToReviewsPage() {
     // Navigate to the reviews page (replace with your navigation logic)
-    // Navigator.push(
-    //   context,
-    //   MaterialPageRoute(builder: (context) => ReviewsPage()),
-    // );
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => ReviewsScreen()),
+    );
   }
 
   @override
@@ -314,7 +317,7 @@ class _ReviewCardState extends State<ReviewCard> {
     return GestureDetector(
       onTap: _navigateToReviewsPage,
       child: Container(
-        constraints: BoxConstraints(maxWidth: 300.w), // Set maxWidth here
+        constraints: BoxConstraints(maxWidth: 300), // Ensure max width only
         child: Card(
           color: OurColors.white,
           shape: RoundedRectangleBorder(
@@ -376,16 +379,14 @@ class _ReviewCardState extends State<ReviewCard> {
                 ),
                 SizedBox(height: 8),
                 Text(
-                  "Absolutely love this scarf, the colors are beyond amazing and the material as well.",
+                  "Absolutely love this scarf, the colors are beyond amazing and the material as well. "
+                  "The colors are vibrant, and it feels so soft on the skin. It's exactly what I was looking for.",
                   style: TextStyle(fontSize: 14),
-                  maxLines: isExpanded ? null : 2,
-                  overflow: TextOverflow.ellipsis,
+                  maxLines: widget.isExpanded ? null : 2, // Dynamically adjust
+                  overflow: widget.isExpanded
+                      ? TextOverflow.visible
+                      : TextOverflow.ellipsis,
                 ),
-                if (!isExpanded)
-                  Text(
-                    "...",
-                    style: TextStyle(color: Colors.grey, fontSize: 14),
-                  ),
                 SizedBox(height: 12),
                 GestureDetector(
                   onTap: _toggleHelpfulCount,
@@ -406,7 +407,7 @@ class _ReviewCardState extends State<ReviewCard> {
                       ),
                     ],
                   ),
-                )
+                ),
               ],
             ),
           ),

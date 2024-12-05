@@ -1,5 +1,6 @@
 import 'package:fashion_assistant/constants.dart';
 import 'package:fashion_assistant/models/product.dart';
+import 'package:fashion_assistant/screens/reviews_screen.dart';
 import 'package:fashion_assistant/services/get_products.dart';
 import 'package:fashion_assistant/widgets/home_page/hm_hzt_list.dart';
 import 'package:fashion_assistant/widgets/product_details/about_brand.dart';
@@ -257,7 +258,14 @@ class _ProductScreenState extends State<ProductScreen> {
                   SizedBox(
                     height: 20.h,
                   ),
-                  ReviewsWidget(),
+                  GestureDetector(
+                      onTap: () {
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (context) {
+                          return ReviewsScreen();
+                        }));
+                      },
+                      child: ReviewsWidget()),
                   SizedBox(
                     height: 20.h,
                   ),
