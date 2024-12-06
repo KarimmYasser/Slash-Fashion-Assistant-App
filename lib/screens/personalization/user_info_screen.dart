@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 
 import '../../constants.dart';
+import '../../data/authentication.repository/user_data.dart';
 import '../../widgets/profile_page/profile_menu.dart';
 
 class UserInfoScreen extends StatelessWidget {
@@ -27,8 +28,8 @@ class UserInfoScreen extends StatelessWidget {
                 width: double.infinity,
                 child: Column(
                   children: [
-                    const CircularImage(
-                      image: 'assets/images/category.png',
+                    CircularImage(
+                      image: UserData.userData!.image,
                       width: 80,
                       height: 80,
                     ),
@@ -49,19 +50,19 @@ class UserInfoScreen extends StatelessWidget {
 
               ProfileMenu(
                 title: 'First Name',
-                value: 'Karim',
+                value: UserData.userData!.firstName!,
                 onPressed: () {},
                 icon: Iconsax.arrow_right_34,
               ),
               ProfileMenu(
                 title: 'Last Name',
-                value: 'Yasser',
+                value: UserData.userData!.lastName!,
                 onPressed: () {},
                 icon: Iconsax.arrow_right_34,
               ),
               ProfileMenu(
                 title: 'UserName',
-                value: 'Karimmyasser',
+                value: UserData.userData!.username!,
                 onPressed: () {},
                 icon: Iconsax.copy,
               ),
@@ -76,25 +77,25 @@ class UserInfoScreen extends StatelessWidget {
 
               ProfileMenu(
                 title: 'User ID',
-                value: '123e4567-e89b-12d3-a456-426614174000',
+                value: UserData.userData!.id!,
                 onPressed: () {},
                 icon: Iconsax.copy,
               ),
               ProfileMenu(
                 title: 'E-mail',
-                value: 'kemoyasso66@gmail.com',
+                value: UserData.userData!.email!,
                 onPressed: () {},
                 icon: Iconsax.arrow_right_34,
               ),
               ProfileMenu(
                 title: 'Phone Number',
-                value: '+201144432284',
+                value: UserData.userData!.phone!,
                 onPressed: () {},
                 icon: Iconsax.arrow_right_34,
               ),
               ProfileMenu(
                 title: 'Gender',
-                value: 'Male',
+                value: UserData.userData!.gender!,
                 onPressed: () {},
                 icon: Iconsax.arrow_right_34,
               ),

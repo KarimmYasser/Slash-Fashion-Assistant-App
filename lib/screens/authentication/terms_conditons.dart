@@ -26,31 +26,34 @@ class TermsAndConditions extends StatelessWidget {
           ),
         ),
         const SizedBox(width: Sizes.spaceBtwItems),
-        Text.rich(
-          TextSpan(
-            children: [
-              TextSpan(
-                  text: "I agree to ",
-                  style: Theme.of(context).textTheme.bodySmall),
-              TextSpan(
-                text: "Privacy Policy ",
-                style: Theme.of(context).textTheme.bodyMedium!.apply(
-                      color: OurColors.primaryColor,
-                      decoration: TextDecoration.underline,
-                      decorationColor: OurColors.primaryColor,
-                    ),
-              ),
-              TextSpan(
-                  text: "and ", style: Theme.of(context).textTheme.bodySmall),
-              TextSpan(
-                text: "Terms of use.",
-                style: Theme.of(context).textTheme.bodyMedium!.apply(
-                      color: OurColors.primaryColor,
-                      decoration: TextDecoration.underline,
-                      decorationColor: OurColors.primaryColor,
-                    ),
-              ),
-            ],
+        Flexible(
+          child: Text.rich(
+            TextSpan(
+              children: [
+                TextSpan(
+                    text: "I agree to ",
+                    style: Theme.of(context).textTheme.bodySmall),
+                TextSpan(
+                  text: "Privacy Policy ",
+                  style: Theme.of(context).textTheme.bodyMedium!.apply(
+                        color: OurColors.primaryColor,
+                        decoration: TextDecoration.underline,
+                        decorationColor: OurColors.primaryColor,
+                      ),
+                ),
+                TextSpan(
+                    text: "and ", style: Theme.of(context).textTheme.bodySmall),
+                TextSpan(
+                  text: "Terms of use.",
+                  style: Theme.of(context).textTheme.bodyMedium!.apply(
+                        color: OurColors.primaryColor,
+                        decoration: TextDecoration.underline,
+                        decorationColor: OurColors.primaryColor,
+                      ),
+                ),
+              ],
+            ),
+            overflow: TextOverflow.visible,
           ),
         ),
       ],

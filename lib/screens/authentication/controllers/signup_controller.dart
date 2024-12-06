@@ -16,6 +16,8 @@ class SignupController extends GetxController {
   // Variables
   final isPasswordVisible = true.obs;
   final privacyPolicey = true.obs;
+  String? gender;
+  String? userType;
   final localStorage = GetStorage();
   String? phoneNumber;
   String? countryValue;
@@ -69,7 +71,7 @@ class SignupController extends GetxController {
         'password': password.text.trim(),
         "phone": phoneNumber!.trim(),
         "city": cityValue!.trim(),
-        'gender': "male",
+        'gender': gender!.trim(),
         'age': 25,
       });
       HttpHelper.setToken(response['token']);

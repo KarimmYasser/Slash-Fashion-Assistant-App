@@ -7,11 +7,14 @@ import 'package:fashion_assistant/widgets/profile_page/setting_menu_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttermoji/fluttermoji.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:iconsax/iconsax.dart';
 import 'dart:convert';
 
+import '../../data/authentication.repository/user_data.dart';
 import '../../widgets/common/primary_header_container.dart';
 import '../../widgets/profile_page/user_profile_tile.dart';
+import '../authentication/login_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -71,6 +74,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final localStorage = GetStorage();
     return Scaffold(
       body: SingleChildScrollView(
         child: Column(
@@ -93,10 +97,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   UserProfileTile(
                     isLoading: isLoading,
                     avatarSvg: avatarSvg,
-                    name: 'Karim Yasser',
-                    //'${UserData.userData!.firstName} ${UserData.userData!.lastName}',
-                    email: 'Kemoyasso66@gmail.com',
-                    //'${UserData.userData!.email}',
+                    name: '${UserData.userData!.firstName} ${UserData.userData!.lastName}',
+                    email: '${UserData.userData!.email}',
                     editProfile: () => Get.to(() => const UserInfoScreen()),
                   ),
 
@@ -160,7 +162,41 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   SizedBox(
                     width: double.infinity,
                     child: OutlinedButton(
-                        onPressed: () {},
+                        onPressed: () async {
+                          bool? confirmLogout = await showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                title: const Text('Confirm Logout'),
+                                content:
+                                    const Text('Are you sure you want to logout?'),
+                                actions: <Widget>[
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.of(context).pop(false);
+                                    },
+                                    child: const Text('Cancel'),
+                                  ),
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.of(context).pop(true);
+                                    },
+                                    child: const Text('Logout'),
+                                  ),
+                                ],
+                              );
+                            },
+                          );
+
+                          if (confirmLogout == true) {
+                            // Logout
+                            UserData.userData = null;
+                            localStorage.write('IsLoggedIn', false);
+                            HttpHelper.token = null;
+                            localStorage.remove('TOKEN');
+                            Get.offAll(() => const LoginScreen());
+                          }
+                        },
                         style: Theme.of(context)
                             .outlinedButtonTheme
                             .style!
