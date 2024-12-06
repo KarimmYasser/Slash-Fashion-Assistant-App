@@ -1,5 +1,6 @@
 import 'package:fashion_assistant/constants.dart';
 import 'package:fashion_assistant/models/product.dart';
+import 'package:fashion_assistant/screens/brand_mode/reviews_screen_brand.dart';
 import 'package:fashion_assistant/screens/reviews_screen.dart';
 import 'package:fashion_assistant/services/get_products.dart';
 import 'package:fashion_assistant/widgets/home_page/hm_hzt_list.dart';
@@ -58,15 +59,15 @@ final List<Map<String, String>> colors = [
   },
 ];
 
-class ProductScreen extends StatefulWidget {
-  const ProductScreen({super.key, required this.productID});
+class ProductScreenBrand extends StatefulWidget {
+  const ProductScreenBrand({super.key, required this.productID});
   final String productID;
 
   @override
-  State<ProductScreen> createState() => _ProductScreenState();
+  State<ProductScreenBrand> createState() => _ProductScreenBrandState();
 }
 
-class _ProductScreenState extends State<ProductScreen> {
+class _ProductScreenBrandState extends State<ProductScreenBrand> {
   late Future<Product> _product;
   bool isTrustedWithVideoReviews = true;
 
@@ -156,40 +157,27 @@ class _ProductScreenState extends State<ProductScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 8.w),
-                          child: Row(
-                            children: [
-                              // Size of the circular image container
-                              CircleAvatar(
-                                radius:
-                                    14, // Inner circle size (smaller for border effect)
-                                backgroundImage: NetworkImage(
-                                  "https://media.istockphoto.com/id/1398610798/photo/young-woman-in-linen-shirt-shorts-and-high-heels-pointing-to-the-side-and-talking.jpg?s=1024x1024&w=is&k=20&c=IdY440I0pLdmANsNZRXhjSS7K9Q-Xxvnwf4YzH9qQbQ=",
-                                ),
-                                backgroundColor: Colors.transparent,
-                              ),
-                              SizedBox(
-                                width: 10.w,
-                              ),
-                              Text(
-                                'Fashoni',
-                                style: TextStyle(
-                                    fontSize: 16.sp,
-                                    fontWeight: FontWeight.w500),
-                              ),
-                            ],
-                          ),
-                        ),
                         ImagesContainer(
                           imageUrls: imagesPaths,
                         ),
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 8),
-                          child: Text(
-                            product.brandShowcase,
-                            style: TextStyle(
-                                fontSize: 18.sp, fontWeight: FontWeight.w500),
+                          child: Row(
+                            children: [
+                              Text(
+                                product.brandShowcase,
+                                style: TextStyle(
+                                    fontSize: 18.sp,
+                                    fontWeight: FontWeight.w500),
+                              ),
+                              Spacer(),
+                              IconButton(
+                                icon: Icon(Iconsax.edit_2),
+                                onPressed: () {
+                                  // Implement the edit functionality here
+                                },
+                              ),
+                            ],
                           ),
                         ),
                         SizedBox(
@@ -223,8 +211,6 @@ class _ProductScreenState extends State<ProductScreen> {
                         SizedBox(
                           height: 16.h,
                         ),
-                        if (isTrustedWithVideoReviews)
-                          TrustedWithVideoReviews(),
                         SizedBox(
                           height: 20.h,
                         ),
@@ -254,22 +240,17 @@ class _ProductScreenState extends State<ProductScreen> {
                   SizedBox(
                     height: 20.h,
                   ),
-                  AboutBrand(),
-                  SizedBox(
-                    height: 20.h,
-                  ),
                   GestureDetector(
                       onTap: () {
                         Navigator.push(context,
                             MaterialPageRoute(builder: (context) {
-                          return ReviewsScreen();
+                          return ReviewsScreenBrand();
                         }));
                       },
                       child: ReviewsWidget()),
                   SizedBox(
                     height: 20.h,
                   ),
-                  HorizontalList(title: 'You may also like'),
                 ],
               ),
             );

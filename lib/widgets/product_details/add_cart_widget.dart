@@ -5,8 +5,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:iconsax/iconsax.dart';
 
 class AddCartAppBar extends StatelessWidget {
-  const AddCartAppBar({super.key});
-
+  const AddCartAppBar({super.key, required this.productId});
+  final String productId;
   @override
   Widget build(BuildContext context) {
     return BottomAppBar(
@@ -37,7 +37,7 @@ class AddCartAppBar extends StatelessWidget {
                       borderRadius: BorderRadius.circular(14.r),
                       color: const Color.fromARGB(255, 242, 242, 245)),
                   child: IconButton(
-                    icon: FavoriteButton(),
+                    icon: FavoriteButton(productId: productId),
                     onPressed: () {
                       // Handle favorite action
                     },

@@ -9,8 +9,8 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:iconsax/iconsax.dart';
 
-class ProductCard extends StatelessWidget {
-  const ProductCard({
+class ProductCardBrand extends StatelessWidget {
+  const ProductCardBrand({
     super.key,
     required this.brandName,
     required this.brandImage,
@@ -23,6 +23,7 @@ class ProductCard extends StatelessWidget {
     required this.stars,
     required this.numReviewers,
     required this.productId,
+    required this.likes,
   });
   final String brandName,
       brandImage,
@@ -35,6 +36,15 @@ class ProductCard extends StatelessWidget {
       numReviewers,
       productId;
   final double prevprice;
+  final int likes;
+
+  String formatLikes(int likes) {
+    if (likes >= 1000) {
+      return '${(likes / 1000).toStringAsFixed(1)}k';
+    }
+    return likes.toString();
+  }
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -68,15 +78,23 @@ class ProductCard extends StatelessWidget {
                     right: 8,
                     child: Container(
                         height: 35.h,
-                        width: 35.w,
+                        width: 60.w,
                         decoration: BoxDecoration(
-                          shape: BoxShape.circle,
+                          borderRadius: BorderRadius.circular(16.r),
                           color: OurColors.white.withOpacity(0.6),
                         ),
-                        child: Center(
-                            child: FavoriteButton(
-                          productId: productId,
-                        )))),
+                        child: Row(
+                          children: [
+                            Center(
+                              child: Icon(
+                                Iconsax.heart5,
+                                color: OurColors.primaryColor,
+                                size: Sizes.iconMd,
+                              ),
+                            ),
+                            Text(formatLikes(likes))
+                          ],
+                        ))),
                 SizedBox(height: 8.h),
                 // Rating and Review Count
                 Positioned(

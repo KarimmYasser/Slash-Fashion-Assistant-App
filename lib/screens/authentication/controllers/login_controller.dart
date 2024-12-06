@@ -1,3 +1,5 @@
+import 'package:fashion_assistant/screens/brand_mode/brand_mode_screen.dart';
+import 'package:fashion_assistant/screens/brand_mode/brand_total_screens.dart';
 import 'package:fashion_assistant/utils/popups/full_screen_loader.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -64,7 +66,7 @@ class LoginController extends GetxController {
             image: "assets/images/72462-check-register.json",
             title: "Your account has been logged in successfully.",
             subtitle: "Your Account is ready to use.",
-            onPressed: () => Get.offAll(() => const TotalScreens()),
+            onPressed: () => Get.offAll(() => const BrandTotalScreens()),
           ));
     } catch (e) {
       // Stop Loading
