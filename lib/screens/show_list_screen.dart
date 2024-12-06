@@ -107,6 +107,7 @@ class _ShowListScreenState extends State<ShowListScreen> {
             delegate: SliverChildBuilderDelegate(
               (context, index) {
                 return const ProductCard(
+                  productId: '1',
                   brandImage:
                       'https://s3-alpha-sig.figma.com/img/709b/907e/4e3118132f60e1919c5891c6e22883fe?Expires=1731283200&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=qnF7TC5k8yOoJLEs4Ahuiip23Rr0BP3HMCK6U-fRo1nkRiQxaGks3iGPIXTKfduvmvGGcamJ9aKlccNZhnIEvvif2EFsIfgxAiW9kXLEFNyuKOuOoD9YwNRT91DbkkgNZuIZjsjdzhu1JS00bxn778jDGTBnJ3E50vnghuEW3xY1MWFb24-gy88W4ZePae22MM6CwltLndPFkdLziNow5F45jn4ObRhMifbTl5puhUBUDHaLb9xO8srJZS0vJxoOoNbiBz9YT9EK5IhLoFMqcJvd3si6-TVNcD-c75zQlCSuXURnGZ65dPBQVHRWtHSgCTebju1yvjiVaETxQPwtlw__',
                   brandName: 'Fashoni',

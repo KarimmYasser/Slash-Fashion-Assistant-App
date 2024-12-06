@@ -1,6 +1,8 @@
 import 'package:fashion_assistant/constants.dart';
+import 'package:fashion_assistant/screens/brand_mode/product_details_screen_brand.dart';
 import 'package:fashion_assistant/screens/product_screen.dart';
 import 'package:fashion_assistant/screens/show_list_screen.dart';
+import 'package:fashion_assistant/widgets/brand_mode/product_card_brand.dart';
 import 'package:fashion_assistant/widgets/product/product_card.dart';
 
 import 'package:flutter/material.dart';
@@ -10,16 +12,16 @@ import 'package:iconsax/iconsax.dart';
 import 'package:fashion_assistant/services/get_products.dart';
 import 'package:fashion_assistant/models/product.dart';
 
-class HorizontalList extends StatefulWidget {
-  HorizontalList({super.key, required this.title});
+class HorizontalListBrand extends StatefulWidget {
+  HorizontalListBrand({super.key, required this.title});
 
   final String title;
 
   @override
-  State<HorizontalList> createState() => _HorizontalListState();
+  State<HorizontalListBrand> createState() => _HorizontalListBrandState();
 }
 
-class _HorizontalListState extends State<HorizontalList> {
+class _HorizontalListBrandState extends State<HorizontalListBrand> {
   late Future<List<Product>> _products;
   @override
   void initState() {
@@ -88,13 +90,13 @@ class _HorizontalListState extends State<HorizontalList> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => ProductScreen(
+                          builder: (context) => ProductScreenBrand(
                             productID: product.id,
                           ),
                         ),
                       );
                     },
-                    child: ProductCard(
+                    child: ProductCardBrand(
                       productId: product.id,
                       brandImage: product.image,
                       brandName: 'Fashoni',
@@ -106,6 +108,7 @@ class _HorizontalListState extends State<HorizontalList> {
                       numReviewers: '132',
                       stars: '5',
                       coin: 'EGP',
+                      likes: 1000,
                     ),
                   );
                 },
