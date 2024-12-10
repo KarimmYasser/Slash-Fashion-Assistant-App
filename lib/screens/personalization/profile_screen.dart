@@ -1,4 +1,5 @@
 import 'package:fashion_assistant/constants.dart';
+import 'package:fashion_assistant/screens/personalization/order_screen.dart';
 import 'package:fashion_assistant/screens/personalization/user_info_screen.dart';
 import 'package:fashion_assistant/utils/http/http_client.dart';
 import 'package:fashion_assistant/widgets/common/appbar.dart';
@@ -97,9 +98,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   UserProfileTile(
                     isLoading: isLoading,
                     avatarSvg: avatarSvg,
-                    name: '${UserData.userData!.firstName} ${UserData.userData!.lastName}',
-                    email: '${UserData.userData!.email}',
-                    editProfile: () => Get.to(() => const UserInfoScreen()),
+                    name: (UserData.userData != null)
+                        ? '${UserData.userData!.firstName} ${UserData.userData!.lastName}'
+                        : 'Guest',
+                    email: (UserData.userData != null)
+                        ? '${UserData.userData!.email}'
+                        : '',
+                    editProfile: () {
+                      if (UserData.userData != null) {
+                        Get.to(() => const UserInfoScreen());
+                      } else {
+                        Get.to(() => const LoginScreen());
+                      }
+                    },
                   ),
 
                   const SizedBox(height: Sizes.spaceBtwSections),
@@ -108,112 +119,141 @@ class _ProfileScreenState extends State<ProfileScreen> {
             ),
 
             // ---> Body
-            Padding(
-              padding: const EdgeInsets.all(Sizes.defaultSpace),
-              child: Column(
+            if (UserData.userData != null)
+              Padding(
+                padding: const EdgeInsets.all(Sizes.defaultSpace),
+                child: Column(
+                  children: [
+                    /// -- Account Settings
+                    const SectionHeading(
+                        title: 'Account Settings', showActionButton: false),
+                    const SizedBox(height: Sizes.spaceBtwItems),
+                    SettingMenuTile(
+                        icon: Iconsax.bag_tick,
+                        title: 'My Orders',
+                        subtitle: 'In-progress and Completed Orders',
+                        onTap: () => Get.to(() => const OrderScreen())),
+                    const SettingMenuTile(
+                        icon: Iconsax.security_card,
+                        title: 'Account Privacy',
+                        subtitle: 'Manage data usage and connected accounts'),
+
+                    /// -- App Settings
+                    const SizedBox(height: Sizes.spaceBtwSections),
+                    const SectionHeading(
+                        title: 'App Settings', showActionButton: false),
+                    const SizedBox(height: Sizes.spaceBtwItems),
+                    const SettingMenuTile(
+                        icon: Iconsax.document_download,
+                        title: 'Load Data',
+                        subtitle:
+                            'Manually Load Data from your Cloud Database'),
+                    const SettingMenuTile(
+                        icon: Iconsax.document_upload,
+                        title: 'Save Data',
+                        subtitle: 'Manually Save Data to your Cloud Database'),
+                    SettingMenuTile(
+                      icon: Iconsax.location,
+                      title: 'Geolocation',
+                      subtitle: 'Set recommendation based on location',
+                      trailing: Switch(value: true, onChanged: (value) {}),
+                    ),
+                    SettingMenuTile(
+                      icon: Iconsax.security_user,
+                      title: 'Safe Mode',
+                      subtitle: 'Search result is safe for all ages',
+                      trailing: Switch(value: false, onChanged: (value) {}),
+                    ),
+                    SettingMenuTile(
+                      icon: Iconsax.image,
+                      title: 'HD Image Quality',
+                      subtitle: 'Set image quality to be seen',
+                      trailing: Switch(value: false, onChanged: (value) {}),
+                    ),
+
+                    /// -- Log Out
+                    const SizedBox(height: Sizes.spaceBtwSections),
+                    SizedBox(
+                      width: double.infinity,
+                      child: OutlinedButton(
+                          onPressed: () async {
+                            bool? confirmLogout = await showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  title: const Text('Confirm Logout'),
+                                  content: const Text(
+                                      'Are you sure you want to logout?'),
+                                  actions: <Widget>[
+                                    TextButton(
+                                      onPressed: () {
+                                        Navigator.of(context).pop(false);
+                                      },
+                                      child: const Text('Cancel'),
+                                    ),
+                                    TextButton(
+                                      onPressed: () {
+                                        Navigator.of(context).pop(true);
+                                      },
+                                      child: const Text('Logout'),
+                                    ),
+                                  ],
+                                );
+                              },
+                            );
+
+                            if (confirmLogout == true) {
+                              // Logout
+                              UserData.userData = null;
+                              localStorage.write('IsLoggedIn', false);
+                              HttpHelper.token = null;
+                              localStorage.remove('TOKEN');
+                              Get.offAll(() => const LoginScreen());
+                            }
+                          },
+                          style: Theme.of(context)
+                              .outlinedButtonTheme
+                              .style!
+                              .copyWith(
+                                side: WidgetStateProperty.all(const BorderSide(
+                                    color: OurColors.errorTextColor)),
+                              ),
+                          child: Text('Log Out',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .headlineMedium!
+                                  .apply(color: OurColors.errorTextColor))),
+                    ),
+                    const SizedBox(height: Sizes.spaceBtwSections * 2.5),
+                  ],
+                ),
+              ),
+            if (UserData.userData == null)
+              Column(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  /// -- Account Settings
-                  const SectionHeading(
-                      title: 'Account Settings', showActionButton: false),
-                  const SizedBox(height: Sizes.spaceBtwItems),
-                  const SettingMenuTile(
-                      icon: Iconsax.bag_tick,
-                      title: 'My Orders',
-                      subtitle: 'In-progress and Completed Orders'),
-                  const SettingMenuTile(
-                      icon: Iconsax.security_card,
-                      title: 'Account Privacy',
-                      subtitle: 'Manage data usage and connected accounts'),
-
-                  /// -- App Settings
                   const SizedBox(height: Sizes.spaceBtwSections),
-                  const SectionHeading(
-                      title: 'App Settings', showActionButton: false),
-                  const SizedBox(height: Sizes.spaceBtwItems),
-                  const SettingMenuTile(
-                      icon: Iconsax.document_download,
-                      title: 'Load Data',
-                      subtitle: 'Manually Load Data from your Cloud Database'),
-                  const SettingMenuTile(
-                      icon: Iconsax.document_upload,
-                      title: 'Save Data',
-                      subtitle: 'Manually Save Data to your Cloud Database'),
-                  SettingMenuTile(
-                    icon: Iconsax.location,
-                    title: 'Geolocation',
-                    subtitle: 'Set recommendation based on location',
-                    trailing: Switch(value: true, onChanged: (value) {}),
+                  Padding(
+                    padding: const EdgeInsets.all(Sizes.defaultSpace),
+                    child: SizedBox(
+                      width: double.infinity,
+                      child: OutlinedButton(
+                          style: Theme.of(context)
+                              .outlinedButtonTheme
+                              .style!
+                              .copyWith(
+                                  backgroundColor: const WidgetStatePropertyAll(
+                                      OurColors.darkerGrey),
+                                  foregroundColor: const WidgetStatePropertyAll(
+                                      OurColors.light)),
+                          onPressed: () =>
+                              Get.offAll(() => const LoginScreen()),
+                          child: const Text('Sign in to access your account')),
+                    ),
                   ),
-                  SettingMenuTile(
-                    icon: Iconsax.security_user,
-                    title: 'Safe Mode',
-                    subtitle: 'Search result is safe for all ages',
-                    trailing: Switch(value: false, onChanged: (value) {}),
-                  ),
-                  SettingMenuTile(
-                    icon: Iconsax.image,
-                    title: 'HD Image Quality',
-                    subtitle: 'Set image quality to be seen',
-                    trailing: Switch(value: false, onChanged: (value) {}),
-                  ),
-
-                  /// -- Log Out
-                  const SizedBox(height: Sizes.spaceBtwSections),
-                  SizedBox(
-                    width: double.infinity,
-                    child: OutlinedButton(
-                        onPressed: () async {
-                          bool? confirmLogout = await showDialog(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return AlertDialog(
-                                title: const Text('Confirm Logout'),
-                                content:
-                                    const Text('Are you sure you want to logout?'),
-                                actions: <Widget>[
-                                  TextButton(
-                                    onPressed: () {
-                                      Navigator.of(context).pop(false);
-                                    },
-                                    child: const Text('Cancel'),
-                                  ),
-                                  TextButton(
-                                    onPressed: () {
-                                      Navigator.of(context).pop(true);
-                                    },
-                                    child: const Text('Logout'),
-                                  ),
-                                ],
-                              );
-                            },
-                          );
-
-                          if (confirmLogout == true) {
-                            // Logout
-                            UserData.userData = null;
-                            localStorage.write('IsLoggedIn', false);
-                            HttpHelper.token = null;
-                            localStorage.remove('TOKEN');
-                            Get.offAll(() => const LoginScreen());
-                          }
-                        },
-                        style: Theme.of(context)
-                            .outlinedButtonTheme
-                            .style!
-                            .copyWith(
-                              side: WidgetStateProperty.all(const BorderSide(
-                                  color: OurColors.errorTextColor)),
-                            ),
-                        child: Text('Log Out',
-                            style: Theme.of(context)
-                                .textTheme
-                                .headlineMedium!
-                                .apply(color: OurColors.errorTextColor))),
-                  ),
-                  const SizedBox(height: Sizes.spaceBtwSections * 2.5),
                 ],
               ),
-            ),
           ],
         ),
       ),

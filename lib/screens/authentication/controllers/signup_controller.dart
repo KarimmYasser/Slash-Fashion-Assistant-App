@@ -73,6 +73,7 @@ class SignupController extends GetxController {
         "city": cityValue!.trim(),
         'gender': gender!.trim(),
         'age': 25,
+        'role': userType!.trim(),
       });
       HttpHelper.setToken(response['token']);
       localStorage.write('TOKEN', HttpHelper.token);

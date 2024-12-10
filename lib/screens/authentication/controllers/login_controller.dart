@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:fashion_assistant/screens/brand_mode/brand_mode_screen.dart';
 import 'package:fashion_assistant/screens/brand_mode/brand_total_screens.dart';
 import 'package:fashion_assistant/utils/popups/full_screen_loader.dart';
@@ -53,6 +55,8 @@ class LoginController extends GetxController {
       HttpHelper.setToken(loginResponse['token']);
       localStorage.write('TOKEN', HttpHelper.token);
 
+      //final response = await HttpHelper.get('api/order');
+
       // Save User Data
       UserData.userData = UserData(loginResponse['user']);
       if (rememberMe.value) {
@@ -63,10 +67,17 @@ class LoginController extends GetxController {
       FullScreenLoader.stopLoading();
 
       Get.offAll(() => SuccessScreen(
-            image: "assets/images/72462-check-register.json",
-            title: "Your account has been logged in successfully.",
-            subtitle: "Your Account is ready to use.",
-            onPressed: () => Get.offAll(() => const BrandTotalScreens()),
+          image: "assets/images/72462-check-register.json",
+          title: "Your account has been logged in successfully.",
+          subtitle: "Your Account is ready to use.",
+          onPressed: () {
+            if (loginResponse['user']['role'] == 'Brand') {
+              Get.offAll(() => const BrandModeScreen());
+            } else {
+              Get.offAll(() => const TotalScreens());
+            }
+          }
+          //() => Get.offAll(() => const BrandTotalScreens()),
           ));
     } catch (e) {
       // Stop Loading

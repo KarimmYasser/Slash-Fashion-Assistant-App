@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 
+import '../../screens/brand_mode/brand_total_screens.dart';
 import '../../screens/total_screen.dart';
 import 'user_data.dart';
 
@@ -41,7 +42,11 @@ class AuthenticationRepository extends GetxController {
         HttpHelper.setToken(deviceStorage.read('TOKEN'));
         final response = await HttpHelper.get('api/auth/me');
         UserData.userData = UserData(response);
-        Get.offAll(() => const TotalScreens());
+        if (UserData.userData!.role == 'Brand') {
+          Get.offAll(() => const BrandTotalScreens());
+        } else {
+          Get.offAll(() => const TotalScreens());
+        }
       } catch (e) {
         deviceStorage.write('IsLoggedIn', false);
         Get.offAll(() => const LoginScreen());

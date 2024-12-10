@@ -5,6 +5,7 @@ class UserData {
     lastName = data['lastName'];
     username = data['username'];
     gender = data['gender'];
+    role = data['role'];
     age = data['age'];
     email = data['email'];
     password = data['password'];
@@ -19,6 +20,7 @@ class UserData {
   String? lastName;
   String? username;
   String? gender;
+  String? role;
   int? age;
   String? email;
   String? password;
