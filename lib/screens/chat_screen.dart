@@ -5,6 +5,7 @@ import 'package:fashion_assistant/screens/product_screen.dart';
 import 'package:fashion_assistant/tap_map.dart';
 import 'package:flutter/material.dart';
 import 'package:fashion_assistant/utils/http/http_client.dart';
+import 'package:http/http.dart' as http;
 
 class ChatScreen extends StatefulWidget {
   const ChatScreen({super.key});
@@ -19,16 +20,6 @@ class _ChatScreenState extends State<ChatScreen> {
   TextEditingController messageController = TextEditingController();
   bool isLoading = false;
 
-  Future<String> createChat() async {
-    const url = 'api/chat/create';
-    final data = await HttpHelper.get(url);
-    if (data != null && data['id'] != null) {
-      return data['id'].toString(); // Ensure chatId is a String
-    } else {
-      throw Exception('Failed to create chat');
-    }
-  }
-
   @override
   void initState() {
     super.initState();
@@ -41,11 +32,21 @@ class _ChatScreenState extends State<ChatScreen> {
     });
 
     try {
-      if (kChatId == null) {
-        kChatId = createChat();
-      }
+      final response =
+          await http.get(Uri.parse('$baseURL/api/chat/'), headers: {
+        'Authorization': 'Bearer ${HttpHelper.token}',
+        'Content-Type': 'application/json',
+      });
 
-      chatId = await kChatId;
+      List<dynamic> chatList = json.decode(response.body);
+      if (chatList.isNotEmpty) {
+        setState(() {
+          chatId = chatList[0]['id'];
+          print('==================================');
+          print(chatList[0]['id']);
+          print('==================================');
+        });
+      }
 
       await _fetchPreviousMessages();
     } catch (e) {
@@ -60,31 +61,32 @@ class _ChatScreenState extends State<ChatScreen> {
   Future<void> _fetchPreviousMessages() async {
     const url = 'api/chat/messages';
     try {
-      final response = await HttpHelper.post(
+      // Fetch data from the API
+      final data = await HttpHelper.post(
         url,
         {'chatId': chatId},
       );
 
-      if (response['statusCode'] == 200) {
-        final data = jsonDecode(response['body']);
-        final userMessages = data['userMessages'] as List<dynamic>;
-        final botMessages = data['botMessages'] as List<dynamic>;
+      // Extract and process messages
+      final userMessages = (data['userMessages'] as List<dynamic>).map((m) {
+        return Map<String, dynamic>.from(m)..['sender'] = 'user';
+      }).toList();
 
-        final allMessages = [
-          ...userMessages.map((m) => {...m, 'sender': 'user'}),
-          ...botMessages.map((m) => {...m, 'sender': 'bot'}),
-        ];
+      final botMessages = (data['botMessages'] as List<dynamic>).map((m) {
+        return Map<String, dynamic>.from(m)..['sender'] = 'bot';
+      }).toList();
 
-        allMessages.sort((a, b) => DateTime.parse(a['created_at'])
-            .compareTo(DateTime.parse(b['created_at'])));
+      // Combine and sort messages
+      final allMessages = [...userMessages, ...botMessages];
+      allMessages.sort((a, b) => DateTime.parse(a['created_at'])
+          .compareTo(DateTime.parse(b['created_at'])));
 
-        setState(() {
-          messages = allMessages.cast<Map<String, dynamic>>();
-        });
-      } else {
-        print('Failed to fetch messages: ${response['body']}');
-      }
+      // Update the state with the fetched messages
+      setState(() {
+        messages = allMessages.cast<Map<String, dynamic>>();
+      });
     } catch (e) {
+      // Log any errors
       print('Error fetching messages: $e');
     }
   }
