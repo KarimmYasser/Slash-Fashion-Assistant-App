@@ -19,11 +19,13 @@ class _ChatScreenState extends State<ChatScreen> {
   List<Map<String, dynamic>> messages = [];
   TextEditingController messageController = TextEditingController();
   bool isLoading = false;
+  final ScrollController _scrollController = ScrollController();
 
   @override
   void initState() {
     super.initState();
     _initializeChat();
+    WidgetsBinding.instance.addPostFrameCallback((_) => _scrollToBottom());
   }
 
   Future<void> _initializeChat() async {
@@ -61,13 +63,11 @@ class _ChatScreenState extends State<ChatScreen> {
   Future<void> _fetchPreviousMessages() async {
     const url = 'api/chat/messages';
     try {
-      // Fetch data from the API
       final data = await HttpHelper.post(
         url,
         {'chatId': chatId},
       );
 
-      // Extract and process messages
       final userMessages = (data['userMessages'] as List<dynamic>).map((m) {
         return Map<String, dynamic>.from(m)..['sender'] = 'user';
       }).toList();
@@ -76,17 +76,17 @@ class _ChatScreenState extends State<ChatScreen> {
         return Map<String, dynamic>.from(m)..['sender'] = 'bot';
       }).toList();
 
-      // Combine and sort messages
       final allMessages = [...userMessages, ...botMessages];
       allMessages.sort((a, b) => DateTime.parse(a['created_at'])
           .compareTo(DateTime.parse(b['created_at'])));
 
-      // Update the state with the fetched messages
       setState(() {
         messages = allMessages.cast<Map<String, dynamic>>();
       });
+
+      // Scroll to the bottom after loading messages
+      _scrollToBottom();
     } catch (e) {
-      // Log any errors
       print('Error fetching messages: $e');
     }
   }
@@ -121,27 +121,39 @@ class _ChatScreenState extends State<ChatScreen> {
       messages.add({'text': text, 'sender': 'user'});
     });
 
+    // Scroll to the bottom after user sends a message
+    _scrollToBottom();
+
     try {
       final response = await sendMessage(text: text, chatId: chatId!);
 
-      print('Response222222222: $response ========$chatId'); // Debug print
-
       if (response != null) {
-        print('---------------------------------------------');
-        print('Response: $response');
-        print('---------------------------------------------');
-
         setState(() {
           messages.add({
             'text': response['BotMessage']['text'],
             'sender': 'bot',
-            'products': response['products'] ?? []
+            'products': response['products'] ?? [],
           });
         });
+
+        // Scroll to the bottom after receiving bot's response
+        _scrollToBottom();
       }
     } catch (e) {
       print('Error sending message: $e');
     }
+  }
+
+  void _scrollToBottom({Duration delay = const Duration(milliseconds: 300)}) {
+    Future.delayed(delay, () {
+      if (_scrollController.hasClients) {
+        _scrollController.animateTo(
+          _scrollController.position.maxScrollExtent,
+          duration: Duration(milliseconds: 300),
+          curve: Curves.easeOut,
+        );
+      }
+    });
   }
 
   @override
@@ -153,6 +165,7 @@ class _ChatScreenState extends State<ChatScreen> {
         children: [
           Expanded(
             child: ListView.builder(
+              controller: _scrollController,
               itemCount: messages.length,
               itemBuilder: (context, index) {
                 final message = messages[index];
@@ -299,5 +312,11 @@ class _ChatScreenState extends State<ChatScreen> {
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
   }
 }
