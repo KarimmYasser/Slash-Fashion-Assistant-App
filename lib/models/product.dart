@@ -10,7 +10,9 @@ class Product {
   final String sizes;
   final String colors;
   final String reviews;
+  final bool isInWishlist;
   Product({
+    required this.isInWishlist,
     required this.id,
     required this.brandID,
     required this.inStock,
@@ -25,17 +27,17 @@ class Product {
   });
   factory Product.fromJson(Map<String, dynamic> json) {
     return Product(
-      brandShowcase: json['name'] ?? '',
-      prevprice: (json['price'] as num).toDouble(),
-      id: json['id'] ?? '',
-      brandID: json['brand_id'] ?? '',
-      inStock: json['inStock'] ?? true,
-      image: json['image'] ?? '',
-      categoryID: json['category_id'] ?? '',
-      createdAt: json['created_at'] ?? '',
-      sizes: json['sizes'] ?? '',
-      colors: json['colours'] ?? '',
-      reviews: json['reviews'] ?? '',
-    );
+        brandShowcase: json['name'] ?? '',
+        prevprice: (json['price'] as num).toDouble(),
+        id: json['id'] ?? '',
+        brandID: json['brand_id'] ?? '',
+        inStock: json['inStock'] ?? true,
+        image: json['image'] ?? '',
+        categoryID: json['category_id'] ?? '',
+        createdAt: json['created_at'] ?? '',
+        sizes: json['sizes'] ?? '',
+        colors: json['colours'] ?? '',
+        reviews: json['reviews'] ?? '',
+        isInWishlist: json['isInWishlist'] ?? false);
   }
 }

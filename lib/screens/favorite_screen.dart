@@ -1,4 +1,5 @@
 import 'package:fashion_assistant/constants.dart';
+import 'package:fashion_assistant/tap_map.dart';
 import 'package:fashion_assistant/utils/http/http_client.dart';
 import 'package:fashion_assistant/widgets/product/product_card.dart';
 import 'package:flutter/material.dart';
@@ -40,8 +41,7 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
   Future<void> fetchProducts() async {
     try {
       final response = await http.get(
-        Uri.parse(
-            'https://f86f-2c0f-fc89-8039-ab0e-10fa-ed2f-b4ae-873b.ngrok-free.app/api/wishlist'),
+        Uri.parse('$baseURL/api/wishlist'),
         headers: {
           'Authorization': 'Bearer ${HttpHelper.token}',
           'Content-Type': 'application/json',
@@ -60,7 +60,9 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
       }
     } catch (e) {
       print('Error: $e');
-      setState(() => _isLoading = false);
+      if (mounted) {
+        setState(() => _isLoading = false);
+      }
     }
   }
 
@@ -142,6 +144,7 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
                                     product['numReviewers'].toString(),
                                 stars: product['stars'].toString(),
                                 coin: 'EGP',
+                                liked: product['isInWishlist'] ?? true,
                               ),
                             ),
                           ],

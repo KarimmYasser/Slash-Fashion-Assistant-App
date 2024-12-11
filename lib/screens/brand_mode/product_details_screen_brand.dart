@@ -68,6 +68,7 @@ class ProductScreenBrand extends StatefulWidget {
 }
 
 class _ProductScreenBrandState extends State<ProductScreenBrand> {
+  Product? product;
   late Future<Product> _product;
   bool isTrustedWithVideoReviews = true;
 
@@ -75,6 +76,11 @@ class _ProductScreenBrandState extends State<ProductScreenBrand> {
   void initState() {
     super.initState();
     _product = ProductService().getProductById(widget.productID);
+    _product.then((value) {
+      setState(() {
+        product = value;
+      });
+    });
   }
 
   @override
@@ -148,6 +154,7 @@ class _ProductScreenBrandState extends State<ProductScreenBrand> {
             }
 
             final product = snapshot.data!;
+
             return SingleChildScrollView(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -255,7 +262,6 @@ class _ProductScreenBrandState extends State<ProductScreenBrand> {
               ),
             );
           }),
-      bottomNavigationBar: AddCartAppBar(productId: widget.productID),
     );
   }
 }

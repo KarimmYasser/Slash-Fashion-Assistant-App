@@ -11,10 +11,11 @@ import 'package:fashion_assistant/services/get_products.dart';
 import 'package:fashion_assistant/models/product.dart';
 
 class HorizontalList extends StatefulWidget {
-  HorizontalList({super.key, required this.title});
+  const HorizontalList(
+      {super.key, required this.title, required this.endpouint});
 
   final String title;
-
+  final String endpouint;
   @override
   State<HorizontalList> createState() => _HorizontalListState();
 }
@@ -24,7 +25,7 @@ class _HorizontalListState extends State<HorizontalList> {
   @override
   void initState() {
     super.initState();
-    _products = ProductService().getAllProducts();
+    _products = ProductService().getAllProducts(widget.endpouint);
   }
 
   @override
@@ -106,6 +107,7 @@ class _HorizontalListState extends State<HorizontalList> {
                       numReviewers: '132',
                       stars: '5',
                       coin: 'EGP',
+                      liked: product.isInWishlist,
                     ),
                   );
                 },

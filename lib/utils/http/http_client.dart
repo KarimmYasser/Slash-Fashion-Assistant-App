@@ -2,8 +2,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class HttpHelper {
-  static const String _baseUrl =
-      'https://hhynshsbih.us-east-1.awsapprunner.com';
+  static const String _baseUrl = 'https://2eb7-156-174-3-169.ngrok-free.app';
   static String? token;
 
   // Helper method to make a GET request
@@ -45,8 +44,16 @@ class HttpHelper {
   }
 
   // Helper method to make a DELETE request
-  static Future<Map<String, dynamic>> delete(String endpoint) async {
-    final response = await http.delete(Uri.parse('$_baseUrl/$endpoint'));
+  static Future<Map<String, dynamic>> delete(
+      String endpoint, dynamic data) async {
+    final response = await http.delete(
+      Uri.parse('$_baseUrl/$endpoint'),
+      headers: {
+        'Authorization': 'Bearer $token',
+        'Content-Type': 'application/json'
+      },
+      body: json.encode(data),
+    );
     return _handleResponse(response);
   }
 
