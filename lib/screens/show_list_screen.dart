@@ -119,6 +119,7 @@ class _ShowListScreenState extends State<ShowListScreen> {
                   numReviewers: '132',
                   stars: '5',
                   coin: 'EGP',
+                  liked: false,
                 );
               },
               childCount: 20, // Number of items in the list

@@ -67,9 +67,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
       print("Error fetching avatar: $error");
       avatarSvg = null;
     } finally {
-      setState(() {
-        isLoading = false;
-      });
+      if (mounted) {
+        setState(() {
+          isLoading = false;
+        });
+      }
     }
   }
 

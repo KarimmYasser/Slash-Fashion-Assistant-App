@@ -8,9 +8,10 @@ import 'dart:convert';
 import 'package:fashion_assistant/constants.dart';
 
 class FavoriteButton extends StatefulWidget {
-  const FavoriteButton({super.key, required this.productId});
+  const FavoriteButton(
+      {super.key, required this.productId, required this.isLiked});
   final String productId;
-
+  final bool isLiked;
   @override
   State<FavoriteButton> createState() => _FavoriteButtonState();
 }
@@ -19,31 +20,66 @@ class _FavoriteButtonState extends State<FavoriteButton> {
   bool _isLiked = false;
   bool _isLoading = false;
 
+  @override
+  void initState() {
+    super.initState();
+    _isLiked = widget.isLiked;
+  }
+
   Future<void> _updateFavoriteStatus() async {
     final String url = _isLiked ? 'api/wishlist/remove' : 'api/wishlist/add';
 
     setState(() {
       _isLoading = true;
     });
+    if (_isLiked) {
+      try {
+        final response =
+            await HttpHelper.delete(url, {'productId': widget.productId});
 
-    try {
-      final response =
-          await HttpHelper.post(url, {'productId': widget.productId});
+        debugPrint('Response status: ${response['statusCode']}');
 
-      debugPrint('Response status: ${response['statusCode']}');
+        if (mounted) {
+          setState(() {
+            _isLiked = !_isLiked;
+          });
+        }
+      } catch (e) {
+        debugPrint('Error: ${widget.productId} $e');
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Network error. Please try again.')),
+        );
+      } finally {
+        if (mounted) {
+          setState(() {
+            _isLoading = false;
+          });
+        }
+      }
+    } else {
+      try {
+        final response =
+            await HttpHelper.post(url, {'productId': widget.productId});
 
-      setState(() {
-        _isLiked = !_isLiked;
-      });
-    } catch (e) {
-      debugPrint('Error: ${widget.productId} $e');
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Network error. Please try again.')),
-      );
-    } finally {
-      setState(() {
-        _isLoading = false;
-      });
+        debugPrint('Response status: ${response['statusCode']}');
+
+        if (mounted) {
+          setState(() {
+            _isLiked = !_isLiked;
+          });
+        }
+      } catch (e) {
+        debugPrint('Error: ${widget.productId} $e');
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Network error. Please try again.')),
+        );
+      } finally {
+        if (mounted) {
+          setState(() {
+            _isLoading = false;
+          });
+        }
+      }
     }
   }
 

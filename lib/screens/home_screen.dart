@@ -218,9 +218,7 @@ class HomeScreen extends StatelessWidget {
             SizedBox(
               height: 16.h,
             ),
-            BrandCarousel(
-              brands: brands,
-            ),
+            BrandCarousel(),
             SizedBox(
               height: 16.h,
             ),
@@ -238,11 +236,13 @@ class HomeScreen extends StatelessWidget {
             SizedBox(
               height: 16.h,
             ),
-            HorizontalList(title: 'Best Selling'),
+            HorizontalList(
+              title: 'Special for You',
+              endpouint: 'api/product/recommended-products',
+            ),
             SizedBox(
               height: 10.h,
             ),
-            HorizontalList(title: 'Hot Deals'),
           ],
         ),
       ),

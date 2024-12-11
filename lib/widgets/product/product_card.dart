@@ -23,6 +23,7 @@ class ProductCard extends StatelessWidget {
     required this.stars,
     required this.numReviewers,
     required this.productId,
+    required this.liked,
   });
   final String brandName,
       brandImage,
@@ -35,6 +36,7 @@ class ProductCard extends StatelessWidget {
       numReviewers,
       productId;
   final double prevprice;
+  final bool liked;
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -76,6 +78,7 @@ class ProductCard extends StatelessWidget {
                         child: Center(
                             child: FavoriteButton(
                           productId: productId,
+                          isLiked: liked,
                         )))),
                 SizedBox(height: 8.h),
                 // Rating and Review Count

@@ -241,11 +241,13 @@ class BrandDetails extends StatelessWidget {
                 ],
               ),
             ),
-            HorizontalListBrand(title: 'your products')
+            HorizontalListBrand(
+              title: 'your products',
+              brandid: 'd83f5614-05e1-4300-9f52-415fa66b2847',
+            )
           ],
         ),
       ),
     );
-    ;
   }
 }

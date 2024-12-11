@@ -69,11 +69,23 @@ class ProductScreen extends StatefulWidget {
 class _ProductScreenState extends State<ProductScreen> {
   late Future<Product> _product;
   bool isTrustedWithVideoReviews = true;
-
+  bool? liked;
+  Product? product;
   @override
   void initState() {
     super.initState();
     _product = ProductService().getProductById(widget.productID);
+    _product.then((value) {
+      setState(() {
+        product = value;
+        liked = product!.isInWishlist;
+      });
+    });
+  }
+
+  Future<bool> fetchLikedStatus() async {
+    // Implement your logic to fetch the liked status here
+    return liked ?? false;
   }
 
   @override
@@ -147,6 +159,7 @@ class _ProductScreenState extends State<ProductScreen> {
             }
 
             final product = snapshot.data!;
+
             return SingleChildScrollView(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -269,12 +282,29 @@ class _ProductScreenState extends State<ProductScreen> {
                   SizedBox(
                     height: 20.h,
                   ),
-                  HorizontalList(title: 'You may also like'),
+                  HorizontalList(
+                    title: 'You may also like',
+                    endpouint: 'api/product/get-similar-products/${product.id}',
+                  ),
                 ],
               ),
             );
           }),
-      bottomNavigationBar: AddCartAppBar(productId: widget.productID),
+      bottomNavigationBar: FutureBuilder<bool>(
+        future: fetchLikedStatus(), // Replace with your future function
+        builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return CircularProgressIndicator(); // Show a loading indicator while waiting
+          } else if (snapshot.hasError) {
+            return Text('Error: ${snapshot.error}'); // Handle error case
+          } else {
+            return AddCartAppBar(
+              productId: widget.productID,
+              liked: snapshot.data!,
+            );
+          }
+        },
+      ),
     );
   }
 }

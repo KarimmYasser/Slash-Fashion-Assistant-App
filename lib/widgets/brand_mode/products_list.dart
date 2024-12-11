@@ -2,6 +2,7 @@ import 'package:fashion_assistant/constants.dart';
 import 'package:fashion_assistant/screens/brand_mode/product_details_screen_brand.dart';
 import 'package:fashion_assistant/screens/product_screen.dart';
 import 'package:fashion_assistant/screens/show_list_screen.dart';
+import 'package:fashion_assistant/utils/http/http_client.dart';
 import 'package:fashion_assistant/widgets/brand_mode/product_card_brand.dart';
 import 'package:fashion_assistant/widgets/product/product_card.dart';
 
@@ -13,20 +14,45 @@ import 'package:fashion_assistant/services/get_products.dart';
 import 'package:fashion_assistant/models/product.dart';
 
 class HorizontalListBrand extends StatefulWidget {
-  HorizontalListBrand({super.key, required this.title});
+  const HorizontalListBrand(
+      {super.key, required this.title, required this.brandid});
 
   final String title;
-
+  final String brandid;
   @override
   State<HorizontalListBrand> createState() => _HorizontalListBrandState();
 }
 
 class _HorizontalListBrandState extends State<HorizontalListBrand> {
   late Future<List<Product>> _products;
+  List<Product> _filteredProducts = [];
+
   @override
   void initState() {
     super.initState();
-    _products = ProductService().getAllProducts();
+    _products =
+        HttpHelper.get('api/product/get-products-of-brand/${widget.brandid}')
+            .then((response) {
+      final products = response['products'] as List<dynamic>;
+      return products.map((product) => Product.fromJson(product)).toList();
+    });
+    _products.then((products) {
+      setState(() {
+        _filteredProducts = products;
+      });
+    });
+  }
+
+  void _filterProducts(String query) {
+    _products.then((products) {
+      setState(() {
+        _filteredProducts = products.where((product) {
+          return product.brandShowcase
+              .toLowerCase()
+              .contains(query.toLowerCase());
+        }).toList();
+      });
+    });
   }
 
   @override
@@ -48,8 +74,7 @@ class _HorizontalListBrandState extends State<HorizontalListBrand> {
         SizedBox(
           height: 410.h,
           child: FutureBuilder<List<Product>>(
-            future:
-                _products, // Make sure _products is defined elsewhere in the code
+            future: _products,
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return Center(child: CircularProgressIndicator());
@@ -59,14 +84,13 @@ class _HorizontalListBrandState extends State<HorizontalListBrand> {
                 return Center(child: Text('No products available'));
               }
 
-              final products = snapshot.data!;
               return ListView.builder(
                 scrollDirection: Axis.horizontal,
-                itemCount: products.length + 1,
+                itemCount: _filteredProducts.length + 1,
                 itemBuilder: (context, index) {
-                  if (index == products.length)
+                  if (index == _filteredProducts.length)
                     return SizedBox(
-                      width: 100.w, // Adjust as needed
+                      width: 100.w,
                       child: IconButton(
                         onPressed: () {
                           Navigator.push(
@@ -79,12 +103,12 @@ class _HorizontalListBrandState extends State<HorizontalListBrand> {
                         },
                         icon: Icon(
                           Iconsax.arrow_circle_right4,
-                          color: OurColors.secondaryTextColor, // Optional color
-                          size: 50.sp, // Adjust size as needed
+                          color: OurColors.secondaryTextColor,
+                          size: 50.sp,
                         ),
                       ),
                     );
-                  final product = products[index];
+                  final product = _filteredProducts[index];
                   return GestureDetector(
                     onTap: () {
                       Navigator.push(
