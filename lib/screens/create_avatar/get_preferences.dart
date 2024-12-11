@@ -44,6 +44,17 @@ class _GetPreferencesState extends State<GetPreferences> {
   // Define the total number of screens here for easy management
   final int _totalScreens =
       isMale ? 9 : 7; // Adjust based on conditional screens
+
+  Future<String> createChat() async {
+    const url = 'api/chat/create';
+    final data = await HttpHelper.get(url);
+    if (data['id'] != null) {
+      return data['id'].toString(); // Ensure chatId is a String
+    } else {
+      throw Exception('Failed to create chat');
+    }
+  }
+
   void _showAvatarPopup(BuildContext context) async {
     String? avatarSvg;
     Map<String, dynamic> avatarData = {};
@@ -141,6 +152,12 @@ class _GetPreferencesState extends State<GetPreferences> {
                           // Close the dialog
                           _sendColorsToBackend();
                           saveSelectedProducts('generalProduct');
+
+                          try {
+                            kChatId = createChat();
+                          } catch (e) {
+                            print('Error initializing chat: $e');
+                          }
                           try {
                             final response = await HttpHelper.post(
                               'api/user/avatar',

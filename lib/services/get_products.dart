@@ -43,11 +43,7 @@ class ProductService {
       },
     );
 
-    if (response.statusCode == 200) {
-      final productJson = json.decode(response.body);
-      return Product.fromJson(productJson);
-    } else {
-      throw Exception('Failed to load product with ID $id');
-    }
+    final productJson = json.decode(response.body);
+    return Product.fromJson(productJson);
   }
 }
