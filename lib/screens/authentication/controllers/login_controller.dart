@@ -1,7 +1,4 @@
-import 'dart:math';
-
 import 'package:fashion_assistant/screens/brand_mode/brand_mode_screen.dart';
-import 'package:fashion_assistant/screens/brand_mode/brand_total_screens.dart';
 import 'package:fashion_assistant/utils/popups/full_screen_loader.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -22,8 +19,9 @@ class LoginController extends GetxController {
   final email = TextEditingController();
   final password = TextEditingController();
   GlobalKey<FormState> loginFormKey = GlobalKey<FormState>();
+  GlobalKey<FormState> loginBrandFormKey = GlobalKey<FormState>();
 
-  Future<void> login() async {
+  Future<void> login(String role) async {
     try {
       FullScreenLoader.openLoadingDialog('Logging you in...',
           'assets/animations/141594-animation-of-docer.json');
@@ -36,9 +34,16 @@ class LoginController extends GetxController {
       }
 
       // Form Validation
-      if (!loginFormKey.currentState!.validate()) {
-        FullScreenLoader.stopLoading();
-        return;
+      if (role == 'Brand') {
+        if (!loginBrandFormKey.currentState!.validate()) {
+          FullScreenLoader.stopLoading();
+          return;
+        }
+      } else {
+        if (!loginFormKey.currentState!.validate()) {
+          FullScreenLoader.stopLoading();
+          return;
+        }
       }
 
       // Save Data if Remember Me is Checked
@@ -51,6 +56,7 @@ class LoginController extends GetxController {
       final loginResponse = await HttpHelper.post('api/auth/login', {
         'email': email.text.trim(),
         'password': password.text.trim(),
+        'role': role.trim()
       });
       HttpHelper.setToken(loginResponse['token']);
       localStorage.write('TOKEN', HttpHelper.token);
@@ -71,7 +77,7 @@ class LoginController extends GetxController {
           title: "Your account has been logged in successfully.",
           subtitle: "Your Account is ready to use.",
           onPressed: () {
-            if (loginResponse['user']['role'] == 'Brand') {
+            if (role == 'Brand') {
               Get.offAll(() => const BrandModeScreen());
             } else {
               Get.offAll(() => const TotalScreens());
