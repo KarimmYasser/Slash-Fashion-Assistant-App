@@ -1,3 +1,4 @@
+import 'package:fashion_assistant/screens/authentication/brand_login_screen.dart';
 import 'package:fashion_assistant/screens/create_avatar/male_or_female.dart';
 import 'package:get/get.dart';
 
@@ -44,6 +45,21 @@ class LoginScreen extends StatelessWidget {
                                 const WidgetStatePropertyAll(OurColors.light)),
                     onPressed: () => Get.offAll(() => const MaleOrFemale()),
                     child: const Text('Continue as a Guest')),
+              ),
+              const SizedBox(height: Sizes.spaceBtwItems),
+              SizedBox(
+                width: double.infinity,
+                child: OutlinedButton(
+                    style: Theme.of(context)
+                        .outlinedButtonTheme
+                        .style!
+                        .copyWith(
+                            backgroundColor: const WidgetStatePropertyAll(
+                                OurColors.secondaryColor),
+                            foregroundColor:
+                                const WidgetStatePropertyAll(OurColors.light)),
+                    onPressed: () => Get.to(() => const BrandLoginScreen()),
+                    child: const Text('Sign In as a Brand')),
               ),
               //SocialButtons(),
             ],

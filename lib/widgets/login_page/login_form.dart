@@ -81,7 +81,7 @@ class LoginPageForm extends StatelessWidget {
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
-                  onPressed: () => controller.login(),
+                  onPressed: () => controller.login('Shopper'),
                   child: const Text('Sign in')),
             ),
             const SizedBox(height: Sizes.spaceBtwItems),
