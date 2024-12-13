@@ -2,7 +2,8 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class HttpHelper {
-  static const String _baseUrl = 'https://2eb7-156-174-3-169.ngrok-free.app';
+  static const String _baseUrl =
+      'https://hhynshsbih.us-east-1.awsapprunner.com';
   static String? token;
 
   // Helper method to make a GET request

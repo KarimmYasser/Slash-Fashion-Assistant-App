@@ -1,7 +1,8 @@
-import 'dart:io'; // For File handling
+import 'dart:io';
 import 'package:fashion_assistant/constants.dart';
+import 'package:fashion_assistant/screens/brand_mode/add_color_sizes_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart'; // Image Picker package
+import 'package:image_picker/image_picker.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class BrandAddProductScreen extends StatefulWidget {
@@ -17,15 +18,17 @@ class _BrandAddProductScreenState extends State<BrandAddProductScreen> {
   final TextEditingController _descriptionController = TextEditingController();
   final TextEditingController _priceController = TextEditingController();
   String? _selectedCategory;
-  List<File> _selectedImages = []; // List to store selected images
-  bool _areImagesValid = true; // Track if at least one image is selected
+  List<File> _selectedImages = [];
+  bool _areImagesValid = true;
 
   final ImagePicker _imagePicker = ImagePicker();
 
+  List<Map<String, dynamic>> _colors = [];
+  Map<String, dynamic>? _sizes;
+
   Future<void> _pickImages() async {
-    // Open the image picker for multiple image selection
     final List<XFile>? pickedImages = await _imagePicker.pickMultiImage(
-      maxWidth: 800, // Resize the images (optional)
+      maxWidth: 800,
       maxHeight: 800,
     );
 
@@ -33,7 +36,37 @@ class _BrandAddProductScreenState extends State<BrandAddProductScreen> {
       setState(() {
         _selectedImages =
             pickedImages.map((image) => File(image.path)).toList();
-        _areImagesValid = true; // Mark the images as valid
+        _areImagesValid = true;
+      });
+    }
+  }
+
+  Future<void> _navigateToAddColors() async {
+    final result = await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => AddColorsScreen(colors: _colors),
+      ),
+    );
+
+    if (result != null) {
+      setState(() {
+        _colors = result;
+      });
+    }
+  }
+
+  Future<void> _navigateToAddSizes() async {
+    final result = await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => AddSizesScreen(sizes: _sizes),
+      ),
+    );
+
+    if (result != null) {
+      setState(() {
+        _sizes = result;
       });
     }
   }
@@ -72,6 +105,7 @@ class _BrandAddProductScreenState extends State<BrandAddProductScreen> {
                   },
                 ),
                 const SizedBox(height: 16),
+
                 // Description
                 const Text("Description"),
                 const SizedBox(height: 8),
@@ -92,6 +126,7 @@ class _BrandAddProductScreenState extends State<BrandAddProductScreen> {
                   },
                 ),
                 const SizedBox(height: 16),
+
                 // Price
                 const Text("Price"),
                 const SizedBox(height: 8),
@@ -115,6 +150,7 @@ class _BrandAddProductScreenState extends State<BrandAddProductScreen> {
                   },
                 ),
                 const SizedBox(height: 16),
+
                 // Category
                 const Text("Category"),
                 const SizedBox(height: 8),
@@ -142,6 +178,7 @@ class _BrandAddProductScreenState extends State<BrandAddProductScreen> {
                   },
                 ),
                 const SizedBox(height: 16),
+
                 // Product Images
                 const Text("Product Images"),
                 const SizedBox(height: 8),
@@ -203,38 +240,102 @@ class _BrandAddProductScreenState extends State<BrandAddProductScreen> {
                       style: TextStyle(color: Colors.red, fontSize: 12),
                     ),
                   ),
-                SizedBox(
-                  height: 20.h,
+                const SizedBox(height: 20),
+
+                // Add Colors Button
+                Center(
+                  child: ElevatedButton(
+                    onPressed: _navigateToAddColors,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: OurColors.containerBackgroundColor,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                    ),
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 30.w),
+                      child: const Text(
+                        "Add Colors",
+                        style: TextStyle(color: OurColors.black),
+                      ),
+                    ),
+                  ),
                 ),
+                const SizedBox(height: 16),
+
+                // Add Sizes Button
+                Center(
+                  child: ElevatedButton(
+                    onPressed: _navigateToAddSizes,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: OurColors.containerBackgroundColor,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                    ),
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 30.w),
+                      child: const Text(
+                        "Add Sizes",
+                        style: TextStyle(color: OurColors.black),
+                      ),
+                    ),
+                  ),
+                ),
+
+                const SizedBox(height: 20),
+
                 // Publish Product Button
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
                     onPressed: () {
-                      // Validate the form and images
                       if (_formKey.currentState!.validate() &&
                           _selectedImages.isNotEmpty) {
-                        // All fields and images are valid
+                        // Example logic for publishing product
+                        final productData = {
+                          "name": _productNameController.text.trim(),
+                          "description": _descriptionController.text.trim(),
+                          "price": double.parse(_priceController.text.trim()),
+                          "category": _selectedCategory,
+                          "images": _selectedImages,
+                          "colors": _colors,
+                          "sizes": _sizes,
+                        };
+
+                        // Add backend integration or database upload logic here
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
-                              content: Text("Product added successfully!")),
+                            content: Text("Product published successfully!"),
+                            backgroundColor: Colors.green,
+                          ),
                         );
                       } else {
-                        // If no images are selected, show error
                         setState(() {
-                          if (_selectedImages.isEmpty) {
-                            _areImagesValid = false;
-                          }
+                          _areImagesValid = _selectedImages.isNotEmpty;
                         });
+
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text(
+                                "Please fill all fields and upload images."),
+                            backgroundColor: Colors.red,
+                          ),
+                        );
                       }
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: OurColors.primaryColor,
+                      padding: const EdgeInsets.symmetric(vertical: 16),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8),
                       ),
                     ),
-                    child: const Text("Publish Product"),
+                    child: const Text(
+                      "Publish Product",
+                      style:
+                          TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                    ),
                   ),
                 ),
               ],
