@@ -47,9 +47,7 @@ class _HorizontalListBrandState extends State<HorizontalListBrand> {
     _products.then((products) {
       setState(() {
         _filteredProducts = products.where((product) {
-          return product.brandShowcase
-              .toLowerCase()
-              .contains(query.toLowerCase());
+          return product.name.toLowerCase().contains(query.toLowerCase());
         }).toList();
       });
     });
@@ -124,8 +122,8 @@ class _HorizontalListBrandState extends State<HorizontalListBrand> {
                       productId: product.id,
                       brandImage: product.image,
                       brandName: 'Fashoni',
-                      brandShowcase: product.brandShowcase,
-                      prevprice: product.prevprice,
+                      brandShowcase: product.name,
+                      prevprice: product.price,
                       price: '300',
                       discound: '20',
                       sold: '130',

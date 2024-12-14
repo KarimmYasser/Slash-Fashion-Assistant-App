@@ -1,4 +1,5 @@
 import 'package:fashion_assistant/constants.dart';
+import 'package:fashion_assistant/models/productcard.dart';
 import 'package:fashion_assistant/screens/product_screen.dart';
 import 'package:fashion_assistant/screens/show_list_screen.dart';
 import 'package:fashion_assistant/widgets/product/product_card.dart';
@@ -21,7 +22,7 @@ class HorizontalList extends StatefulWidget {
 }
 
 class _HorizontalListState extends State<HorizontalList> {
-  late Future<List<Product>> _products;
+  late Future<List<ProductCardModel>> _products;
   @override
   void initState() {
     super.initState();
@@ -46,7 +47,7 @@ class _HorizontalListState extends State<HorizontalList> {
         ),
         SizedBox(
           height: 410.h,
-          child: FutureBuilder<List<Product>>(
+          child: FutureBuilder<List<ProductCardModel>>(
             future:
                 _products, // Make sure _products is defined elsewhere in the code
             builder: (context, snapshot) {
@@ -61,28 +62,8 @@ class _HorizontalListState extends State<HorizontalList> {
               final products = snapshot.data!;
               return ListView.builder(
                 scrollDirection: Axis.horizontal,
-                itemCount: products.length + 1,
+                itemCount: products.length,
                 itemBuilder: (context, index) {
-                  if (index == products.length)
-                    return SizedBox(
-                      width: 100.w, // Adjust as needed
-                      child: IconButton(
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) =>
-                                  ShowListScreen(title: widget.title),
-                            ),
-                          );
-                        },
-                        icon: Icon(
-                          Iconsax.arrow_circle_right4,
-                          color: OurColors.secondaryTextColor, // Optional color
-                          size: 50.sp, // Adjust size as needed
-                        ),
-                      ),
-                    );
                   final product = products[index];
                   return GestureDetector(
                     onTap: () {
@@ -99,15 +80,18 @@ class _HorizontalListState extends State<HorizontalList> {
                       productId: product.id,
                       brandImage: product.image,
                       brandName: 'Fashoni',
-                      brandShowcase: product.brandShowcase,
-                      prevprice: product.prevprice,
+                      brandShowcase: product.name,
+                      prevprice: product.price,
                       price: '300',
-                      discound: '20',
+                      discound: product.discount,
                       sold: '130',
                       numReviewers: '132',
                       stars: '5',
                       coin: 'EGP',
                       liked: product.isInWishlist,
+                      image: product.image,
+                      instock: product.inStock,
+                      rating: product.rating,
                     ),
                   );
                 },

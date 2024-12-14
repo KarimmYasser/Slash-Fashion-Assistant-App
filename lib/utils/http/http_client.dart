@@ -1,9 +1,9 @@
 import 'dart:convert';
+import 'package:fashion_assistant/tap_map.dart';
 import 'package:http/http.dart' as http;
 
 class HttpHelper {
-  static const String _baseUrl =
-      'https://hhynshsbih.us-east-1.awsapprunner.com';
+  static const String _baseUrl = baseURL;
   static String? token;
 
   // Helper method to make a GET request

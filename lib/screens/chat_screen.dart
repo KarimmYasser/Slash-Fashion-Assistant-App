@@ -54,9 +54,11 @@ class _ChatScreenState extends State<ChatScreen> {
     } catch (e) {
       print('Error initializing chat: $e');
     } finally {
-      setState(() {
-        isLoading = false;
-      });
+      if (mounted) {
+        setState(() {
+          isLoading = false;
+        });
+      }
     }
   }
 
