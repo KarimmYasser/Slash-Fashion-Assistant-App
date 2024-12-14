@@ -67,9 +67,11 @@ class _BrandProfileScreenState extends State<BrandProfileScreen> {
       print("Error fetching avatar: $error");
       avatarSvg = null;
     } finally {
-      setState(() {
-        isLoading = false;
-      });
+      i(mounted) {
+        setState(() {
+          isLoading = false;
+        });
+      }
     }
   }
 
@@ -98,7 +100,8 @@ class _BrandProfileScreenState extends State<BrandProfileScreen> {
                   UserProfileTile(
                     isLoading: isLoading,
                     avatarSvg: avatarSvg,
-                    name: '${UserData.userData!.firstName} ${UserData.userData!.lastName}',
+                    name:
+                        '${UserData.userData!.firstName} ${UserData.userData!.lastName}',
                     email: '${UserData.userData!.email}',
                     editProfile: () => Get.to(() => const UserInfoScreen()),
                   ),
@@ -147,8 +150,8 @@ class _BrandProfileScreenState extends State<BrandProfileScreen> {
                             builder: (BuildContext context) {
                               return AlertDialog(
                                 title: const Text('Confirm Logout'),
-                                content:
-                                    const Text('Are you sure you want to logout?'),
+                                content: const Text(
+                                    'Are you sure you want to logout?'),
                                 actions: <Widget>[
                                   TextButton(
                                     onPressed: () {

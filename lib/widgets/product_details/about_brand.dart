@@ -6,8 +6,14 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:iconsax/iconsax.dart';
 
 class AboutBrand extends StatelessWidget {
-  const AboutBrand({super.key});
-
+  const AboutBrand(
+      {super.key,
+      required this.logo,
+      required this.name,
+      required this.description,
+      required this.rate});
+  final String logo, name, description;
+  final double rate;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -33,9 +39,7 @@ class AboutBrand extends StatelessWidget {
                 // Size of the circular image container
                 CircleAvatar(
                   radius: 28, // Inner circle size (smaller for border effect)
-                  backgroundImage: NetworkImage(
-                    "https://media.istockphoto.com/id/1398610798/photo/young-woman-in-linen-shirt-shorts-and-high-heels-pointing-to-the-side-and-talking.jpg?s=1024x1024&w=is&k=20&c=IdY440I0pLdmANsNZRXhjSS7K9Q-Xxvnwf4YzH9qQbQ=",
-                  ),
+                  backgroundImage: NetworkImage(logo),
                   backgroundColor: Colors.transparent,
                 ),
                 SizedBox(
@@ -45,7 +49,7 @@ class AboutBrand extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Fashoni',
+                      "$name",
                       style: TextStyle(
                           fontSize: 20.sp, fontWeight: FontWeight.w500),
                     ),
@@ -56,7 +60,7 @@ class AboutBrand extends StatelessWidget {
                           width: 6.w,
                         ),
                         Text(
-                          '(4.5/5)',
+                          '($rate/5)',
                           style: TextStyle(
                               fontSize: 14.sp, fontWeight: FontWeight.w500),
                         )

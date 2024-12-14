@@ -38,6 +38,7 @@ class RowAboutbrand extends StatelessWidget {
               text,
               style: TextStyle(
                 color: OurColors.textColor,
+                fontSize: 12.sp,
               ),
             ),
             if (row)
@@ -65,7 +66,7 @@ class RowAboutbrand extends StatelessWidget {
                     Text(
                       '${(perc * 100).toStringAsFixed(0)}%', // Format percentage value
                       style: TextStyle(
-                        fontSize: 16,
+                        fontSize: 12.sp,
                         fontWeight: FontWeight.bold,
                         color: Colors.black,
                       ),

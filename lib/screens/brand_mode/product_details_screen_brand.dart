@@ -172,7 +172,7 @@ class _ProductScreenBrandState extends State<ProductScreenBrand> {
                           child: Row(
                             children: [
                               Text(
-                                product.brandShowcase,
+                                product.name,
                                 style: TextStyle(
                                     fontSize: 18.sp,
                                     fontWeight: FontWeight.w500),
@@ -195,7 +195,7 @@ class _ProductScreenBrandState extends State<ProductScreenBrand> {
                           child: Row(
                             children: [
                               Text(
-                                "${product.prevprice}",
+                                "${product.price}",
                                 style: TextStyle(
                                   fontSize: 20.sp,
                                   color: OurColors.textColor,
@@ -254,7 +254,9 @@ class _ProductScreenBrandState extends State<ProductScreenBrand> {
                           return ReviewsScreenBrand();
                         }));
                       },
-                      child: ReviewsWidget()),
+                      child: ReviewsWidget(
+                        rate: product.rating,
+                      )),
                   SizedBox(
                     height: 20.h,
                   ),

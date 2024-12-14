@@ -129,20 +129,6 @@ class ProductCardBrand extends StatelessWidget {
                     ),
                   ),
                 ),
-                Positioned(
-                  bottom: 8.h,
-                  right: 8.w,
-                  child: Container(
-                      height: 30.h,
-                      width: 30.w,
-                      decoration: BoxDecoration(
-                        color: OurColors.white.withOpacity(0.6),
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: Image.asset(
-                        'assets/icons/add_cart.png',
-                      )),
-                ),
               ],
             ),
 
