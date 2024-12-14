@@ -200,7 +200,7 @@ class _ProductScreenState extends State<ProductScreen> {
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 8),
                           child: Text(
-                            product.brandShowcase,
+                            product.name,
                             style: TextStyle(
                                 fontSize: 18.sp, fontWeight: FontWeight.w500),
                           ),
@@ -209,35 +209,67 @@ class _ProductScreenState extends State<ProductScreen> {
                           height: 5.h,
                         ),
                         Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 8),
+                          padding: EdgeInsets.symmetric(horizontal: 8.w),
                           child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text(
-                                "${product.prevprice}",
-                                style: TextStyle(
-                                  fontSize: 20.sp,
-                                  color: OurColors.textColor,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                              Padding(
-                                padding: EdgeInsets.only(top: 10.h),
-                                child: Text(
-                                  "EGP",
-                                  style: TextStyle(
-                                    fontSize: 12.sp,
-                                    color: OurColors.textColor,
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    children: [
+                                      Text(
+                                        "${product.price - (product.price * product.discount) / 100}",
+                                        style: TextStyle(
+                                          fontSize: 22.sp,
+                                          color: OurColors.textColor,
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: EdgeInsets.only(top: 10.h),
+                                        child: Text(
+                                          "EGP",
+                                          style: TextStyle(
+                                            fontSize: 12.sp,
+                                            color: OurColors.textColor,
+                                          ),
+                                        ),
+                                      ),
+                                      SizedBox(width: 4.w),
+                                      Padding(
+                                        padding: EdgeInsets.only(top: 10.h),
+                                        child: Text(
+                                          "${product.discount}% off",
+                                          style: TextStyle(
+                                              fontSize: 14.sp,
+                                              color: OurColors.primaryColor,
+                                              fontWeight: FontWeight.w500),
+                                        ),
+                                      ),
+                                    ],
                                   ),
-                                ),
+                                  Row(
+                                    children: [
+                                      Text(
+                                        '${product.price}',
+                                        style: TextStyle(
+                                          fontSize: 12.sp,
+                                          color: Colors.grey,
+                                          decoration:
+                                              TextDecoration.lineThrough,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
                               ),
+                              // Cart Icon
                             ],
                           ),
                         ),
                         SizedBox(
                           height: 16.h,
                         ),
-                        if (isTrustedWithVideoReviews)
-                          TrustedWithVideoReviews(),
                         SizedBox(
                           height: 20.h,
                         ),
@@ -245,7 +277,47 @@ class _ProductScreenState extends State<ProductScreen> {
                         SizedBox(
                           height: 20.h,
                         ),
-                        SizesList(),
+                        if (product.sizes.isNotEmpty)
+                          SizedBox(
+                            height: 150.h, // Adjust height as needed
+                            child: ListView.builder(
+                              scrollDirection: Axis.horizontal,
+                              itemCount: product.sizes.length,
+                              itemBuilder: (context, index) {
+                                final size = product.sizes[index];
+                                return Card(
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Text('Size: ${size.size}',
+                                            style: TextStyle(fontSize: 14.sp)),
+                                        if (size.waist != null)
+                                          Text('Waist: ${size.waist}',
+                                              style:
+                                                  TextStyle(fontSize: 12.sp)),
+                                        Text('Length: ${size.length}',
+                                            style: TextStyle(fontSize: 12.sp)),
+                                        Text('Chest: ${size.chest}',
+                                            style: TextStyle(fontSize: 12.sp)),
+                                        Text('Arm Length: ${size.armLength}',
+                                            style: TextStyle(fontSize: 12.sp)),
+                                        Text('Bicep: ${size.bicep}',
+                                            style: TextStyle(fontSize: 12.sp)),
+                                        if (size.footLength != null)
+                                          Text(
+                                              'Foot Length: ${size.footLength}',
+                                              style:
+                                                  TextStyle(fontSize: 12.sp)),
+                                      ],
+                                    ),
+                                  ),
+                                );
+                              },
+                            ),
+                          ),
                         SizedBox(
                           height: 20.h,
                         ),
@@ -267,7 +339,12 @@ class _ProductScreenState extends State<ProductScreen> {
                   SizedBox(
                     height: 20.h,
                   ),
-                  AboutBrand(),
+                  AboutBrand(
+                    rate: product.brand.rating,
+                    name: product.brand.name,
+                    description: product.brand.description,
+                    logo: product.brand.logo ?? '',
+                  ),
                   SizedBox(
                     height: 20.h,
                   ),
@@ -278,7 +355,7 @@ class _ProductScreenState extends State<ProductScreen> {
                           return ReviewsScreen();
                         }));
                       },
-                      child: ReviewsWidget()),
+                      child: ReviewsWidget(rate: product.rating)),
                   SizedBox(
                     height: 20.h,
                   ),
@@ -297,12 +374,14 @@ class _ProductScreenState extends State<ProductScreen> {
             return CircularProgressIndicator(); // Show a loading indicator while waiting
           } else if (snapshot.hasError) {
             return Text('Error: ${snapshot.error}'); // Handle error case
-          } else {
+          } else if (product != null) {
             return AddCartAppBar(
               productId: widget.productID,
               liked: snapshot.data!,
+              variants: product!.variants,
             );
           }
+          return Text('no response');
         },
       ),
     );

@@ -238,7 +238,7 @@ class HomeScreen extends StatelessWidget {
             ),
             HorizontalList(
               title: 'Special for You',
-              endpouint: 'api/product/recommended-products',
+              endpouint: 'api/product',
             ),
             SizedBox(
               height: 10.h,

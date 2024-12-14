@@ -24,19 +24,23 @@ class ProductCard extends StatelessWidget {
     required this.numReviewers,
     required this.productId,
     required this.liked,
+    required this.image,
+    required this.instock,
+    required this.rating,
   });
   final String brandName,
       brandImage,
       brandShowcase,
       price,
       coin,
-      discound,
       sold,
       stars,
       numReviewers,
-      productId;
-  final double prevprice;
-  final bool liked;
+      productId,
+      image;
+  final double prevprice, rating;
+  final int discound;
+  final bool liked, instock;
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -56,9 +60,7 @@ class ProductCard extends StatelessWidget {
                 ClipRRect(
                   borderRadius: BorderRadius.circular(12),
                   child: Image.network(
-                    "https://media.istockphoto.com/id/1398610798/photo/young-woman-in-linen-shirt-shorts-and-high-heels-pointing-to-the-side-and-talking.jpg?s=1024x1024&w=is&k=20&c=IdY440I0pLdmANsNZRXhjSS7K9Q-Xxvnwf4YzH9qQbQ=",
-                    //"https://media.istockphoto.com/id/1401899435/photo/image-of-young-asian-girl-posing-on-blue-background.jpg?s=2048x2048&w=is&k=20&c=PUMy-lxrA9ufa0_yjtk1_YEcj3bxd86fjD7_jCcTE3A=",
-                    // Replace with actual image URL
+                    image,
                     width: double.infinity,
                     height: 200.h,
                     fit: BoxFit.cover,
@@ -95,16 +97,10 @@ class ProductCard extends StatelessWidget {
                     child: Row(
                       children: [
                         SizedBox(width: 4.w),
-                        Text(
-                          stars,
-                          style: const TextStyle(
-                            color: OurColors.textColor,
-                          ),
-                        ),
                         Icon(Iconsax.star1,
                             color: OurColors.primaryColor, size: 16.sp),
                         Text(
-                          "5",
+                          "$rating",
                           style: TextStyle(
                             color: OurColors.textColor,
                             fontSize: 12.sp,
@@ -118,15 +114,22 @@ class ProductCard extends StatelessWidget {
                   bottom: 8.h,
                   right: 8.w,
                   child: Container(
-                      height: 30.h,
-                      width: 30.w,
-                      decoration: BoxDecoration(
-                        color: OurColors.white.withOpacity(0.6),
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: Image.asset(
-                        'assets/icons/add_cart.png',
-                      )),
+                    height: 30.h,
+                    padding: EdgeInsets.symmetric(horizontal: 10.w),
+                    decoration: BoxDecoration(
+                      color: OurColors.white.withOpacity(0.6),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: instock
+                        ? const Text(
+                            'In Stock',
+                            style: TextStyle(color: Colors.green),
+                          )
+                        : const Text(
+                            'Out Of Stock',
+                            style: TextStyle(color: Colors.red),
+                          ),
+                  ),
                 ),
               ],
             ),
@@ -179,7 +182,7 @@ class ProductCard extends StatelessWidget {
                     Row(
                       children: [
                         Text(
-                          price,
+                          "${prevprice - (prevprice * discound) / 100}",
                           style: TextStyle(
                             fontSize: 22.sp,
                             color: OurColors.textColor,
@@ -211,7 +214,7 @@ class ProductCard extends StatelessWidget {
                     Row(
                       children: [
                         Text(
-                          "250 EGP",
+                          '$prevprice',
                           style: TextStyle(
                             fontSize: 12.sp,
                             color: Colors.grey,

@@ -217,7 +217,7 @@ class BrandDetails extends StatelessWidget {
                 children: [
                   // Search Bar
                   Container(
-                    width: 310.w,
+                    width: 300.w,
                     decoration: BoxDecoration(
                       color: OurColors.containerBackgroundColor,
                       borderRadius:

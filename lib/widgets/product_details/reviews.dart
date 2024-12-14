@@ -8,8 +8,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:iconsax/iconsax.dart';
 
 class ReviewsWidget extends StatelessWidget {
-  const ReviewsWidget({super.key});
-
+  const ReviewsWidget({super.key, required this.rate});
+  final double rate;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -29,7 +29,7 @@ class ReviewsWidget extends StatelessWidget {
               ),
             ),
           ),
-          StarsSection(stars: 4.5),
+          StarsSection(stars: rate),
           SizedBox(
             height: 10.h,
           ),
