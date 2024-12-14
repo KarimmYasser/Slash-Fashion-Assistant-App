@@ -61,8 +61,6 @@ class LoginController extends GetxController {
       HttpHelper.setToken(loginResponse['token']);
       localStorage.write('TOKEN', HttpHelper.token);
 
-      //final response = await HttpHelper.get('api/order');
-
       // Save User Data
       UserData.userData = UserData(loginResponse['user']);
       if (rememberMe.value) {

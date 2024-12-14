@@ -1,7 +1,7 @@
 import 'package:fashion_assistant/screens/brand_mode/brand_add_product_screen.dart';
 import 'package:fashion_assistant/screens/brand_mode/brand_mode_screen.dart';
 import 'package:fashion_assistant/screens/brand_mode/brand_profile_screen.dart';
-import 'package:fashion_assistant/screens/cart_screen.dart';
+import 'package:fashion_assistant/screens/cart/cart_screen.dart';
 import 'package:fashion_assistant/screens/chat_screen.dart';
 import 'package:fashion_assistant/screens/favorite_screen.dart';
 import 'package:fashion_assistant/screens/home_screen.dart';
