@@ -1,4 +1,5 @@
 import 'package:fashion_assistant/constants.dart';
+import 'package:fashion_assistant/models/review.dart';
 import 'package:fashion_assistant/widgets/product_details/reviews.dart';
 import 'package:flutter/material.dart';
 import 'package:fashion_assistant/screens/add_review_screen.dart'; // Import the AddReviewScreen
@@ -43,6 +44,22 @@ class ReviewsScreenBrand extends StatelessWidget {
                       EdgeInsets.symmetric(horizontal: 24.w, vertical: 4.h),
                   child: ReviewCard(
                     isExpanded: true,
+                    review: Review(
+                      id: '1',
+                      userId: '1',
+                      productId: '1',
+                      rating: 5,
+                      valueForMoneyRate: 5,
+                      qualityRate: 5,
+                      shippingRate: 5,
+                      accuracyRate: 5,
+                      comment: 'This is a great product',
+                      createdAt: DateTime.now(),
+                      updatedAt: DateTime.now(),
+                      likes: 0,
+                      image: '',
+                    ),
+                    reviews: [],
                   ),
                 );
               },

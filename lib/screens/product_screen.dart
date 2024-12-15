@@ -2,6 +2,7 @@ import 'package:fashion_assistant/constants.dart';
 import 'package:fashion_assistant/models/product.dart';
 import 'package:fashion_assistant/screens/reviews_screen.dart';
 import 'package:fashion_assistant/services/get_products.dart';
+import 'package:fashion_assistant/services/get_reviews.dart';
 import 'package:fashion_assistant/widgets/home_page/hm_hzt_list.dart';
 import 'package:fashion_assistant/widgets/product_details/about_brand.dart';
 import 'package:fashion_assistant/widgets/product_details/add_cart_widget.dart';
@@ -71,6 +72,7 @@ class _ProductScreenState extends State<ProductScreen> {
   bool isTrustedWithVideoReviews = true;
   bool? liked;
   Product? product;
+  late Future<List<Map<String, dynamic>>> _reviews;
   @override
   void initState() {
     super.initState();
@@ -81,6 +83,7 @@ class _ProductScreenState extends State<ProductScreen> {
         liked = product!.isInWishlist;
       });
     });
+    _reviews = ReviewService().getReviews(widget.productID);
   }
 
   Future<bool> fetchLikedStatus() async {
@@ -349,13 +352,60 @@ class _ProductScreenState extends State<ProductScreen> {
                     height: 20.h,
                   ),
                   GestureDetector(
-                      onTap: () {
-                        Navigator.push(context,
-                            MaterialPageRoute(builder: (context) {
-                          return ReviewsScreen();
-                        }));
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) {
+                            return FutureBuilder<List<Map<String, dynamic>>>(
+                              future: _reviews,
+                              builder: (context, snapshot) {
+                                if (snapshot.connectionState ==
+                                    ConnectionState.waiting) {
+                                  return Center(
+                                      child: CircularProgressIndicator());
+                                } else if (snapshot.hasError) {
+                                  return Center(
+                                      child: Text('Error: ${snapshot.error}'));
+                                } else if (!snapshot.hasData ||
+                                    snapshot.data!.isEmpty) {
+                                  return Center(
+                                      child: Text('No reviews available'));
+                                }
+
+                                final reviews = snapshot.data!;
+                                return ReviewsScreen(
+                                  reviews: reviews,
+                                  productId: product.id,
+                                );
+                              },
+                            );
+                          },
+                        ),
+                      );
+                    },
+                    child: FutureBuilder<List<Map<String, dynamic>>>(
+                      future: _reviews,
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return Center(child: CircularProgressIndicator());
+                        } else if (snapshot.hasError) {
+                          return Center(
+                              child: Text('Error: ${snapshot.error}'));
+                        } else if (!snapshot.hasData ||
+                            snapshot.data!.isEmpty) {
+                          return Center(child: Text('No reviews available'));
+                        }
+
+                        final reviews = snapshot.data!;
+                        return ReviewsWidget(
+                          rate: product.rating,
+                          reviews: reviews,
+                        );
                       },
-                      child: ReviewsWidget(rate: product.rating)),
+                    ),
+                  ),
                   SizedBox(
                     height: 20.h,
                   ),

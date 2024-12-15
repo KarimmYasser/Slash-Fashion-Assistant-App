@@ -1,8 +1,8 @@
 import 'package:fashion_assistant/constants.dart';
 import 'package:fashion_assistant/models/product.dart';
-import 'package:fashion_assistant/screens/brand_mode/reviews_screen_brand.dart';
 import 'package:fashion_assistant/screens/reviews_screen.dart';
 import 'package:fashion_assistant/services/get_products.dart';
+import 'package:fashion_assistant/services/get_reviews.dart';
 import 'package:fashion_assistant/widgets/home_page/hm_hzt_list.dart';
 import 'package:fashion_assistant/widgets/product_details/about_brand.dart';
 import 'package:fashion_assistant/widgets/product_details/add_cart_widget.dart';
@@ -59,19 +59,21 @@ final List<Map<String, String>> colors = [
   },
 ];
 
-class ProductScreenBrand extends StatefulWidget {
-  const ProductScreenBrand({super.key, required this.productID});
+class ProductDetailsScreenBrand extends StatefulWidget {
+  const ProductDetailsScreenBrand({super.key, required this.productID});
   final String productID;
 
   @override
-  State<ProductScreenBrand> createState() => _ProductScreenBrandState();
+  State<ProductDetailsScreenBrand> createState() =>
+      _ProductDetailsScreenBrandState();
 }
 
-class _ProductScreenBrandState extends State<ProductScreenBrand> {
-  Product? product;
+class _ProductDetailsScreenBrandState extends State<ProductDetailsScreenBrand> {
   late Future<Product> _product;
   bool isTrustedWithVideoReviews = true;
-
+  bool? liked;
+  Product? product;
+  late Future<List<Map<String, dynamic>>> _reviews;
   @override
   void initState() {
     super.initState();
@@ -79,8 +81,15 @@ class _ProductScreenBrandState extends State<ProductScreenBrand> {
     _product.then((value) {
       setState(() {
         product = value;
+        liked = product!.isInWishlist;
       });
     });
+    _reviews = ReviewService().getReviews(widget.productID);
+  }
+
+  Future<bool> fetchLikedStatus() async {
+    // Implement your logic to fetch the liked status here
+    return liked ?? false;
   }
 
   @override
@@ -164,6 +173,31 @@ class _ProductScreenBrandState extends State<ProductScreenBrand> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
+                        Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 8.w),
+                          child: Row(
+                            children: [
+                              // Size of the circular image container
+                              CircleAvatar(
+                                radius:
+                                    14, // Inner circle size (smaller for border effect)
+                                backgroundImage: NetworkImage(
+                                  "https://media.istockphoto.com/id/1398610798/photo/young-woman-in-linen-shirt-shorts-and-high-heels-pointing-to-the-side-and-talking.jpg?s=1024x1024&w=is&k=20&c=IdY440I0pLdmANsNZRXhjSS7K9Q-Xxvnwf4YzH9qQbQ=",
+                                ),
+                                backgroundColor: Colors.transparent,
+                              ),
+                              SizedBox(
+                                width: 10.w,
+                              ),
+                              Text(
+                                'Fashoni',
+                                style: TextStyle(
+                                    fontSize: 16.sp,
+                                    fontWeight: FontWeight.w500),
+                              ),
+                            ],
+                          ),
+                        ),
                         ImagesContainer(
                           imageUrls: imagesPaths,
                         ),
@@ -191,27 +225,61 @@ class _ProductScreenBrandState extends State<ProductScreenBrand> {
                           height: 5.h,
                         ),
                         Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 8),
+                          padding: EdgeInsets.symmetric(horizontal: 8.w),
                           child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text(
-                                "${product.price}",
-                                style: TextStyle(
-                                  fontSize: 20.sp,
-                                  color: OurColors.textColor,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                              Padding(
-                                padding: EdgeInsets.only(top: 10.h),
-                                child: Text(
-                                  "EGP",
-                                  style: TextStyle(
-                                    fontSize: 12.sp,
-                                    color: OurColors.textColor,
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    children: [
+                                      Text(
+                                        "${product.price - (product.price * product.discount) / 100}",
+                                        style: TextStyle(
+                                          fontSize: 22.sp,
+                                          color: OurColors.textColor,
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: EdgeInsets.only(top: 10.h),
+                                        child: Text(
+                                          "EGP",
+                                          style: TextStyle(
+                                            fontSize: 12.sp,
+                                            color: OurColors.textColor,
+                                          ),
+                                        ),
+                                      ),
+                                      SizedBox(width: 4.w),
+                                      Padding(
+                                        padding: EdgeInsets.only(top: 10.h),
+                                        child: Text(
+                                          "${product.discount}% off",
+                                          style: TextStyle(
+                                              fontSize: 14.sp,
+                                              color: OurColors.primaryColor,
+                                              fontWeight: FontWeight.w500),
+                                        ),
+                                      ),
+                                    ],
                                   ),
-                                ),
+                                  Row(
+                                    children: [
+                                      Text(
+                                        '${product.price}',
+                                        style: TextStyle(
+                                          fontSize: 12.sp,
+                                          color: Colors.grey,
+                                          decoration:
+                                              TextDecoration.lineThrough,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
                               ),
+                              // Cart Icon
                             ],
                           ),
                         ),
@@ -225,7 +293,47 @@ class _ProductScreenBrandState extends State<ProductScreenBrand> {
                         SizedBox(
                           height: 20.h,
                         ),
-                        SizesList(),
+                        if (product.sizes.isNotEmpty)
+                          SizedBox(
+                            height: 150.h, // Adjust height as needed
+                            child: ListView.builder(
+                              scrollDirection: Axis.horizontal,
+                              itemCount: product.sizes.length,
+                              itemBuilder: (context, index) {
+                                final size = product.sizes[index];
+                                return Card(
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Text('Size: ${size.size}',
+                                            style: TextStyle(fontSize: 14.sp)),
+                                        if (size.waist != null)
+                                          Text('Waist: ${size.waist}',
+                                              style:
+                                                  TextStyle(fontSize: 12.sp)),
+                                        Text('Length: ${size.length}',
+                                            style: TextStyle(fontSize: 12.sp)),
+                                        Text('Chest: ${size.chest}',
+                                            style: TextStyle(fontSize: 12.sp)),
+                                        Text('Arm Length: ${size.armLength}',
+                                            style: TextStyle(fontSize: 12.sp)),
+                                        Text('Bicep: ${size.bicep}',
+                                            style: TextStyle(fontSize: 12.sp)),
+                                        if (size.footLength != null)
+                                          Text(
+                                              'Foot Length: ${size.footLength}',
+                                              style:
+                                                  TextStyle(fontSize: 12.sp)),
+                                      ],
+                                    ),
+                                  ),
+                                );
+                              },
+                            ),
+                          ),
                         SizedBox(
                           height: 20.h,
                         ),
@@ -238,8 +346,8 @@ class _ProductScreenBrandState extends State<ProductScreenBrand> {
                   ),
                   Description(
                     description:
-                        "This is a detailed description of the product. It provides all the necessary information users need to know before making a purchase decision. The description includes features, benefits, and usage guidelines.",
-                  ),
+                        product.description ?? 'No description available',
+                  ), // Use the product description here),
                   SizedBox(
                     height: 20.h,
                   ),
@@ -247,18 +355,63 @@ class _ProductScreenBrandState extends State<ProductScreenBrand> {
                   SizedBox(
                     height: 20.h,
                   ),
-                  GestureDetector(
-                      onTap: () {
-                        Navigator.push(context,
-                            MaterialPageRoute(builder: (context) {
-                          return ReviewsScreenBrand();
-                        }));
-                      },
-                      child: ReviewsWidget(
-                        rate: product.rating,
-                      )),
                   SizedBox(
                     height: 20.h,
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) {
+                            return FutureBuilder<List<Map<String, dynamic>>>(
+                              future: _reviews,
+                              builder: (context, snapshot) {
+                                if (snapshot.connectionState ==
+                                    ConnectionState.waiting) {
+                                  return Center(
+                                      child: CircularProgressIndicator());
+                                } else if (snapshot.hasError) {
+                                  return Center(
+                                      child: Text('Error: ${snapshot.error}'));
+                                } else if (!snapshot.hasData ||
+                                    snapshot.data!.isEmpty) {
+                                  return Center(
+                                      child: Text('No reviews available'));
+                                }
+
+                                final reviews = snapshot.data!;
+                                return ReviewsScreen(
+                                  reviews: reviews,
+                                  productId: product.id,
+                                );
+                              },
+                            );
+                          },
+                        ),
+                      );
+                    },
+                    child: FutureBuilder<List<Map<String, dynamic>>>(
+                      future: _reviews,
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return Center(child: CircularProgressIndicator());
+                        } else if (snapshot.hasError) {
+                          return Center(
+                              child: Text('Error: ${snapshot.error}'));
+                        } else if (!snapshot.hasData ||
+                            snapshot.data!.isEmpty) {
+                          return Center(child: Text('No reviews available'));
+                        }
+
+                        final reviews = snapshot.data!;
+                        return ReviewsWidget(
+                          rate: product.rating,
+                          reviews: reviews,
+                        );
+                      },
+                    ),
                   ),
                 ],
               ),

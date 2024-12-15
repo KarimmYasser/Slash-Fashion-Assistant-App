@@ -24,19 +24,19 @@ class ProductCardBrand extends StatelessWidget {
     required this.numReviewers,
     required this.productId,
     required this.likes,
+    required this.image,
   });
   final String brandName,
       brandImage,
       brandShowcase,
-      price,
       coin,
-      discound,
       sold,
-      stars,
       numReviewers,
       productId;
-  final double prevprice;
-  final int likes;
+  final double prevprice, price, stars;
+  final int likes, discound;
+
+  final String image;
 
   String formatLikes(int likes) {
     if (likes >= 1000) {
@@ -64,8 +64,7 @@ class ProductCardBrand extends StatelessWidget {
                 ClipRRect(
                   borderRadius: BorderRadius.circular(12),
                   child: Image.network(
-                    "https://media.istockphoto.com/id/1398610798/photo/young-woman-in-linen-shirt-shorts-and-high-heels-pointing-to-the-side-and-talking.jpg?s=1024x1024&w=is&k=20&c=IdY440I0pLdmANsNZRXhjSS7K9Q-Xxvnwf4YzH9qQbQ=",
-                    //"https://media.istockphoto.com/id/1401899435/photo/image-of-young-asian-girl-posing-on-blue-background.jpg?s=2048x2048&w=is&k=20&c=PUMy-lxrA9ufa0_yjtk1_YEcj3bxd86fjD7_jCcTE3A=",
+                    image, //"https://media.istockphoto.com/id/1401899435/photo/image-of-young-asian-girl-posing-on-blue-background.jpg?s=2048x2048&w=is&k=20&c=PUMy-lxrA9ufa0_yjtk1_YEcj3bxd86fjD7_jCcTE3A=",
                     // Replace with actual image URL
                     width: double.infinity,
                     height: 200.h,
@@ -111,7 +110,7 @@ class ProductCardBrand extends StatelessWidget {
                       children: [
                         SizedBox(width: 4.w),
                         Text(
-                          stars,
+                          "$stars",
                           style: const TextStyle(
                             color: OurColors.textColor,
                           ),
@@ -142,34 +141,7 @@ class ProductCardBrand extends StatelessWidget {
             ),
             const SizedBox(height: 4),
             // Brand Name
-            Row(
-              children: [
-                Text(
-                  "By ",
-                  style: TextStyle(
-                    fontSize: 12.sp,
-                    color: Colors.grey,
-                  ),
-                ),
-                // Size of the circular image container
-                CircleAvatar(
-                  radius: 10.r, // Inner circle size (smaller for border effect)
-                  backgroundImage: NetworkImage(brandImage),
-                  backgroundColor: Colors.transparent,
-                ),
-                SizedBox(
-                  width: 5.w,
-                ),
-                Text(
-                  brandName,
-                  style: TextStyle(
-                    fontSize: 12.sp,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 8),
+
             // Price and Discount
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -180,7 +152,7 @@ class ProductCardBrand extends StatelessWidget {
                     Row(
                       children: [
                         Text(
-                          price,
+                          "${prevprice - (prevprice * discound) / 100}",
                           style: TextStyle(
                             fontSize: 22.sp,
                             color: OurColors.textColor,
@@ -212,7 +184,7 @@ class ProductCardBrand extends StatelessWidget {
                     Row(
                       children: [
                         Text(
-                          "250 EGP",
+                          "$prevprice",
                           style: TextStyle(
                             fontSize: 12.sp,
                             color: Colors.grey,

@@ -1,4 +1,5 @@
 import 'package:fashion_assistant/constants.dart';
+import 'package:fashion_assistant/models/productcard.dart';
 import 'package:fashion_assistant/screens/brand_mode/product_details_screen_brand.dart';
 import 'package:fashion_assistant/screens/product_screen.dart';
 import 'package:fashion_assistant/screens/show_list_screen.dart';
@@ -24,8 +25,8 @@ class HorizontalListBrand extends StatefulWidget {
 }
 
 class _HorizontalListBrandState extends State<HorizontalListBrand> {
-  late Future<List<Product>> _products;
-  List<Product> _filteredProducts = [];
+  late Future<List<ProductCardModel>> _products;
+  List<ProductCardModel> _filteredProducts = [];
 
   @override
   void initState() {
@@ -34,7 +35,9 @@ class _HorizontalListBrandState extends State<HorizontalListBrand> {
         HttpHelper.get('api/product/get-products-of-brand/${widget.brandid}')
             .then((response) {
       final products = response['products'] as List<dynamic>;
-      return products.map((product) => Product.fromJson(product)).toList();
+      return products
+          .map((product) => ProductCardModel.fromJson(product))
+          .toList();
     });
     _products.then((products) {
       setState(() {
@@ -71,7 +74,7 @@ class _HorizontalListBrandState extends State<HorizontalListBrand> {
         ),
         SizedBox(
           height: 410.h,
-          child: FutureBuilder<List<Product>>(
+          child: FutureBuilder<List<ProductCardModel>>(
             future: _products,
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
@@ -112,25 +115,26 @@ class _HorizontalListBrandState extends State<HorizontalListBrand> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => ProductScreenBrand(
+                          builder: (context) => ProductDetailsScreenBrand(
                             productID: product.id,
                           ),
                         ),
                       );
                     },
                     child: ProductCardBrand(
+                      image: product.image,
                       productId: product.id,
-                      brandImage: product.image,
-                      brandName: 'Fashoni',
+                      brandImage: '',
+                      brandName: '',
                       brandShowcase: product.name,
                       prevprice: product.price,
-                      price: '300',
-                      discound: '20',
+                      discound: product.discount,
                       sold: '130',
-                      numReviewers: '132',
-                      stars: '5',
-                      coin: 'EGP',
+                      stars: product.rating,
                       likes: 1000,
+                      price: product.price,
+                      coin: 'EGP',
+                      numReviewers: '132',
                     ),
                   );
                 },

@@ -1,14 +1,17 @@
 import 'package:fashion_assistant/constants.dart';
+import 'package:fashion_assistant/utils/http/http_client.dart';
 import 'package:fashion_assistant/widgets/product_details/rate.dart';
 import 'package:fashion_assistant/widgets/product_details/trusted_with_video_reviews.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 import 'dart:io';
 
 class AddReviewScreen extends StatefulWidget {
-  const AddReviewScreen({super.key});
-
+  const AddReviewScreen({super.key, required this.productId});
+  final String productId;
   @override
   State<AddReviewScreen> createState() => _AddReviewScreenState();
 }
@@ -36,28 +39,44 @@ class _AddReviewScreenState extends State<AddReviewScreen> {
     });
   }
 
-  void _submitReview() {
+  Future<void> _submitReview() async {
     bool allRated = _ratings.every((rating) => rating != null);
     bool reviewWritten = _reviewController.text.isNotEmpty;
     bool recommendSelected = _recommendProduct != null;
 
     if (allRated && reviewWritten && recommendSelected) {
-      // Handle form submission
-      if (_selectedImages.isNotEmpty) {
-        for (var image in _selectedImages) {
-          print("Image selected: ${image.path}");
-        }
-      } else {
-        print("No images selected");
-      }
-      print("Review submitted: ${_reviewController.text}");
-      print("Recommend product: $_recommendProduct");
+      // Prepare the data to be sent
+      final reviewData = {
+        "productId": widget.productId, // Replace with actual product ID
+        "rating": _ratings[0]!.toDouble(),
+        "comment": _reviewController.text,
+        "valueForMoney_rate": _ratings[1]!.toDouble(),
+        "quality_rate": _ratings[2]!.toDouble(),
+        "shipping_rate": _ratings[3]!.toDouble(),
+        "accuracy_rate": _ratings[0]!.toDouble(),
+        "image": _selectedImages.isNotEmpty
+            ? _selectedImages[0].path
+            : null, // Replace with actual image URL if needed
+      };
+
+      // Send the data to the endpoint
+      final response = await HttpHelper.post(
+        'api/review', // Replace with actual endpoint
+
+        reviewData,
+      );
+
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text('Review submitted successfully!'),
+        backgroundColor: Colors.green,
+      ));
     } else {
       // Show error message
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-            content: Text(
-                'Please rate all questions, write a review, and select if you recommend the product.')),
+        const SnackBar(
+          content: Text(
+              'Please rate all questions, write a review, and select if you recommend the product.'),
+        ),
       );
     }
   }
@@ -216,7 +235,6 @@ class _AddReviewScreenState extends State<AddReviewScreen> {
                 },
               ),
               const SizedBox(height: 16),
-              TrustedWithVideoReviews(),
 
               SizedBox(height: 10.h),
               // "Submit" Button
