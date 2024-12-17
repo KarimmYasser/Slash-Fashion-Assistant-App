@@ -1,12 +1,15 @@
 import 'package:fashion_assistant/constants.dart';
+import 'package:fashion_assistant/models/review.dart';
 import 'package:fashion_assistant/widgets/product_details/reviews.dart';
 import 'package:flutter/material.dart';
 import 'package:fashion_assistant/screens/add_review_screen.dart'; // Import the AddReviewScreen
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class ReviewsScreen extends StatelessWidget {
-  const ReviewsScreen({super.key});
-
+  const ReviewsScreen(
+      {super.key, required this.reviews, required this.productId});
+  final List<Map<String, dynamic>> reviews;
+  final String productId;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -47,7 +50,9 @@ class ReviewsScreen extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => AddReviewScreen()),
+                          builder: (context) => AddReviewScreen(
+                                productId: productId,
+                              )),
                     );
                     //} Handle add to cart action
                     // Handle add to cart action
@@ -68,13 +73,15 @@ class ReviewsScreen extends StatelessWidget {
             ListView.builder(
               shrinkWrap: true,
               physics: NeverScrollableScrollPhysics(),
-              itemCount: 6,
+              itemCount: reviews.length,
               itemBuilder: (context, index) {
                 return Padding(
                   padding:
                       EdgeInsets.symmetric(horizontal: 24.w, vertical: 4.h),
                   child: ReviewCard(
                     isExpanded: true,
+                    review: Review.fromJson(reviews[index]),
+                    reviews: reviews,
                   ),
                 );
               },

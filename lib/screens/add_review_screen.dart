@@ -1,14 +1,18 @@
 import 'package:fashion_assistant/constants.dart';
+import 'package:fashion_assistant/tap_map.dart';
+import 'package:fashion_assistant/utils/http/http_client.dart';
 import 'package:fashion_assistant/widgets/product_details/rate.dart';
 import 'package:fashion_assistant/widgets/product_details/trusted_with_video_reviews.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 import 'dart:io';
 
 class AddReviewScreen extends StatefulWidget {
-  const AddReviewScreen({super.key});
-
+  const AddReviewScreen({super.key, required this.productId});
+  final String productId;
   @override
   State<AddReviewScreen> createState() => _AddReviewScreenState();
 }
@@ -36,28 +40,101 @@ class _AddReviewScreenState extends State<AddReviewScreen> {
     });
   }
 
-  void _submitReview() {
+  Future<void> _submitReview() async {
     bool allRated = _ratings.every((rating) => rating != null);
     bool reviewWritten = _reviewController.text.isNotEmpty;
     bool recommendSelected = _recommendProduct != null;
 
     if (allRated && reviewWritten && recommendSelected) {
-      // Handle form submission
-      if (_selectedImages.isNotEmpty) {
-        for (var image in _selectedImages) {
-          print("Image selected: ${image.path}");
+      try {
+        // Step 1: Submit the review data first
+        final reviewData = {
+          "productId": widget.productId,
+          "rating": _ratings[0]!.toDouble(),
+          "comment": _reviewController.text,
+          "valueForMoney_rate": _ratings[1]!.toDouble(),
+          "quality_rate": _ratings[2]!.toDouble(),
+          "shipping_rate": _ratings[3]!.toDouble(),
+          "accuracy_rate": _ratings[0]!.toDouble(),
+          "image": null, // Placeholder, image is uploaded separately
+        };
+
+        final response = await HttpHelper.post(
+          'api/review',
+          reviewData,
+        );
+
+        final String reviewId = response['id']; // Get the new review ID
+
+        // Step 2: Upload Image(s) if any
+        String? uploadedImageUrl;
+        if (_selectedImages.isNotEmpty) {
+          final imageFile =
+              File(_selectedImages[0].path); // Take the first image
+
+          final imageUploadRequest = http.MultipartRequest(
+            'POST',
+            Uri.parse('$baseURL/api/review/image'),
+          );
+          imageUploadRequest.headers['Authorization'] =
+              'Bearer ${HttpHelper.token}';
+          imageUploadRequest.fields['reviewId'] = reviewId;
+          imageUploadRequest.files.add(await http.MultipartFile.fromPath(
+            'image', // Key name for image in your backend
+            imageFile.path,
+          ));
+
+          final imageResponse = await imageUploadRequest.send();
+
+          if (imageResponse.statusCode == 200) {
+            final imageResponseBody =
+                await imageResponse.stream.bytesToString();
+            final imageData = json.decode(imageResponseBody);
+            uploadedImageUrl =
+                imageData['image']; // Assuming backend returns image URL
+          }
+
+          // Step 3: Update the review with the uploaded image URL
+          if (uploadedImageUrl != null) {
+            final updatedReviewData = {
+              "productId": widget.productId,
+              "rating": _ratings[0]!.toDouble(),
+              "comment": _reviewController.text,
+              "valueForMoney_rate": _ratings[1]!.toDouble(),
+              "quality_rate": _ratings[2]!.toDouble(),
+              "shipping_rate": _ratings[3]!.toDouble(),
+              "accuracy_rate": _ratings[0]!.toDouble(),
+              "image": uploadedImageUrl, // Add the uploaded image URL
+            };
+
+            await HttpHelper.put(
+              'api/review/$reviewId',
+              updatedReviewData,
+            );
+          }
+
+          // Success message
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            content: Text('Review submitted successfully!'),
+            backgroundColor: Colors.green,
+          ));
         }
-      } else {
-        print("No images selected");
+      } catch (e) {
+        print("Error: $e");
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Failed to submit the review. Please try again.'),
+            backgroundColor: Colors.red,
+          ),
+        );
       }
-      print("Review submitted: ${_reviewController.text}");
-      print("Recommend product: $_recommendProduct");
     } else {
-      // Show error message
+      // Show error if conditions are not met
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-            content: Text(
-                'Please rate all questions, write a review, and select if you recommend the product.')),
+        const SnackBar(
+          content: Text(
+              'Please rate all questions, write a review, and select if you recommend the product.'),
+        ),
       );
     }
   }
@@ -216,7 +293,6 @@ class _AddReviewScreenState extends State<AddReviewScreen> {
                 },
               ),
               const SizedBox(height: 16),
-              TrustedWithVideoReviews(),
 
               SizedBox(height: 10.h),
               // "Submit" Button

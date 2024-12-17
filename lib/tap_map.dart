@@ -1,3 +1,8 @@
+import 'package:fashion_assistant/screens/admin_mode/admin_profile_screen.dart';
+import 'package:fashion_assistant/screens/admin_mode/approve_brands_screen.dart';
+import 'package:fashion_assistant/screens/admin_mode/approve_products_screen.dart';
+import 'package:fashion_assistant/screens/admin_mode/delete_reviews_screen.dart';
+import 'package:fashion_assistant/screens/admin_mode/home_admin_screen.dart';
 import 'package:fashion_assistant/screens/brand_mode/brand_add_product_screen.dart';
 import 'package:fashion_assistant/screens/brand_mode/brand_mode_screen.dart';
 import 'package:fashion_assistant/screens/brand_mode/brand_profile_screen.dart';
@@ -10,7 +15,7 @@ import 'package:fashion_assistant/screens/personalization/profile_screen.dart';
 bool inHome = true;
 bool isMale = true;
 const String baseURL =
-    'https://5f48-2c0f-fc89-8032-a7f5-e9a1-8f11-48b6-1b36.ngrok-free.app';
+    'https://1971-2c0f-fc89-8039-6d3b-f977-3ed3-3390-764b.ngrok-free.app';
 Future<String>? kChatId;
 final List<Map<String, dynamic>> screenDetails = [
   {
@@ -27,6 +32,24 @@ final List<Map<String, dynamic>> screenDetails = [
   },
   {
     'screenName': const ProfileScreen(),
+  },
+];
+
+final List<Map<String, dynamic>> screenDetailsAdmin = [
+  {
+    'screenName': const HomeAdminScreen(),
+  },
+  {
+    'screenName': const ApproveProductsScreen(),
+  },
+  {
+    'screenName': const ApproveBrandsScreen(),
+  },
+  {
+    'screenName': const DeleteReviewsScreen(),
+  },
+  {
+    'screenName': const AdminProfileScreen(),
   },
 ];
 final List<Map<String, dynamic>> screenDetailsBrand = [
