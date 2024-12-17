@@ -18,7 +18,7 @@ class BrandCarousel extends StatefulWidget {
 
 class _BrandCarouselState extends State<BrandCarousel> {
   final Map<String, Color> _dominantColors = {};
-  late Future<BrandsResponse> _brandsFuture;
+  late Future<List<Brand>> _brandsFuture;
 
   @override
   void initState() {
@@ -47,7 +47,7 @@ class _BrandCarouselState extends State<BrandCarousel> {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<BrandsResponse>(
+    return FutureBuilder<List<Brand>>(
       future: _brandsFuture,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
@@ -57,7 +57,7 @@ class _BrandCarouselState extends State<BrandCarousel> {
             child: Text('Error: ${snapshot.error}'),
           );
         } else if (snapshot.hasData) {
-          final brands = snapshot.data!.brands;
+          final brands = snapshot.data!;
 
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,

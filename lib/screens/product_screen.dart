@@ -282,7 +282,7 @@ class _ProductScreenState extends State<ProductScreen> {
                         ),
                         if (product.sizes.isNotEmpty)
                           SizedBox(
-                            height: 150.h, // Adjust height as needed
+                            height: 170.h, // Adjust height as needed
                             child: ListView.builder(
                               scrollDirection: Axis.horizontal,
                               itemCount: product.sizes.length,

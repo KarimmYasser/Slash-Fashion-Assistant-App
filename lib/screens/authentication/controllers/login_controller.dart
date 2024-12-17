@@ -1,3 +1,4 @@
+import 'package:fashion_assistant/screens/admin_mode/admin_total_screens.dart';
 import 'package:fashion_assistant/screens/brand_mode/brand_mode_screen.dart';
 import 'package:fashion_assistant/screens/brand_mode/brand_total_screens.dart';
 import 'package:fashion_assistant/utils/popups/full_screen_loader.dart';

@@ -87,28 +87,8 @@ class _HorizontalListBrandState extends State<HorizontalListBrand> {
 
               return ListView.builder(
                 scrollDirection: Axis.horizontal,
-                itemCount: _filteredProducts.length + 1,
+                itemCount: _filteredProducts.length,
                 itemBuilder: (context, index) {
-                  if (index == _filteredProducts.length)
-                    return SizedBox(
-                      width: 100.w,
-                      child: IconButton(
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) =>
-                                  ShowListScreen(title: widget.title),
-                            ),
-                          );
-                        },
-                        icon: Icon(
-                          Iconsax.arrow_circle_right4,
-                          color: OurColors.secondaryTextColor,
-                          size: 50.sp,
-                        ),
-                      ),
-                    );
                   final product = _filteredProducts[index];
                   return GestureDetector(
                     onTap: () {

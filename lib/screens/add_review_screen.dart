@@ -1,4 +1,5 @@
 import 'package:fashion_assistant/constants.dart';
+import 'package:fashion_assistant/tap_map.dart';
 import 'package:fashion_assistant/utils/http/http_client.dart';
 import 'package:fashion_assistant/widgets/product_details/rate.dart';
 import 'package:fashion_assistant/widgets/product_details/trusted_with_video_reviews.dart';
@@ -45,33 +46,90 @@ class _AddReviewScreenState extends State<AddReviewScreen> {
     bool recommendSelected = _recommendProduct != null;
 
     if (allRated && reviewWritten && recommendSelected) {
-      // Prepare the data to be sent
-      final reviewData = {
-        "productId": widget.productId, // Replace with actual product ID
-        "rating": _ratings[0]!.toDouble(),
-        "comment": _reviewController.text,
-        "valueForMoney_rate": _ratings[1]!.toDouble(),
-        "quality_rate": _ratings[2]!.toDouble(),
-        "shipping_rate": _ratings[3]!.toDouble(),
-        "accuracy_rate": _ratings[0]!.toDouble(),
-        "image": _selectedImages.isNotEmpty
-            ? _selectedImages[0].path
-            : null, // Replace with actual image URL if needed
-      };
+      try {
+        // Step 1: Submit the review data first
+        final reviewData = {
+          "productId": widget.productId,
+          "rating": _ratings[0]!.toDouble(),
+          "comment": _reviewController.text,
+          "valueForMoney_rate": _ratings[1]!.toDouble(),
+          "quality_rate": _ratings[2]!.toDouble(),
+          "shipping_rate": _ratings[3]!.toDouble(),
+          "accuracy_rate": _ratings[0]!.toDouble(),
+          "image": null, // Placeholder, image is uploaded separately
+        };
 
-      // Send the data to the endpoint
-      final response = await HttpHelper.post(
-        'api/review', // Replace with actual endpoint
+        final response = await HttpHelper.post(
+          'api/review',
+          reviewData,
+        );
 
-        reviewData,
-      );
+        final String reviewId = response['id']; // Get the new review ID
 
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-        content: Text('Review submitted successfully!'),
-        backgroundColor: Colors.green,
-      ));
+        // Step 2: Upload Image(s) if any
+        String? uploadedImageUrl;
+        if (_selectedImages.isNotEmpty) {
+          final imageFile =
+              File(_selectedImages[0].path); // Take the first image
+
+          final imageUploadRequest = http.MultipartRequest(
+            'POST',
+            Uri.parse('$baseURL/api/review/image'),
+          );
+          imageUploadRequest.headers['Authorization'] =
+              'Bearer ${HttpHelper.token}';
+          imageUploadRequest.fields['reviewId'] = reviewId;
+          imageUploadRequest.files.add(await http.MultipartFile.fromPath(
+            'image', // Key name for image in your backend
+            imageFile.path,
+          ));
+
+          final imageResponse = await imageUploadRequest.send();
+
+          if (imageResponse.statusCode == 200) {
+            final imageResponseBody =
+                await imageResponse.stream.bytesToString();
+            final imageData = json.decode(imageResponseBody);
+            uploadedImageUrl =
+                imageData['image']; // Assuming backend returns image URL
+          }
+
+          // Step 3: Update the review with the uploaded image URL
+          if (uploadedImageUrl != null) {
+            final updatedReviewData = {
+              "productId": widget.productId,
+              "rating": _ratings[0]!.toDouble(),
+              "comment": _reviewController.text,
+              "valueForMoney_rate": _ratings[1]!.toDouble(),
+              "quality_rate": _ratings[2]!.toDouble(),
+              "shipping_rate": _ratings[3]!.toDouble(),
+              "accuracy_rate": _ratings[0]!.toDouble(),
+              "image": uploadedImageUrl, // Add the uploaded image URL
+            };
+
+            await HttpHelper.put(
+              'api/review/$reviewId',
+              updatedReviewData,
+            );
+          }
+
+          // Success message
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            content: Text('Review submitted successfully!'),
+            backgroundColor: Colors.green,
+          ));
+        }
+      } catch (e) {
+        print("Error: $e");
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Failed to submit the review. Please try again.'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
     } else {
-      // Show error message
+      // Show error if conditions are not met
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text(
