@@ -337,7 +337,9 @@ class _ProductDetailsScreenBrandState extends State<ProductDetailsScreenBrand> {
                         SizedBox(
                           height: 20.h,
                         ),
-                        MaterialList(),
+                        MaterialList(
+                          name: product.material,
+                        ),
                       ],
                     ),
                   ),
