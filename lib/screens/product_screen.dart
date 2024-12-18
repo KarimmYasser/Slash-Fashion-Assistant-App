@@ -411,7 +411,7 @@ class _ProductScreenState extends State<ProductScreen> {
                   ),
                   HorizontalList(
                     title: 'You may also like',
-                    endpouint: 'api/product/get-similar-products/${product.id}',
+                    endpouint: 'api/product',
                   ),
                 ],
               ),

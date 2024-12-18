@@ -64,7 +64,8 @@ class _AddReviewScreenState extends State<AddReviewScreen> {
           reviewData,
         );
 
-        final String reviewId = response['id']; // Get the new review ID
+        final String reviewId =
+            response['review']['id']; // Get the new review ID
 
         // Step 2: Upload Image(s) if any
         String? uploadedImageUrl;
@@ -118,6 +119,7 @@ class _AddReviewScreenState extends State<AddReviewScreen> {
             content: Text('Review submitted successfully!'),
             backgroundColor: Colors.green,
           ));
+          Navigator.pop(context);
         }
       } catch (e) {
         print("Error: $e");

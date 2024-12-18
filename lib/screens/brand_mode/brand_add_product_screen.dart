@@ -1,13 +1,20 @@
 import 'dart:io';
 import 'package:fashion_assistant/constants.dart';
-import 'package:fashion_assistant/screens/brand_mode/add_color_sizes_screen.dart';
+import 'package:fashion_assistant/screens/brand_mode/brand_total_screens.dart';
+import 'package:fashion_assistant/tap_map.dart';
+import 'package:fashion_assistant/utils/http/http_client.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'add_size.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class BrandAddProductScreen extends StatefulWidget {
-  const BrandAddProductScreen({super.key});
+  const BrandAddProductScreen(
+      {super.key, required this.sizes, required this.catID});
 
+  final List<Size> sizes;
+  final String catID;
   @override
   State<BrandAddProductScreen> createState() => _BrandAddProductScreenState();
 }
@@ -17,14 +24,50 @@ class _BrandAddProductScreenState extends State<BrandAddProductScreen> {
   final TextEditingController _productNameController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
   final TextEditingController _priceController = TextEditingController();
-  String? _selectedCategory;
+  final TextEditingController _tagController = TextEditingController();
+  final TextEditingController _materialController = TextEditingController();
+
   List<File> _selectedImages = [];
+  List<Map<String, dynamic>> _availableColors = [];
+  List<Map<String, dynamic>> _selectedColors = [];
+  Map<String, double> _colorPercentages = {};
+
+  List<String> _tags = [];
   bool _areImagesValid = true;
+  bool _isLoading = true;
 
   final ImagePicker _imagePicker = ImagePicker();
 
-  List<Map<String, dynamic>> _colors = [];
-  Map<String, dynamic>? _sizes;
+  String? _productId;
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchAvailableColors();
+  }
+
+  Future<void> _fetchAvailableColors() async {
+    setState(() => _isLoading = true);
+    try {
+      final response = await HttpHelper.get('api/constants/colours');
+      final List<dynamic> data = response['colours'];
+      setState(() {
+        _availableColors = data.map((color) {
+          return {
+            'id': color['id'],
+            'name': color['name'],
+            'hex': color['hex'].replaceFirst('#', ''),
+          };
+        }).toList();
+      });
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error fetching colors: $e')),
+      );
+    } finally {
+      setState(() => _isLoading = false);
+    }
+  }
 
   Future<void> _pickImages() async {
     final List<XFile>? pickedImages = await _imagePicker.pickMultiImage(
@@ -41,34 +84,137 @@ class _BrandAddProductScreenState extends State<BrandAddProductScreen> {
     }
   }
 
-  Future<void> _navigateToAddColors() async {
-    final result = await Navigator.push(
+  void _addTag() {
+    final tag = _tagController.text.trim();
+    if (tag.isNotEmpty && !_tags.contains(tag)) {
+      setState(() {
+        _tags.add(tag);
+        _tagController.clear();
+      });
+    } else if (_tags.contains(tag)) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Tag already exists!')),
+      );
+    }
+  }
+
+  void _removeTag(String tag) {
+    setState(() {
+      _tags.remove(tag);
+    });
+  }
+
+  Future<void> _publishProduct() async {
+    if (_formKey.currentState!.validate() && _selectedImages.isNotEmpty) {
+      final productData = {
+        "name": _productNameController.text.trim(),
+        "description": _descriptionController.text.trim(),
+        "price": double.parse(_priceController.text.trim()),
+        "category_id": widget.catID,
+        "sizes": widget.sizes
+            .map((size) => {
+                  "size": size.tag,
+                  "quantity": size.quantity,
+                })
+            .toList(),
+        "colours": _selectedColors
+            .map((color) => {
+                  "name": color['name'],
+                  "percentage": _colorPercentages[color['id']] ??
+                      0, // User-entered percentage
+                })
+            .toList(),
+        "tags": _tags,
+        "discount": 0, // Default or user-provided value
+        "material": _materialController.text.trim(),
+      };
+
+      try {
+        final response =
+            await HttpHelper.post('api/brand/product', productData);
+        _productId = response['product']['id']; // Save the product ID
+        String? uploadedImageUrl;
+        if (_selectedImages.isNotEmpty) {
+          final imageFile =
+              File(_selectedImages[0].path); // Take the first image
+
+          final imageUploadRequest = http.MultipartRequest(
+            'POST',
+            Uri.parse('$baseURL/api/brand/product/upload-image/$_productId'),
+          );
+          imageUploadRequest.headers['Authorization'] =
+              'Bearer ${HttpHelper.token}';
+
+          imageUploadRequest.files.add(await http.MultipartFile.fromPath(
+            'image', // Key name for image in your backend
+            imageFile.path,
+          ));
+
+          try {
+            final imageResponse = await imageUploadRequest.send();
+
+            if (imageResponse.statusCode == 200) {
+              final imageResponseBody =
+                  await imageResponse.stream.bytesToString();
+              final imageData = json.decode(imageResponseBody);
+              uploadedImageUrl = imageData['image'];
+              print('Image uploaded successfully: $uploadedImageUrl');
+            } else {
+              print(
+                  'Failed to upload image. Status code: ${imageResponse.statusCode}');
+              final responseBody = await imageResponse.stream.bytesToString();
+              print('Response body: $responseBody');
+            }
+          } catch (e) {
+            print('Error uploading image: $e');
+          }
+        }
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Product published successfully.')),
+        );
+        //Navigator.of(context).pushReplacementNamed('/totalscreens');
+      } catch (e) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error: $e')),
+        );
+      }
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Fill all fields and upload images.')),
+      );
+    }
+    Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => AddColorsScreen(colors: _colors),
+        builder: (context) => BrandTotalScreens(),
       ),
     );
+  }
 
-    if (result != null) {
+  void _addColor(Map<String, dynamic> color) {
+    if (!_selectedColors.contains(color)) {
       setState(() {
-        _colors = result;
+        _selectedColors.add(color);
+        _colorPercentages[color['id']] = 0.0; // Initialize percentage
       });
     }
   }
 
-  Future<void> _navigateToAddSizes() async {
-    final result = await Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => AddSizesScreen(sizes: _sizes),
-      ),
-    );
+  void _removeColor(Map<String, dynamic> color) {
+    setState(() {
+      _selectedColors.remove(color);
+      _colorPercentages.remove(color['id']); // Remove percentage
+    });
+  }
 
-    if (result != null) {
-      setState(() {
-        _sizes = result;
-      });
-    }
+  Color getColorFromHex(String hexColor) {
+    return Color(int.parse(hexColor, radix: 16) + 0xFF000000);
+  }
+
+  void _validatePercentages() {
+    double totalPercentage = _selectedColors.fold(
+        0, (sum, color) => sum + (color['percentage'] ?? 0));
+    if (totalPercentage != 100) {}
   }
 
   @override
@@ -78,271 +224,235 @@ class _BrandAddProductScreenState extends State<BrandAddProductScreen> {
       appBar: AppBar(
         title: const Text("Add Product"),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: SingleChildScrollView(
-          child: Form(
-            key: _formKey,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // Product Name
-                const Text("Product Name"),
-                const SizedBox(height: 8),
-                TextFormField(
-                  controller: _productNameController,
-                  decoration: InputDecoration(
-                    hintText: "Enter product name",
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                  ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return "Please enter the product name";
-                    }
-                    return null;
-                  },
-                ),
-                const SizedBox(height: 16),
-
-                // Description
-                const Text("Description"),
-                const SizedBox(height: 8),
-                TextFormField(
-                  controller: _descriptionController,
-                  maxLines: 3,
-                  decoration: InputDecoration(
-                    hintText: "Enter product description",
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                  ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return "Please enter the product description";
-                    }
-                    return null;
-                  },
-                ),
-                const SizedBox(height: 16),
-
-                // Price
-                const Text("Price"),
-                const SizedBox(height: 8),
-                TextFormField(
-                  controller: _priceController,
-                  keyboardType: TextInputType.number,
-                  decoration: InputDecoration(
-                    hintText: "Enter price",
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                  ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return "Please enter the product price";
-                    }
-                    if (double.tryParse(value) == null) {
-                      return "Please enter a valid numeric value";
-                    }
-                    return null;
-                  },
-                ),
-                const SizedBox(height: 16),
-
-                // Category
-                const Text("Category"),
-                const SizedBox(height: 8),
-                DropdownButtonFormField<String>(
-                  items: ["Home", "Classic", "Casual"]
-                      .map((category) => DropdownMenuItem<String>(
-                            value: category,
-                            child: Text(category),
-                          ))
-                      .toList(),
-                  onChanged: (value) {
-                    _selectedCategory = value;
-                  },
-                  decoration: InputDecoration(
-                    hintText: "Select category",
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                  ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return "Please select a category";
-                    }
-                    return null;
-                  },
-                ),
-                const SizedBox(height: 16),
-
-                // Product Images
-                const Text("Product Images"),
-                const SizedBox(height: 8),
-                GestureDetector(
-                  onTap: _pickImages,
-                  child: Container(
-                    height: 150,
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                      border: Border.all(
-                        color: _areImagesValid
-                            ? OurColors.primaryColor
-                            : Colors.red,
-                        width: 1.5,
+      body: _isLoading
+          ? const Center(child: CircularProgressIndicator())
+          : Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: SingleChildScrollView(
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text("Product Name"),
+                      const SizedBox(height: 8),
+                      TextFormField(
+                        controller: _productNameController,
+                        decoration: InputDecoration(
+                          hintText: "Enter product name",
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                        ),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return "Please enter the product name";
+                          }
+                          return null;
+                        },
                       ),
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: _selectedImages.isEmpty
-                        ? Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
+                      const SizedBox(height: 16),
+                      const Text("Description"),
+                      const SizedBox(height: 8),
+                      TextFormField(
+                        controller: _descriptionController,
+                        maxLines: 3,
+                        decoration: InputDecoration(
+                          hintText: "Enter product description",
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                        ),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return "Please enter the product description";
+                          }
+                          return null;
+                        },
+                      ),
+                      const SizedBox(height: 16),
+                      const Text("Price"),
+                      const SizedBox(height: 8),
+                      TextFormField(
+                        controller: _priceController,
+                        keyboardType: TextInputType.number,
+                        decoration: InputDecoration(
+                          hintText: "Enter price",
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                        ),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return "Please enter the product price";
+                          }
+                          if (double.tryParse(value) == null) {
+                            return "Please enter a valid numeric value";
+                          }
+                          return null;
+                        },
+                      ),
+                      const SizedBox(height: 16),
+                      const Text("Product Images"),
+                      const SizedBox(height: 8),
+                      GestureDetector(
+                        onTap: _pickImages,
+                        child: Container(
+                          height: 150,
+                          width: double.infinity,
+                          decoration: BoxDecoration(
+                            border: Border.all(
+                              color: _areImagesValid
+                                  ? OurColors.primaryColor
+                                  : Colors.red,
+                            ),
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: _selectedImages.isEmpty
+                              ? const Center(
+                                  child: Text(
+                                    "Tap to upload images",
+                                    style: TextStyle(color: Colors.grey),
+                                  ),
+                                )
+                              : ListView.builder(
+                                  scrollDirection: Axis.horizontal,
+                                  itemCount: _selectedImages.length,
+                                  itemBuilder: (context, index) {
+                                    return Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Stack(
+                                        children: [
+                                          Image.file(
+                                            _selectedImages[index],
+                                            height: 140,
+                                            width: 100,
+                                            fit: BoxFit.cover,
+                                          ),
+                                          Positioned(
+                                            right: 0,
+                                            top: 0,
+                                            child: GestureDetector(
+                                              onTap: () {
+                                                setState(() {
+                                                  _selectedImages
+                                                      .removeAt(index);
+                                                });
+                                              },
+                                              child: Container(
+                                                decoration: BoxDecoration(
+                                                  shape: BoxShape.circle,
+                                                  color: Colors.red,
+                                                ),
+                                                child: const Icon(
+                                                  Icons.close,
+                                                  color: Colors.white,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    );
+                                  },
+                                ),
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+                      const Text("Colors"),
+                      const SizedBox(height: 8),
+                      Wrap(
+                        spacing: 8,
+                        children: _availableColors.map((color) {
+                          return Column(
                             children: [
-                              Icon(Icons.cloud_upload,
-                                  color: _areImagesValid
-                                      ? OurColors.primaryColor
-                                      : Colors.red),
-                              Text(
-                                "Upload Images",
-                                style: TextStyle(
-                                  color: _areImagesValid
-                                      ? Colors.black
-                                      : Colors.red,
-                                ),
+                              FilterChip(
+                                label: Text(color['name']),
+                                backgroundColor: getColorFromHex(color['hex']),
+                                selected: _selectedColors.contains(color),
+                                onSelected: (selected) {
+                                  if (selected) {
+                                    _addColor(color);
+                                  } else {
+                                    _removeColor(color);
+                                  }
+                                },
                               ),
-                            ],
-                          )
-                        : ListView.builder(
-                            scrollDirection: Axis.horizontal,
-                            itemCount: _selectedImages.length,
-                            itemBuilder: (context, index) {
-                              return Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 4.0),
-                                child: Image.file(
-                                  _selectedImages[index],
-                                  width: 100,
-                                  height: 100,
-                                  fit: BoxFit.cover,
+                              if (_selectedColors.contains(color))
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 8.0),
+                                  child: TextFormField(
+                                    decoration: InputDecoration(
+                                      labelText: 'Percentage',
+                                      border: OutlineInputBorder(),
+                                    ),
+                                    keyboardType: TextInputType.number,
+                                    initialValue: _colorPercentages[color['id']]
+                                            ?.toString() ??
+                                        '0',
+                                    onChanged: (value) {
+                                      setState(() {
+                                        _colorPercentages[color['id']] =
+                                            double.tryParse(value) ?? 0;
+                                        _validatePercentages();
+                                      });
+                                    },
+                                  ),
                                 ),
-                              );
-                            },
+                            ],
+                          );
+                        }).toList(),
+                      ),
+                      const SizedBox(height: 16),
+                      const Text("Tags"),
+                      const SizedBox(height: 8),
+                      Wrap(
+                        spacing: 8,
+                        children: _tags.map((tag) {
+                          return Chip(
+                            label: Text(tag),
+                            onDeleted: () => _removeTag(tag),
+                          );
+                        }).toList(),
+                      ),
+                      TextFormField(
+                        controller: _tagController,
+                        decoration: InputDecoration(
+                          hintText: "Enter a tag",
+                          suffixIcon: IconButton(
+                            icon: const Icon(Icons.add),
+                            onPressed: _addTag,
                           ),
-                  ),
-                ),
-                if (!_areImagesValid)
-                  Padding(
-                    padding: const EdgeInsets.only(top: 8.0),
-                    child: Text(
-                      "Please upload at least one image",
-                      style: TextStyle(color: Colors.red, fontSize: 12),
-                    ),
-                  ),
-                const SizedBox(height: 20),
-
-                // Add Colors Button
-                Center(
-                  child: ElevatedButton(
-                    onPressed: _navigateToAddColors,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: OurColors.containerBackgroundColor,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
+                        ),
                       ),
-                    ),
-                    child: Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 30.w),
-                      child: const Text(
-                        "Add Colors",
-                        style: TextStyle(color: OurColors.black),
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 16),
-
-                // Add Sizes Button
-                Center(
-                  child: ElevatedButton(
-                    onPressed: _navigateToAddSizes,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: OurColors.containerBackgroundColor,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                    ),
-                    child: Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 30.w),
-                      child: const Text(
-                        "Add Sizes",
-                        style: TextStyle(color: OurColors.black),
-                      ),
-                    ),
-                  ),
-                ),
-
-                const SizedBox(height: 20),
-
-                // Publish Product Button
-                SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      if (_formKey.currentState!.validate() &&
-                          _selectedImages.isNotEmpty) {
-                        // Example logic for publishing product
-                        final productData = {
-                          "name": _productNameController.text.trim(),
-                          "description": _descriptionController.text.trim(),
-                          "price": double.parse(_priceController.text.trim()),
-                          "category": _selectedCategory,
-                          "images": _selectedImages,
-                          "colors": _colors,
-                          "sizes": _sizes,
-                        };
-
-                        // Add backend integration or database upload logic here
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text("Product published successfully!"),
-                            backgroundColor: Colors.green,
+                      const SizedBox(height: 16),
+                      const Text("Material"),
+                      const SizedBox(height: 8),
+                      TextFormField(
+                        controller: _materialController,
+                        decoration: InputDecoration(
+                          hintText: "Enter material",
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8),
                           ),
-                        );
-                      } else {
-                        setState(() {
-                          _areImagesValid = _selectedImages.isNotEmpty;
-                        });
-
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text(
-                                "Please fill all fields and upload images."),
-                            backgroundColor: Colors.red,
-                          ),
-                        );
-                      }
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: OurColors.primaryColor,
-                      padding: const EdgeInsets.symmetric(vertical: 16),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
+                        ),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return "Please enter the product material";
+                          }
+                          return null;
+                        },
                       ),
-                    ),
-                    child: const Text(
-                      "Publish Product",
-                      style:
-                          TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                    ),
+                      const SizedBox(height: 16),
+                      ElevatedButton(
+                        onPressed: _publishProduct,
+                        child: const Center(child: Text("Publish Product")),
+                      ),
+                    ],
                   ),
                 ),
-              ],
+              ),
             ),
-          ),
-        ),
-      ),
     );
   }
 }

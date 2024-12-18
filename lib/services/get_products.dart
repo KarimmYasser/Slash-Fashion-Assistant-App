@@ -12,25 +12,16 @@ class ProductService {
 
   // Method to get all products
   Future<List<ProductCardModel>> getAllProducts(String endpoint) async {
-    final v = Uri.parse("$_baseUrl$endpoint");
+    final v = endpoint;
 
-    final response = await http.get(
+    final response = await HttpHelper.get(
       v,
-      headers: {
-        'Authorization': 'Bearer ${HttpHelper.token}',
-        'Content-Type': 'application/json',
-      },
     );
 
-    if (response.statusCode == 200) {
-      final List<dynamic> productListJson = json.decode(response.body);
-      return productListJson
-          .map((json) => ProductCardModel.fromJson(json))
-          .toList();
-    } else {
-      throw Exception(
-          'Failed to load products ${response.statusCode} ${response.body}');
-    }
+    final List<dynamic> productListJson = response['products'] as List<dynamic>;
+    return productListJson
+        .map((json) => ProductCardModel.fromJson(json))
+        .toList();
   }
 
   final String _baseUrlone = '$baseURL/api/product/details';

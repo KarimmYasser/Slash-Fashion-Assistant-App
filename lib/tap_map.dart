@@ -6,6 +6,7 @@ import 'package:fashion_assistant/screens/admin_mode/home_admin_screen.dart';
 import 'package:fashion_assistant/screens/brand_mode/brand_add_product_screen.dart';
 import 'package:fashion_assistant/screens/brand_mode/brand_mode_screen.dart';
 import 'package:fashion_assistant/screens/brand_mode/brand_profile_screen.dart';
+import 'package:fashion_assistant/screens/brand_mode/select_category.dart';
 import 'package:fashion_assistant/screens/cart_screen.dart';
 import 'package:fashion_assistant/screens/chat_screen.dart';
 import 'package:fashion_assistant/screens/favorite_screen.dart';
@@ -57,7 +58,7 @@ final List<Map<String, dynamic>> screenDetailsBrand = [
     'screenName': const BrandModeScreen(),
   },
   {
-    'screenName': const BrandAddProductScreen(),
+    'screenName': const SelectCategory(),
   },
   {
     'screenName': const BrandProfileScreen(),
