@@ -137,8 +137,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         onTap: () => Get.to(() => const OrderScreen())),
                     const SettingMenuTile(
                         icon: Iconsax.security_card,
-                        title: 'Account Privacy',
-                        subtitle: 'Manage data usage and connected accounts'),
+                        title: 'Change Password',
+                        subtitle: 'Manage data security'),
 
                     /// -- App Settings
                     const SizedBox(height: Sizes.spaceBtwSections),
@@ -154,24 +154,24 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         icon: Iconsax.document_upload,
                         title: 'Save Data',
                         subtitle: 'Manually Save Data to your Cloud Database'),
-                    SettingMenuTile(
-                      icon: Iconsax.location,
-                      title: 'Geolocation',
-                      subtitle: 'Set recommendation based on location',
-                      trailing: Switch(value: true, onChanged: (value) {}),
-                    ),
-                    SettingMenuTile(
-                      icon: Iconsax.security_user,
-                      title: 'Safe Mode',
-                      subtitle: 'Search result is safe for all ages',
-                      trailing: Switch(value: false, onChanged: (value) {}),
-                    ),
-                    SettingMenuTile(
-                      icon: Iconsax.image,
-                      title: 'HD Image Quality',
-                      subtitle: 'Set image quality to be seen',
-                      trailing: Switch(value: false, onChanged: (value) {}),
-                    ),
+                    // SettingMenuTile(
+                    //   icon: Iconsax.location,
+                    //   title: 'Geolocation',
+                    //   subtitle: 'Set recommendation based on location',
+                    //   trailing: Switch(value: true, onChanged: (value) {}),
+                    // ),
+                    // SettingMenuTile(
+                    //   icon: Iconsax.security_user,
+                    //   title: 'Safe Mode',
+                    //   subtitle: 'Search result is safe for all ages',
+                    //   trailing: Switch(value: false, onChanged: (value) {}),
+                    // ),
+                    // SettingMenuTile(
+                    //   icon: Iconsax.image,
+                    //   title: 'HD Image Quality',
+                    //   subtitle: 'Set image quality to be seen',
+                    //   trailing: Switch(value: false, onChanged: (value) {}),
+                    // ),
 
                     /// -- Log Out
                     const SizedBox(height: Sizes.spaceBtwSections),

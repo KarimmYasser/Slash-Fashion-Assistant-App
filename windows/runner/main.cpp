@@ -31,9 +31,9 @@ int APIENTRY wWinMain(_In_ HINSTANCE instance, _In_opt_ HINSTANCE prev,
     return EXIT_FAILURE;
   }
   // After window creation, change the style to make the window non-resizable
-LONG_PTR style = GetWindowLongPtr(window.GetHandle(), GWL_STYLE);
-style &= ~(WS_THICKFRAME);  // Remove resize and maximize options
-SetWindowLongPtr(window.GetHandle(), GWL_STYLE, style);
+//LONG_PTR style = GetWindowLongPtr(window.GetHandle(), GWL_STYLE);
+//style &= ~(WS_THICKFRAME);  // Remove resize and maximize options
+//SetWindowLongPtr(window.GetHandle(), GWL_STYLE, style);
   window.SetQuitOnClose(true);
 
   ::MSG msg;

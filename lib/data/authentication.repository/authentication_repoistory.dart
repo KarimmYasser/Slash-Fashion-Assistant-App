@@ -41,7 +41,7 @@ class AuthenticationRepository extends GetxController {
       try {
         HttpHelper.setToken(deviceStorage.read('TOKEN'));
         final response = await HttpHelper.get('api/auth/me');
-        UserData.userData = UserData(response);
+        UserData.userData = UserData(response['user']);
         if (UserData.userData!.role == 'Brand') {
           Get.offAll(() => const BrandTotalScreens());
         } else {
