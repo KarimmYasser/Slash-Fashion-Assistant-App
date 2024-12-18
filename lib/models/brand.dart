@@ -32,7 +32,7 @@ class Brand {
       id: json['id'] ?? '',
       name: json['name'] ?? '',
       email: json['email'] ?? '',
-      rating: (json['rating'] as num).toDouble(),
+      rating: ((json['rating'] ?? 0) as num).toDouble() ?? 0,
       phone: json['phone'] ?? '',
       description: json['description'] ?? '',
       logo: json['logo'] ?? '',

@@ -5,17 +5,19 @@ import 'package:http/http.dart' as http;
 
 class ReviewService {
   Future<List<Map<String, dynamic>>> getReviews(String productId) async {
-    final response = await http.get(
-      Uri.parse('$baseURL/api/review/$productId'),
-      headers: {
-        'Authorization': 'Bearer ${HttpHelper.token}',
-        'Content-Type': 'application/json',
-      },
+    final response = await HttpHelper.get(
+      'api/review/$productId',
     );
-    if (response.statusCode == 200) {
-      return List<Map<String, dynamic>>.from(json.decode(response.body));
+
+    // Debugging: Print the response to inspect its format
+    print('Response: $response');
+
+    if (response['reviews'] is List) {
+      return (response['reviews'] as List)
+          .map((review) => review as Map<String, dynamic>)
+          .toList();
     } else {
-      throw Exception('Failed to load reviews ${response.body}');
+      throw Exception('Unexpected response format');
     }
   }
 }

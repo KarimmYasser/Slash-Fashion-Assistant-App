@@ -48,11 +48,7 @@ class _GetPreferencesState extends State<GetPreferences> {
   Future<String> createChat() async {
     const url = 'api/chat/create';
     final data = await HttpHelper.get(url);
-    if (data['id'] != null) {
-      return data['id'].toString(); // Ensure chatId is a String
-    } else {
-      throw Exception('Failed to create chat');
-    }
+    return data['chat']['id']; // Ensure chatId is a String
   }
 
   void _showAvatarPopup(BuildContext context) async {

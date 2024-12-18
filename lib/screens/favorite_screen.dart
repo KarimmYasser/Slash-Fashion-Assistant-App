@@ -1,4 +1,5 @@
 import 'package:fashion_assistant/constants.dart';
+import 'package:fashion_assistant/models/productcard.dart';
 import 'package:fashion_assistant/tap_map.dart';
 import 'package:fashion_assistant/utils/http/http_client.dart';
 import 'package:fashion_assistant/widgets/product/product_card.dart';
@@ -18,13 +19,13 @@ class FavoriteScreen extends StatefulWidget {
 class _FavoriteScreenState extends State<FavoriteScreen> {
   final ScrollController _scrollController = ScrollController();
   bool _showScrollToTopButton = false;
-  List<dynamic> _products = [];
+  late Future<List<ProductCardModel>> _products;
   bool _isLoading = true;
 
   @override
   void initState() {
     super.initState();
-    fetchProducts();
+    _products = fetchProducts();
     _scrollController.addListener(() {
       setState(() {
         _showScrollToTopButton = _scrollController.offset >= 200;
@@ -38,32 +39,27 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
     super.dispose();
   }
 
-  Future<void> fetchProducts() async {
+  Future<List<ProductCardModel>> fetchProducts() async {
     try {
-      final response = await http.get(
-        Uri.parse('$baseURL/api/wishlist'),
-        headers: {
-          'Authorization': 'Bearer ${HttpHelper.token}',
-          'Content-Type': 'application/json',
-        },
+      final response = await HttpHelper.get(
+        'api/wishlist',
       );
 
-      if (response.statusCode == 200) {
-        final List<dynamic> data = json.decode(response.body);
-        setState(() {
-          _products = data;
-          _isLoading = false;
-        });
-      } else {
-        print('Error: ${response.statusCode}');
-        setState(() => _isLoading = false);
-      }
+      final List<dynamic> data = response['products'] as List<dynamic>;
+
+      setState(() {
+        _isLoading = false;
+
+        ;
+      });
+      return data.map((json) => ProductCardModel.fromJson(json)).toList();
     } catch (e) {
       print('Error: $e');
       if (mounted) {
         setState(() => _isLoading = false);
       }
     }
+    return [];
   }
 
   void _scrollToTop() {
@@ -95,67 +91,88 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
           ? const Center(
               child: CircularProgressIndicator(),
             )
-          : _products.isEmpty
-              ? Center(
-                  child: Text(
-                    'No items in your favorites list.',
-                    style: TextStyle(
-                      color: Colors.grey,
-                      fontSize: 18.sp,
+          : FutureBuilder<List<ProductCardModel>>(
+              future: _products,
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                } else if (snapshot.hasError) {
+                  return Center(
+                    child: Text(
+                      'Error: ${snapshot.error}',
+                      style: TextStyle(
+                        color: Colors.grey,
+                        fontSize: 18.sp,
+                      ),
                     ),
-                  ),
-                )
-              : SafeArea(
-                  child: ListView(
-                    controller: _scrollController,
-                    children: [
-                      // Search Bar
-                      Container(
-                        decoration: BoxDecoration(
-                          color: OurColors.containerBackgroundColor,
-                          borderRadius: BorderRadius.circular(50.r),
-                        ),
-                        child: TextField(
-                          decoration: InputDecoration(
-                            hintText: 'Search...',
-                            prefixIcon: Icon(Iconsax.search_favorite,
-                                color: OurColors.primaryColor),
-                            border: InputBorder.none,
-                            contentPadding:
-                                EdgeInsets.symmetric(vertical: 14.h),
+                  );
+                } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                  return Center(
+                    child: Text(
+                      'No items in your favorites list.',
+                      style: TextStyle(
+                        color: Colors.grey,
+                        fontSize: 18.sp,
+                      ),
+                    ),
+                  );
+                } else {
+                  return SafeArea(
+                    child: ListView(
+                      controller: _scrollController,
+                      children: [
+                        // Search Bar
+                        Container(
+                          decoration: BoxDecoration(
+                            color: OurColors.containerBackgroundColor,
+                            borderRadius: BorderRadius.circular(50.r),
+                          ),
+                          child: TextField(
+                            decoration: InputDecoration(
+                              hintText: 'Search...',
+                              prefixIcon: Icon(Iconsax.search_favorite,
+                                  color: OurColors.primaryColor),
+                              border: InputBorder.none,
+                              contentPadding:
+                                  EdgeInsets.symmetric(vertical: 14.h),
+                            ),
                           ),
                         ),
-                      ),
-                      // Product List
-                      ..._products.map((product) {
-                        return Row(
-                          children: [
-                            Expanded(
-                              child: ProductCard(
-                                productId: product['id'].toString(),
-                                brandImage: product['brandImage'] ?? '',
-                                brandName: product['brandName'] ?? '',
-                                brandShowcase: product['name'] ?? '',
-                                prevprice: product['prevPrice'] ?? 0,
-                                price: product['price'].toString(),
-                                discound: product['discount'],
-                                sold: product['sold'].toString(),
-                                numReviewers:
-                                    product['numReviewers'].toString(),
-                                stars: product['stars'].toString(),
-                                coin: 'EGP',
-                                liked: product['isInWishlist'] ?? true,
-                                image: product['image'],
-                                instock: product['InStock'],
-                                rating: product['rating'],
+                        // Product List
+                        ...snapshot.data!.map((product) {
+                          return Row(
+                            children: [
+                              Expanded(
+                                child: ProductCard(
+                                  productId: product.id,
+                                  brandImage: product.image,
+                                  brandName: product.name,
+                                  brandShowcase: product.name,
+                                  prevprice: product.price,
+                                  price: '',
+                                  discound: product.discount,
+                                  sold: '130',
+                                  numReviewers:
+                                      5.toString(), // Number of reviewers
+                                  stars: '5',
+                                  coin: 'EGP',
+                                  liked: product.isInWishlist,
+                                  image: product.image,
+                                  instock: product.inStock,
+                                  rating: product.rating,
+                                ),
                               ),
-                            ),
-                          ],
-                        );
-                      }).toList(),
-                    ],
-                  ),
-                ),
+                            ],
+                          );
+                        }).toList(),
+                      ],
+                    ),
+                  );
+                }
+              },
+            ),
       floatingActionButton: _showScrollToTopButton
           ? FloatingActionButton(
               onPressed: _scrollToTop,

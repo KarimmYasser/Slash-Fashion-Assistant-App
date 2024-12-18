@@ -222,20 +222,20 @@ class HomeScreen extends StatelessWidget {
             SizedBox(
               height: 16.h,
             ),
-            CategoriesSection(
-              categories: brands,
-            ),
+            // CategoriesSection(
+            //   categories: brands,
+            // ),
             SizedBox(
               height: 16.h,
             ),
-            const FlashSaleCountdown(
-              days: 2,
-              hours: 3,
-              minutes: 51,
-            ),
-            SizedBox(
-              height: 16.h,
-            ),
+            // const FlashSaleCountdown(
+            //   days: 2,
+            //   hours: 3,
+            //   minutes: 51,
+            // ),
+            // SizedBox(
+            //   height: 16.h,
+            // ),
             HorizontalList(
               title: 'Special for You',
               endpouint: 'api/product',

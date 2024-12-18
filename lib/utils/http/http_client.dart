@@ -66,7 +66,13 @@ class HttpHelper {
     if (response.statusCode < 400) {
       return json.decode(response.body);
     } else {
-      throw Exception('Failed to load data: ${response.body}');
+      final responseBody = json.decode(response.body);
+      if (responseBody['message'] == 'Size already exists') {
+        // Handle the specific case where the size already exists
+        return responseBody;
+      } else {
+        throw Exception('Failed to load data: ${response.body}');
+      }
     }
   }
 
