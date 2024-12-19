@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../constants.dart';
+import 'checkout_screen.dart';
 import 'controllers/cart_controller.dart';
 
 class CartScreen extends StatelessWidget {
@@ -32,11 +33,30 @@ class CartScreen extends StatelessWidget {
                     return ListTile(
                       leading: Image.network(item.imageUrl,
                           width: 50, height: 50, fit: BoxFit.cover),
-                      title: Text(item.name),
-                      subtitle: Text('Quantity: ${item.quantity}'),
-                      trailing: Text(
-                          'EGP ${(item.price * item.quantity).toStringAsFixed(2)}'),
-                      onLongPress: () => controller.removeItem(item),
+                      title: Text(
+                        item.name,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      subtitle: Row(
+                        children: [
+                          IconButton(
+                            icon: const Icon(Icons.remove),
+                            onPressed: () => controller.decreaseQuantity(item),
+                          ),
+                          Text('${item.quantity}'),
+                          IconButton(
+                            icon: const Icon(Icons.add),
+                            onPressed: () => controller.increaseQuantity(item),
+                          ),
+                          const Spacer(),
+                          Text(
+                              'EGP ${(item.price * item.quantity).toStringAsFixed(2)}'),
+                        ],
+                      ),
+                      trailing: IconButton(
+                        icon: const Icon(Icons.close),
+                        onPressed: () => controller.removeItem(item),
+                      ),
                     );
                   },
                 ),
@@ -53,9 +73,19 @@ class CartScreen extends StatelessWidget {
                 child: SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
-                    onPressed: () {
-                      // Handle checkout action
-                    },
+                    onPressed: controller.cartItems.isEmpty
+                        ? null
+                        : () => Get.to(() => CheckoutScreen(
+                              totalPrice: controller.totalPrice.value,
+                              cartItems: controller.cartItems
+                                  .map((item) => {
+                                        'name': item.name,
+                                        'price': item.price,
+                                        'quantity': item.quantity,
+                                        'imageUrl': item.imageUrl,
+                                      })
+                                  .toList(),
+                            )),
                     child: const Text('Checkout'),
                   ),
                 ),
