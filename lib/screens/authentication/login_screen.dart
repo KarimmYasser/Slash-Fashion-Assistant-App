@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 
 import '../../constants.dart';
 import '../../widgets/login_signup/form_divider.dart';
+import 'brand_signup_screen.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
@@ -44,6 +45,26 @@ class LoginScreen extends StatelessWidget {
                                 const WidgetStatePropertyAll(OurColors.light)),
                     onPressed: () => Get.offAll(() => const MaleOrFemale()),
                     child: const Text('Continue as a Guest')),
+              ),
+              const SizedBox(height: Sizes.spaceBtwSections),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    'Are you a Brand?',
+                    style: Theme.of(context).textTheme.labelMedium,
+                  ),
+                  TextButton(
+                    onPressed: () => Get.to(() => const BrandSignupScreen()),
+                    child: Text(
+                      'Register here',
+                      style: Theme.of(context)
+                          .textTheme
+                          .labelMedium!
+                          .apply(color: OurColors.primaryColor),
+                    ),
+                  ),
+                ],
               ),
               // const SizedBox(height: Sizes.spaceBtwItems),
               // SizedBox(
