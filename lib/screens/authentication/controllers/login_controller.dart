@@ -1,12 +1,11 @@
 import 'package:fashion_assistant/screens/admin_mode/admin_total_screens.dart';
-import 'package:fashion_assistant/screens/brand_mode/brand_mode_screen.dart';
 import 'package:fashion_assistant/screens/brand_mode/brand_total_screens.dart';
 import 'package:fashion_assistant/utils/popups/full_screen_loader.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 
-import '../../../data/authentication.repository/user_data.dart';
+import '../../../data/authentication.repository/login_data.dart';
 import '../../../utils/helpers/network_manager.dart';
 import '../../../utils/http/http_client.dart';
 import '../../../utils/popups/loaders.dart';
@@ -21,9 +20,8 @@ class LoginController extends GetxController {
   final email = TextEditingController();
   final password = TextEditingController();
   GlobalKey<FormState> loginFormKey = GlobalKey<FormState>();
-  GlobalKey<FormState> loginBrandFormKey = GlobalKey<FormState>();
 
-  Future<void> login(String role) async {
+  Future<void> login() async {
     try {
       FullScreenLoader.openLoadingDialog('Logging you in...',
           'assets/animations/141594-animation-of-docer.json');
@@ -36,16 +34,10 @@ class LoginController extends GetxController {
       }
 
       // Form Validation
-      if (role == 'Brand') {
-        if (!loginBrandFormKey.currentState!.validate()) {
-          FullScreenLoader.stopLoading();
-          return;
-        }
-      } else {
-        if (!loginFormKey.currentState!.validate()) {
-          FullScreenLoader.stopLoading();
-          return;
-        }
+
+      if (!loginFormKey.currentState!.validate()) {
+        FullScreenLoader.stopLoading();
+        return;
       }
 
       // Save Data if Remember Me is Checked
@@ -55,16 +47,19 @@ class LoginController extends GetxController {
       }
 
       // Login
-      final loginResponse = await HttpHelper.post('api/auth/login', {
-        'email': email.text.trim(),
-        'password': password.text.trim(),
-        'role': role.trim()
-      });
+      final loginResponse = await HttpHelper.post('api/auth/login',
+          {'email': email.text.trim(), 'password': password.text.trim()});
       HttpHelper.setToken(loginResponse['token']);
       localStorage.write('TOKEN', HttpHelper.token);
 
       // Save User Data
-      UserData.userData = UserData(loginResponse['user']);
+      if (loginResponse['role'] == 'BRAND') {
+        BrandData.brandData = BrandData(loginResponse['user']);
+      } else if (loginResponse['role'] == 'USER') {
+        UserData.userData = UserData(loginResponse['user']);
+      } else if (loginResponse['role'] == 'ADMIN') {
+        AdminData.adminData = AdminData(loginResponse['user']);
+      }
       if (rememberMe.value) {
         localStorage.write('IsLoggedIn', true);
       }
@@ -72,24 +67,34 @@ class LoginController extends GetxController {
       // Stop Loading
       FullScreenLoader.stopLoading();
 
-      Get.offAll(() => SuccessScreen(
+      Get.offAll(
+        () => SuccessScreen(
           image: "assets/images/72462-check-register.json",
           title: "Your account has been logged in successfully.",
           subtitle: "Your Account is ready to use.",
           onPressed: () {
-            if (role == 'Brand') {
+            if (loginResponse['role'] == 'BRAND') {
               Get.offAll(() => const BrandTotalScreens());
-            } else {
+            } else if (loginResponse['role'] == 'USER') {
               Get.offAll(() => const TotalScreens());
+            } else if (loginResponse['role'] == 'ADMIN') {
+              Get.offAll(() => const AdminTotalScreens());
             }
-          }
-          //() => Get.offAll(() => const BrandTotalScreens()),
-          ));
+          },
+        ),
+      );
     } catch (e) {
       // Stop Loading
       FullScreenLoader.stopLoading();
+
+      // Prepare the error message
+      String errorMessage = e.toString();
+      if (errorMessage.startsWith('Exception: ')) {
+        errorMessage = errorMessage.replaceFirst('Exception: ', '');
+      }
+
       // Show Error Message
-      Loaders.errorSnackBar(title: 'Oh Snap! ', message: e.toString());
+      Loaders.errorSnackBar(title: 'Oh Snap! ', message: errorMessage);
     }
   }
 }

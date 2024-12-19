@@ -1,5 +1,5 @@
 import 'package:fashion_assistant/constants.dart';
-import 'package:fashion_assistant/data/authentication.repository/user_data.dart';
+import 'package:fashion_assistant/data/authentication.repository/login_data.dart';
 import 'package:fashion_assistant/widgets/brand_mode/products_list.dart';
 import 'package:fashion_assistant/widgets/home_page/hm_hzt_list.dart';
 import 'package:fashion_assistant/widgets/product_details/five_stars.dart';
@@ -244,7 +244,7 @@ class BrandDetails extends StatelessWidget {
             ),
             HorizontalListBrand(
               title: 'your products',
-              brandid: UserData.userData!.id!,
+              brandid: BrandData.brandData!.id!,
             )
           ],
         ),

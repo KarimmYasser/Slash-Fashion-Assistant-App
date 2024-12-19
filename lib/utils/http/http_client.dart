@@ -71,7 +71,7 @@ class HttpHelper {
         // Handle the specific case where the size already exists
         return responseBody;
       } else {
-        throw Exception('Failed to load data: ${response.body}');
+        throw Exception('${responseBody['message']}');
       }
     }
   }

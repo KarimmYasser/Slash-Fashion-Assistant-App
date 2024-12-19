@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:fashion_assistant/constants.dart';
-import 'package:fashion_assistant/data/authentication.repository/user_data.dart';
+import 'package:fashion_assistant/data/authentication.repository/login_data.dart';
 import 'package:fashion_assistant/screens/product_screen.dart';
 import 'package:fashion_assistant/tap_map.dart';
 import 'package:flutter/material.dart';

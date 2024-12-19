@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 
 import '../../constants.dart';
-import '../../data/authentication.repository/user_data.dart';
+import '../../data/authentication.repository/login_data.dart';
 import '../../widgets/profile_page/profile_menu.dart';
 
 class UserInfoScreen extends StatelessWidget {

@@ -1,4 +1,4 @@
-import 'package:fashion_assistant/data/authentication.repository/user_data.dart';
+import 'package:fashion_assistant/data/authentication.repository/login_data.dart';
 import 'package:fashion_assistant/screens/brand_mode/brand_add_product_screen.dart';
 import 'package:fashion_assistant/utils/http/http_client.dart';
 import 'package:flutter/material.dart';
@@ -80,7 +80,7 @@ class _AddSizesScreenState extends State<AddSizesScreen> {
 
     final Map<String, dynamic> payload = {
       "category_id": categoryId,
-      "brand_id": UserData.userData!.id!,
+      "brand_id": BrandData.brandData!.id,
       "sizeTag": size.tag,
       "waist": size.waist,
       "length": size.length,

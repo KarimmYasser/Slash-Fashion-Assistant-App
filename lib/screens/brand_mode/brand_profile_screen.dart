@@ -7,7 +7,7 @@ import 'package:get_storage/get_storage.dart';
 import 'package:iconsax/iconsax.dart';
 
 import '../../constants.dart';
-import '../../data/authentication.repository/user_data.dart';
+import '../../data/authentication.repository/login_data.dart';
 import '../../utils/http/http_client.dart';
 import '../../widgets/common/appbar.dart';
 import '../../widgets/common/primary_header_container.dart';
@@ -101,8 +101,8 @@ class _BrandProfileScreenState extends State<BrandProfileScreen> {
                     isLoading: isLoading,
                     avatarSvg: avatarSvg,
                     name:
-                        '${UserData.userData!.firstName} ${UserData.userData!.lastName}',
-                    email: '${UserData.userData!.email}',
+                        '${BrandData.brandData!.name}',
+                    email: '${BrandData.brandData!.email}',
                     editProfile: () => Get.to(() => const UserInfoScreen()),
                   ),
 
@@ -172,7 +172,7 @@ class _BrandProfileScreenState extends State<BrandProfileScreen> {
 
                           if (confirmLogout == true) {
                             // Logout
-                            UserData.userData = null;
+                            BrandData.brandData = null;
                             localStorage.write('IsLoggedIn', false);
                             HttpHelper.token = null;
                             localStorage.remove('TOKEN');

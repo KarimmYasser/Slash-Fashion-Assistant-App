@@ -12,7 +12,7 @@ import 'package:get_storage/get_storage.dart';
 import 'package:iconsax/iconsax.dart';
 import 'dart:convert';
 
-import '../../data/authentication.repository/user_data.dart';
+import '../../data/authentication.repository/login_data.dart';
 import '../../widgets/common/primary_header_container.dart';
 import '../../widgets/profile_page/user_profile_tile.dart';
 import '../authentication/login_screen.dart';

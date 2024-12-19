@@ -18,7 +18,7 @@ import 'package:fashion_assistant/screens/personalization/profile_screen.dart';
 bool inHome = true;
 bool isMale = true;
 const String baseURL =
-    'https://1971-2c0f-fc89-8039-6d3b-f977-3ed3-3390-764b.ngrok-free.app';
+    'https://015b-2c0f-fc89-8039-3d70-e427-9b44-bc36-948e.ngrok-free.app';
 Future<String>? kChatId;
 final List<Map<String, dynamic>> screenDetails = [
   {

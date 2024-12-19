@@ -1,4 +1,4 @@
-import 'package:fashion_assistant/data/authentication.repository/user_data.dart';
+import 'package:fashion_assistant/data/authentication.repository/login_data.dart';
 import 'package:fashion_assistant/screens/brand_mode/brand_total_screens.dart';
 import 'package:fashion_assistant/screens/create_avatar/male_or_female.dart';
 import 'package:fashion_assistant/utils/helpers/network_manager.dart';

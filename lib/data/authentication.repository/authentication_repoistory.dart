@@ -5,9 +5,10 @@ import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 
+import '../../screens/admin_mode/admin_total_screens.dart';
 import '../../screens/brand_mode/brand_total_screens.dart';
 import '../../screens/total_screen.dart';
-import 'user_data.dart';
+import 'login_data.dart';
 
 class AuthenticationRepository extends GetxController {
   static AuthenticationRepository get instance => Get.find();
@@ -41,11 +42,15 @@ class AuthenticationRepository extends GetxController {
       try {
         HttpHelper.setToken(deviceStorage.read('TOKEN'));
         final response = await HttpHelper.get('api/auth/me');
-        UserData.userData = UserData(response['user']);
-        if (UserData.userData!.role == 'Brand') {
+        if (response['role'] == 'BRAND') {
+          BrandData.brandData = BrandData(response['user']);
           Get.offAll(() => const BrandTotalScreens());
-        } else {
+        } else if (response['role'] == 'USER') {
+          UserData.userData = UserData(response['user']);
           Get.offAll(() => const TotalScreens());
+        } else if (response['role'] == 'ADMIN') {
+          AdminData.adminData = AdminData(response['user']);
+          Get.offAll(() => const AdminTotalScreens());
         }
       } catch (e) {
         deviceStorage.write('IsLoggedIn', false);
