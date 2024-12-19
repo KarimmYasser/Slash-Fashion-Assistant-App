@@ -34,13 +34,11 @@ class _ChatScreenState extends State<ChatScreen> {
     });
 
     try {
-      final response =
-          await http.get(Uri.parse('$baseURL/api/chat/'), headers: {
-        'Authorization': 'Bearer ${HttpHelper.token}',
-        'Content-Type': 'application/json',
-      });
+      final response = await HttpHelper.get(
+        'api/chat',
+      );
 
-      List<dynamic> chatList = json.decode(response.body);
+      List<dynamic> chatList = response['chats'] as List<dynamic>;
       if (chatList.isNotEmpty) {
         setState(() {
           chatId = chatList[0]['id'];

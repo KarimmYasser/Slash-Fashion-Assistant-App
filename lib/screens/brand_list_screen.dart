@@ -8,7 +8,7 @@ class BrandListScreen extends StatefulWidget {
 }
 
 class _BrandListScreenState extends State<BrandListScreen> {
-  late Future<BrandsResponse> _brandsFuture;
+  late Future<List<Brand>> _brandsFuture;
 
   @override
   void initState() {
@@ -22,7 +22,7 @@ class _BrandListScreenState extends State<BrandListScreen> {
       appBar: AppBar(
         title: Text('Brands'),
       ),
-      body: FutureBuilder<BrandsResponse>(
+      body: FutureBuilder<List<Brand>>(
         future: _brandsFuture,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
@@ -32,7 +32,7 @@ class _BrandListScreenState extends State<BrandListScreen> {
               child: Text('Error: ${snapshot.error}'),
             );
           } else if (snapshot.hasData) {
-            final brands = snapshot.data!.brands;
+            final brands = snapshot.data!;
 
             return ListView.builder(
               itemCount: brands.length,

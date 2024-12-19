@@ -29,18 +29,18 @@ class Brand {
 
   factory Brand.fromJson(Map<String, dynamic> json) {
     return Brand(
-      id: json['id'],
-      name: json['name'],
-      email: json['email'],
-      rating: (json['rating'] as num).toDouble(),
-      phone: json['phone'],
-      description: json['description'],
-      logo: json['logo'],
-      facebook: json['facebook'],
-      instagram: json['instagram'],
-      website: json['website'],
-      createdAt: json['created_at'],
-      updatedAt: json['updated_at'],
+      id: json['id'] ?? '',
+      name: json['name'] ?? '',
+      email: json['email'] ?? '',
+      rating: ((json['rating'] ?? 0) as num).toDouble() ?? 0,
+      phone: json['phone'] ?? '',
+      description: json['description'] ?? '',
+      logo: json['logo'] ?? '',
+      facebook: json['facebook'] ?? '',
+      instagram: json['instagram'] ?? '',
+      website: json['website'] ?? '',
+      createdAt: json['created_at'] ?? '',
+      updatedAt: json['updated_at'] ?? '',
     );
   }
 }

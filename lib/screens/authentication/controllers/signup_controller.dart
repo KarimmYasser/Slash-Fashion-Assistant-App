@@ -1,4 +1,5 @@
 import 'package:fashion_assistant/data/authentication.repository/user_data.dart';
+import 'package:fashion_assistant/screens/brand_mode/brand_total_screens.dart';
 import 'package:fashion_assistant/screens/create_avatar/male_or_female.dart';
 import 'package:fashion_assistant/utils/helpers/network_manager.dart';
 import 'package:fashion_assistant/utils/popups/full_screen_loader.dart';
@@ -61,27 +62,50 @@ class SignupController extends GetxController {
                 'In order to create an account, you must have to read and accept the Privacy Policey & Terms of Use. ');
         return;
       }
-
+      var endpoint = '';
       // Register User
-      final response = await HttpHelper.post('api/auth/signup', {
-        'firstName': firstName.text.trim(),
-        'lastName': lastName.text.trim(),
-        'email': email.text.trim(),
-        'username': userName.text.trim(),
-        'password': password.text.trim(),
-        "phone": phoneNumber!.trim(),
-        "city": cityValue!.trim(),
-        'gender': gender!.trim(),
-        'age': 25,
-        'role': userType!.trim(),
-      });
-      HttpHelper.setToken(response['token']);
-      localStorage.write('TOKEN', HttpHelper.token);
+      if (userType!.trim() == "Shopper")
+        endpoint = 'api/auth/signup';
+      else
+        endpoint = 'api/auth/brand-signup';
+      if (userType!.trim() == "Shopper") {
+        final response = await HttpHelper.post(endpoint, {
+          'firstName': firstName.text.trim(),
+          'lastName': lastName.text.trim(),
+          'email': email.text.trim(),
+          'username': userName.text.trim(),
+          'password': password.text.trim(),
+          "phone": phoneNumber!.trim(),
+          "city": cityValue!.trim(),
+          'gender': gender!.trim(),
+          'age': 25,
+          'role': userType!.trim(),
+        });
+        HttpHelper.setToken(response['token']);
+        localStorage.write('TOKEN', HttpHelper.token);
 
-      // Save User Data
-      UserData.userData = UserData(response['user']);
-      localStorage.write('IsLoggedIn', true);
-      
+        // Save User Data
+        UserData.userData = UserData(response['user']);
+        localStorage.write('IsLoggedIn', true);
+      } else {
+        final response = await HttpHelper.post(endpoint, {
+          "name": firstName.text.trim(),
+          "description": "This is a sample brand description.",
+          "phone": phoneNumber!.trim(),
+          "logo": "https://example.com/logo.jpg",
+          "website": "https://example.com",
+          "facebook": "https://facebook.com/brand",
+          "instagram": "https://instagram.com/brand",
+          'email': email.text.trim(),
+          'password': password.text.trim()
+        });
+        HttpHelper.setToken(response['token']);
+        localStorage.write('TOKEN', HttpHelper.token);
+
+        // Save User Data
+        UserData.userData = UserData(response['user']);
+        localStorage.write('IsLoggedIn', true);
+      }
       // Stop Loading
       FullScreenLoader.stopLoading();
 
@@ -90,7 +114,13 @@ class SignupController extends GetxController {
             image: "assets/images/72462-check-register.json",
             title: "Your account has been created successfully.",
             subtitle: "Your Account is ready to use.",
-            onPressed: () => Get.offAll(() => const MaleOrFemale()),
+            onPressed: () {
+              if (userType!.trim() == "Shopper") {
+                Get.offAll(() => const MaleOrFemale());
+              } else {
+                Get.offAll(() => const BrandTotalScreens());
+              }
+            },
           ));
     } catch (e) {
       // Stop Loading

@@ -2,6 +2,7 @@ import 'package:fashion_assistant/constants.dart';
 import 'package:fashion_assistant/models/product.dart';
 import 'package:fashion_assistant/screens/reviews_screen.dart';
 import 'package:fashion_assistant/services/get_products.dart';
+import 'package:fashion_assistant/services/get_reviews.dart';
 import 'package:fashion_assistant/widgets/home_page/hm_hzt_list.dart';
 import 'package:fashion_assistant/widgets/product_details/about_brand.dart';
 import 'package:fashion_assistant/widgets/product_details/add_cart_widget.dart';
@@ -17,47 +18,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:iconsax/iconsax.dart';
 
-final List<String> imagesPaths = [
-  "https://media.istockphoto.com/id/1398610798/photo/young-woman-in-linen-shirt-shorts-and-high-heels-pointing-to-the-side-and-talking.jpg?s=1024x1024&w=is&k=20&c=IdY440I0pLdmANsNZRXhjSS7K9Q-Xxvnwf4YzH9qQbQ=",
-  "https://media.istockphoto.com/id/1401899435/photo/image-of-young-asian-girl-posing-on-blue-background.jpg?s=2048x2048&w=is&k=20&c=PUMy-lxrA9ufa0_yjtk1_YEcj3bxd86fjD7_jCcTE3A=",
-  "https://media.istockphoto.com/id/2090871623/photo/photo-of-young-asian-woman-on-purple-background.jpg?s=2048x2048&w=is&k=20&c=lBP5Ai4G_jFo9qyYvkqkBfIWY8bFOqsNGT5oFMmyYkI=",
-  "https://media.istockphoto.com/id/1330861728/photo/asian-woman-looking-through-magnifying-glass-searching-or-investigating-something.jpg?s=2048x2048&w=is&k=20&c=I8vNRSuxc_iVlrl3HnZISMXBcuKltHpMr5C72Tkbog8=",
-  "https://media.istockphoto.com/id/2105695547/photo/photo-of-young-asian-girl-on-purple-background.jpg?s=2048x2048&w=is&k=20&c=SgL1NDoeaqYTUgryZSL9Qev1sR_TT_eZUw45N6JRcL4=",
-];
-
-final List<Map<String, String>> colors = [
-  {
-    'name': 'Nike',
-    'image':
-        "https://media.istockphoto.com/id/1398610798/photo/young-woman-in-linen-shirt-shorts-and-high-heels-pointing-to-the-side-and-talking.jpg?s=1024x1024&w=is&k=20&c=IdY440I0pLdmANsNZRXhjSS7K9Q-Xxvnwf4YzH9qQbQ=",
-  },
-  {
-    'name': 'Adidas',
-    'image':
-        "https://media.istockphoto.com/id/1401899435/photo/image-of-young-asian-girl-posing-on-blue-background.jpg?s=2048x2048&w=is&k=20&c=PUMy-lxrA9ufa0_yjtk1_YEcj3bxd86fjD7_jCcTE3A=",
-  },
-  {
-    'name': 'Puma',
-    'image':
-        "https://media.istockphoto.com/id/2090871623/photo/photo-of-young-asian-woman-on-purple-background.jpg?s=2048x2048&w=is&k=20&c=lBP5Ai4G_jFo9qyYvkqkBfIWY8bFOqsNGT5oFMmyYkI=",
-  },
-  {
-    'name': 'Nike',
-    'image':
-        "https://media.istockphoto.com/id/1330861728/photo/asian-woman-looking-through-magnifying-glass-searching-or-investigating-something.jpg?s=2048x2048&w=is&k=20&c=I8vNRSuxc_iVlrl3HnZISMXBcuKltHpMr5C72Tkbog8=",
-  },
-  {
-    'name': 'Adidas',
-    'image':
-        "https://media.istockphoto.com/id/2105695547/photo/photo-of-young-asian-girl-on-purple-background.jpg?s=2048x2048&w=is&k=20&c=SgL1NDoeaqYTUgryZSL9Qev1sR_TT_eZUw45N6JRcL4=",
-  },
-  {
-    'name': 'Pumammmmmmmmmmm',
-    'image':
-        "https://media.istockphoto.com/id/1401899435/photo/image-of-young-asian-girl-posing-on-blue-background.jpg?s=2048x2048&w=is&k=20&c=PUMy-lxrA9ufa0_yjtk1_YEcj3bxd86fjD7_jCcTE3A=",
-  },
-];
-
 class ProductScreen extends StatefulWidget {
   const ProductScreen({super.key, required this.productID});
   final String productID;
@@ -71,6 +31,8 @@ class _ProductScreenState extends State<ProductScreen> {
   bool isTrustedWithVideoReviews = true;
   bool? liked;
   Product? product;
+  late Future<List<Map<String, dynamic>>> _reviews;
+
   @override
   void initState() {
     super.initState();
@@ -81,10 +43,10 @@ class _ProductScreenState extends State<ProductScreen> {
         liked = product!.isInWishlist;
       });
     });
+    _reviews = ReviewService().getReviews(widget.productID);
   }
 
   Future<bool> fetchLikedStatus() async {
-    // Implement your logic to fetch the liked status here
     return liked ?? false;
   }
 
@@ -96,11 +58,10 @@ class _ProductScreenState extends State<ProductScreen> {
         leading: IconButton(
           icon: Icon(
             Icons.arrow_back,
-            color: OurColors.grey, // Match your text color
+            color: OurColors.grey,
             size: Sizes.iconMd,
           ),
           onPressed: () {
-            // Navigate back to the home page
             Navigator.pop(context);
           },
         ),
@@ -173,12 +134,10 @@ class _ProductScreenState extends State<ProductScreen> {
                           padding: EdgeInsets.symmetric(horizontal: 8.w),
                           child: Row(
                             children: [
-                              // Size of the circular image container
                               CircleAvatar(
-                                radius:
-                                    14, // Inner circle size (smaller for border effect)
+                                radius: 14,
                                 backgroundImage: NetworkImage(
-                                  "https://media.istockphoto.com/id/1398610798/photo/young-woman-in-linen-shirt-shorts-and-high-heels-pointing-to-the-side-and-talking.jpg?s=1024x1024&w=is&k=20&c=IdY440I0pLdmANsNZRXhjSS7K9Q-Xxvnwf4YzH9qQbQ=",
+                                  product.brand.logo ?? '',
                                 ),
                                 backgroundColor: Colors.transparent,
                               ),
@@ -186,7 +145,7 @@ class _ProductScreenState extends State<ProductScreen> {
                                 width: 10.w,
                               ),
                               Text(
-                                'Fashoni',
+                                product.brand.name,
                                 style: TextStyle(
                                     fontSize: 16.sp,
                                     fontWeight: FontWeight.w500),
@@ -194,8 +153,18 @@ class _ProductScreenState extends State<ProductScreen> {
                             ],
                           ),
                         ),
-                        ImagesContainer(
-                          imageUrls: imagesPaths,
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 8),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(
+                                16.0), // Adjust the radius as needed
+                            child: Image.network(
+                              product.image,
+                              width: double.infinity,
+                              // Adjust the height as needed
+                              fit: BoxFit.cover,
+                            ),
+                          ),
                         ),
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 8),
@@ -263,7 +232,6 @@ class _ProductScreenState extends State<ProductScreen> {
                                   ),
                                 ],
                               ),
-                              // Cart Icon
                             ],
                           ),
                         ),
@@ -273,13 +241,27 @@ class _ProductScreenState extends State<ProductScreen> {
                         SizedBox(
                           height: 20.h,
                         ),
-                        ColorsList(colorsList: colors),
+                        Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 8.w),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: product.colours.keys.map((color) {
+                              return Text(
+                                color,
+                                style: TextStyle(
+                                  fontSize: 16.sp,
+                                  color: OurColors.textColor,
+                                ),
+                              );
+                            }).toList(),
+                          ),
+                        ),
                         SizedBox(
                           height: 20.h,
                         ),
                         if (product.sizes.isNotEmpty)
                           SizedBox(
-                            height: 150.h, // Adjust height as needed
+                            height: 170.h,
                             child: ListView.builder(
                               scrollDirection: Axis.horizontal,
                               itemCount: product.sizes.length,
@@ -321,7 +303,7 @@ class _ProductScreenState extends State<ProductScreen> {
                         SizedBox(
                           height: 20.h,
                         ),
-                        MaterialList(),
+                        MaterialList(name: product.material),
                       ],
                     ),
                   ),
@@ -329,8 +311,7 @@ class _ProductScreenState extends State<ProductScreen> {
                     height: 20.h,
                   ),
                   Description(
-                    description:
-                        "This is a detailed description of the product. It provides all the necessary information users need to know before making a purchase decision. The description includes features, benefits, and usage guidelines.",
+                    description: product.description ?? '',
                   ),
                   SizedBox(
                     height: 20.h,
@@ -349,31 +330,78 @@ class _ProductScreenState extends State<ProductScreen> {
                     height: 20.h,
                   ),
                   GestureDetector(
-                      onTap: () {
-                        Navigator.push(context,
-                            MaterialPageRoute(builder: (context) {
-                          return ReviewsScreen();
-                        }));
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) {
+                            return FutureBuilder<List<Map<String, dynamic>>>(
+                              future: _reviews,
+                              builder: (context, snapshot) {
+                                if (snapshot.connectionState ==
+                                    ConnectionState.waiting) {
+                                  return Center(
+                                      child: CircularProgressIndicator());
+                                } else if (snapshot.hasError) {
+                                  return Center(
+                                      child: Text('Error: ${snapshot.error}'));
+                                } else if (!snapshot.hasData ||
+                                    snapshot.data!.isEmpty) {
+                                  return Center(
+                                      child: Text('No reviews available'));
+                                }
+
+                                final reviews = snapshot.data!;
+                                return ReviewsScreen(
+                                  reviews: reviews,
+                                  productId: product.id,
+                                );
+                              },
+                            );
+                          },
+                        ),
+                      );
+                    },
+                    child: FutureBuilder<List<Map<String, dynamic>>>(
+                      future: _reviews,
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return Center(child: CircularProgressIndicator());
+                        } else if (snapshot.hasError) {
+                          return Center(
+                              child: Text('Error: ${snapshot.error}'));
+                        } else if (!snapshot.hasData ||
+                            snapshot.data!.isEmpty) {
+                          return Center(child: Text('No reviews available'));
+                        }
+
+                        final reviews = snapshot.data!;
+                        return ReviewsWidget(
+                          rate: product.rating,
+                          reviews: reviews,
+                        );
                       },
-                      child: ReviewsWidget(rate: product.rating)),
+                    ),
+                  ),
                   SizedBox(
                     height: 20.h,
                   ),
                   HorizontalList(
                     title: 'You may also like',
-                    endpouint: 'api/product/get-similar-products/${product.id}',
+                    endpouint: 'api/product',
                   ),
                 ],
               ),
             );
           }),
       bottomNavigationBar: FutureBuilder<bool>(
-        future: fetchLikedStatus(), // Replace with your future function
+        future: fetchLikedStatus(),
         builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return CircularProgressIndicator(); // Show a loading indicator while waiting
+            return CircularProgressIndicator();
           } else if (snapshot.hasError) {
-            return Text('Error: ${snapshot.error}'); // Handle error case
+            return Text('Error: ${snapshot.error}');
           } else if (product != null) {
             return AddCartAppBar(
               productId: widget.productID,

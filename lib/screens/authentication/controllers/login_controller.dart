@@ -1,4 +1,6 @@
+import 'package:fashion_assistant/screens/admin_mode/admin_total_screens.dart';
 import 'package:fashion_assistant/screens/brand_mode/brand_mode_screen.dart';
+import 'package:fashion_assistant/screens/brand_mode/brand_total_screens.dart';
 import 'package:fashion_assistant/utils/popups/full_screen_loader.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -76,7 +78,7 @@ class LoginController extends GetxController {
           subtitle: "Your Account is ready to use.",
           onPressed: () {
             if (role == 'Brand') {
-              Get.offAll(() => const BrandModeScreen());
+              Get.offAll(() => const BrandTotalScreens());
             } else {
               Get.offAll(() => const TotalScreens());
             }

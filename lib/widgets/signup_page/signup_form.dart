@@ -21,7 +21,6 @@ class SignUpForm extends StatelessWidget {
       key: controller.signupFormKey,
       child: Column(
         children: [
-
           // First Name and Last Name
           Row(
             children: [
@@ -108,8 +107,8 @@ class SignUpForm extends StatelessWidget {
               Expanded(
                 child: DropdownButtonFormField<String>(
                   items: const [
-                    DropdownMenuItem(value:'male', child: Text('Male')),
-                    DropdownMenuItem(value:'female', child: Text('Female')),
+                    DropdownMenuItem(value: 'male', child: Text('Male')),
+                    DropdownMenuItem(value: 'female', child: Text('Female')),
                   ],
                   validator: (value) =>
                       Validator.validateEmptyText('Field', value),
@@ -123,8 +122,8 @@ class SignUpForm extends StatelessWidget {
               Expanded(
                 child: DropdownButtonFormField<String>(
                   items: const [
-                    DropdownMenuItem(value:'Shopper', child: Text('Shopper')),
-                    DropdownMenuItem(value:'Brand', child: Text('Brand')),
+                    DropdownMenuItem(value: 'Shopper', child: Text('Shopper')),
+                    DropdownMenuItem(value: 'Brand', child: Text('Brand')),
                   ],
                   validator: (value) =>
                       Validator.validateEmptyText('Field', value),
@@ -184,4 +183,3 @@ class SignUpForm extends StatelessWidget {
     );
   }
 }
-

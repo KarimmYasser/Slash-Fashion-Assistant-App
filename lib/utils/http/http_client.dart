@@ -38,7 +38,10 @@ class HttpHelper {
   static Future<Map<String, dynamic>> put(String endpoint, dynamic data) async {
     final response = await http.put(
       Uri.parse('$_baseUrl/$endpoint'),
-      headers: {'Content-Type': 'application/json'},
+      headers: {
+        'Authorization': 'Bearer $token',
+        'Content-Type': 'application/json'
+      },
       body: json.encode(data),
     );
     return _handleResponse(response);
@@ -63,7 +66,13 @@ class HttpHelper {
     if (response.statusCode < 400) {
       return json.decode(response.body);
     } else {
-      throw Exception('Failed to load data: ${response.body}');
+      final responseBody = json.decode(response.body);
+      if (responseBody['message'] == 'Size already exists') {
+        // Handle the specific case where the size already exists
+        return responseBody;
+      } else {
+        throw Exception('Failed to load data: ${response.body}');
+      }
     }
   }
 

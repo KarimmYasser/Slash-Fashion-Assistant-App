@@ -1,15 +1,18 @@
 import 'package:fashion_assistant/constants.dart';
+import 'package:fashion_assistant/models/review.dart';
 import 'package:fashion_assistant/screens/add_review_screen.dart';
 import 'package:fashion_assistant/screens/reviews_screen.dart';
 import 'package:fashion_assistant/screens/show_list_screen.dart';
+import 'package:fashion_assistant/utils/http/http_client.dart';
 import 'package:fashion_assistant/widgets/product_details/five_stars.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:iconsax/iconsax.dart';
 
 class ReviewsWidget extends StatelessWidget {
-  const ReviewsWidget({super.key, required this.rate});
+  const ReviewsWidget({super.key, required this.rate, required this.reviews});
   final double rate;
+  final List<Map<String, dynamic>> reviews;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -41,7 +44,9 @@ class ReviewsWidget extends StatelessWidget {
                 SizedBox(
                   height: 14.h,
                 ),
-                Reviews()
+                Reviews(
+                  reviews: reviews,
+                )
               ],
             ),
           )
@@ -226,8 +231,8 @@ class RatingsCardsList extends StatelessWidget {
 }
 
 class Reviews extends StatelessWidget {
-  const Reviews({super.key});
-
+  const Reviews({super.key, required this.reviews});
+  final List<Map<String, dynamic>> reviews;
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -249,7 +254,9 @@ class Reviews extends StatelessWidget {
             height: 300.h, // Provide a fixed height for the horizontal ListView
             child: ListView.builder(
               scrollDirection: Axis.horizontal, // Enables horizontal scrolling
-              itemCount: 5, // Number of review cards + 1 for the icon button
+              itemCount: reviews.length <= 5
+                  ? reviews.length
+                  : 5, // Number of review cards + 1 for the icon button
               itemBuilder: (context, index) {
                 if (index == 4) {
                   // Adjust index to 4 as itemCount is 5
@@ -272,6 +279,8 @@ class Reviews extends StatelessWidget {
                         right: 16.0), // Add spacing between cards
                     child: ReviewCard(
                       isExpanded: false,
+                      review: Review.fromJson(reviews[index]),
+                      reviews: reviews, // Pass the review object
                     ),
                   );
                 }
@@ -283,32 +292,54 @@ class Reviews extends StatelessWidget {
 }
 
 class ReviewCard extends StatefulWidget {
-  const ReviewCard({super.key, required this.isExpanded});
+  const ReviewCard(
+      {super.key,
+      required this.isExpanded,
+      required this.review,
+      required this.reviews});
   final bool isExpanded;
+  final Review review;
+  final List<Map<String, dynamic>> reviews;
   @override
   State<ReviewCard> createState() => _ReviewCardState();
 }
 
 class _ReviewCardState extends State<ReviewCard> {
-  int helpfulCount = 2;
-  bool isHelpfulClicked = false;
+  int isHelpfulClicked = 0;
 
-  void _toggleHelpfulCount() {
-    setState(() {
-      if (isHelpfulClicked) {
-        helpfulCount -= 1;
-      } else {
-        helpfulCount += 1;
-      }
-      isHelpfulClicked = !isHelpfulClicked;
-    });
+  void _toggleHelpfulCount() async {
+    int helpfulCount = widget.review.likes;
+    if (isHelpfulClicked == 1) {
+      helpfulCount -= 1;
+    } else {
+      helpfulCount += 1;
+    }
+    isHelpfulClicked = isHelpfulClicked == 1 ? 0 : 1;
+
+    // final reviewId = widget.review.id; // Replace with actual review ID
+    // final url = 'api/review/$reviewId'; // Replace with actual endpoint
+
+    // final response = await HttpHelper.put(
+    //   url,
+    //   {
+    //     'like': helpfulCount,
+    //   },
+
+    //   // Handle error response
+    // );
+    // print('Failed to update review: ${response['body']}');
+    setState(() {});
   }
 
   void _navigateToReviewsPage() {
     // Navigate to the reviews page (replace with your navigation logic)
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => ReviewsScreen()),
+      MaterialPageRoute(
+          builder: (context) => ReviewsScreen(
+                reviews: widget.reviews,
+                productId: widget.review.productId,
+              )),
     );
   }
 
@@ -333,54 +364,32 @@ class _ReviewCardState extends State<ReviewCard> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      "Toqa Samir",
+                      'toqa samir',
                       style:
                           TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                     ),
                     Text(
-                      "20/08/2024",
+                      widget.review.createdAt.toString(),
                       style: TextStyle(color: Colors.grey, fontSize: 14),
                     ),
                   ],
                 ),
                 SizedBox(height: 8),
-                FiveStarRating(filledStars: 5),
+                FiveStarRating(filledStars: widget.review.rating.toInt()),
                 SizedBox(height: 8),
-                Text(
-                  "Great quality",
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16,
+                if (widget.review.image != '')
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(8),
+                    child: Image.network(
+                      widget.review.image,
+                      width: 50,
+                      height: 50,
+                      fit: BoxFit.cover,
+                    ),
                   ),
-                ),
-                SizedBox(height: 8),
-                Row(
-                  children: [
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(8),
-                      child: Image.network(
-                        "https://media.istockphoto.com/id/1398610798/photo/young-woman-in-linen-shirt-shorts-and-high-heels-pointing-to-the-side-and-talking.jpg?s=1024x1024&w=is&k=20&c=IdY440I0pLdmANsNZRXhjSS7K9Q-Xxvnwf4YzH9qQbQ=",
-                        width: 50,
-                        height: 50,
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                    SizedBox(width: 8),
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(8),
-                      child: Image.network(
-                        "https://media.istockphoto.com/id/1398610798/photo/young-woman-in-linen-shirt-shorts-and-high-heels-pointing-to-the-side-and-talking.jpg?s=1024x1024&w=is&k=20&c=IdY440I0pLdmANsNZRXhjSS7K9Q-Xxvnwf4YzH9qQbQ=",
-                        width: 50,
-                        height: 50,
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                  ],
-                ),
                 SizedBox(height: 8),
                 Text(
-                  "Absolutely love this scarf, the colors are beyond amazing and the material as well. "
-                  "The colors are vibrant, and it feels so soft on the skin. It's exactly what I was looking for.",
+                  widget.review.comment,
                   style: TextStyle(fontSize: 14),
                   maxLines: widget.isExpanded ? null : 2, // Dynamically adjust
                   overflow: widget.isExpanded
@@ -397,9 +406,9 @@ class _ReviewCardState extends State<ReviewCard> {
                           color: OurColors.darkGrey, size: 16),
                       SizedBox(width: 4),
                       Text(
-                        "Helpful ($helpfulCount)",
+                        "Helpful (${widget.review.likes + isHelpfulClicked})",
                         style: TextStyle(
-                          color: isHelpfulClicked
+                          color: isHelpfulClicked == 1
                               ? Colors.green
                               : OurColors.darkGrey,
                           fontSize: 14,

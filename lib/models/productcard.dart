@@ -50,7 +50,7 @@ class ProductCardModel {
       image: json['image'] ?? '',
       createdAt: DateTime.parse(
           json['created_at'] ?? DateTime.now().toIso8601String()),
-      isInWishlist: json['isInWishlist'] ?? false,
+      isInWishlist: json['isInWishlist'] ?? true,
     );
   }
 }

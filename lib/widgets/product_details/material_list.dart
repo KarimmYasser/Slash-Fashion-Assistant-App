@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class MaterialList extends StatelessWidget {
-  const MaterialList({super.key});
-
+  const MaterialList({super.key, required this.name});
+  final String name;
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -28,7 +28,7 @@ class MaterialList extends StatelessWidget {
             height: 40.h,
             child: ListView.builder(
               scrollDirection: Axis.horizontal,
-              itemCount: 3,
+              itemCount: 1,
               itemBuilder: (context, index) {
                 return GestureDetector(
                   onTap: () {},
@@ -45,7 +45,7 @@ class MaterialList extends StatelessWidget {
                         padding: const EdgeInsets.all(4.0),
                         child: Center(
                           child: Text(
-                            'Cotton',
+                            name,
                           ),
                         ),
                       ),
