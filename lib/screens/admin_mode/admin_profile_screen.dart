@@ -14,7 +14,7 @@ import '../../widgets/common/section_heading.dart';
 import '../../widgets/profile_page/admin_profile_tile.dart';
 import '../../widgets/profile_page/setting_menu_tile.dart';
 import '../authentication/login_screen.dart';
-import '../personalization/user_info_screen.dart';
+import 'delete_admin_screen.dart';
 
 class AdminProfileScreen extends StatelessWidget {
   const AdminProfileScreen({super.key});
@@ -42,12 +42,9 @@ class AdminProfileScreen extends StatelessWidget {
 
                   // User Profile Card
                   AdminUserProfileTile(
-                    username: '${AdminData.adminData!.username}',
-                    email: '${AdminData.adminData!.email}',
-                    role: AdminData.adminData!.role!,
-                    editProfile: () => Get.to(() => const UserInfoScreen()),
-                  ),
-
+                      username: '${AdminData.adminData!.username}',
+                      email: '${AdminData.adminData!.email}',
+                      role: AdminData.adminData!.role!),
                   const SizedBox(height: Sizes.spaceBtwSections),
                 ],
               ),
@@ -83,7 +80,8 @@ class AdminProfileScreen extends StatelessWidget {
                         title: 'Add New Admin',
                         subtitle: 'Add a new Admin to database'),
                   if (AdminData.adminData!.role == 'SuperAdmin')
-                    const SettingMenuTile(
+                    SettingMenuTile(
+                        onTap: () => Get.to(() => const DeleteAdminScreen()),
                         icon: Iconsax.profile_delete,
                         title: 'Delete Admin',
                         subtitle: 'Delete an Admin from database'),

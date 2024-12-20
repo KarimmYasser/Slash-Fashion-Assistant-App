@@ -1,6 +1,5 @@
 import 'package:fashion_assistant/utils/popups/loaders.dart';
 import 'package:fashion_assistant/widgets/common/appbar.dart';
-import 'package:fashion_assistant/widgets/common/circular_image.dart';
 import 'package:fashion_assistant/widgets/common/section_heading.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -54,27 +53,6 @@ class UserInfoScreen extends StatelessWidget {
           padding: const EdgeInsets.all(Sizes.defaultSpace),
           child: Column(
             children: [
-              // Profile Picture
-              SizedBox(
-                width: double.infinity,
-                child: Column(
-                  children: [
-                    CircularImage(
-                      image: UserData.userData!.image,
-                      width: 80,
-                      height: 80,
-                    ),
-                    TextButton(
-                        onPressed: () {},
-                        child: const Text('Change Profile Picture'))
-                  ],
-                ),
-              ),
-
-              // Details
-              const SizedBox(height: Sizes.spaceBtwItems / 2),
-              const Divider(),
-              const SizedBox(height: Sizes.spaceBtwItems),
               const SectionHeading(
                   title: 'Profile Information', showActionButton: false),
               const SizedBox(height: Sizes.spaceBtwItems),

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:iconsax/iconsax.dart';
 
 import '../../constants.dart';
 
@@ -9,13 +8,11 @@ class AdminUserProfileTile extends StatelessWidget {
     required this.username,
     required this.email,
     required this.role,
-    required this.editProfile,
   });
 
   final String username;
   final String email;
   final String role;
-  final void Function()? editProfile;
 
   @override
   Widget build(BuildContext context) {
@@ -31,13 +28,6 @@ class AdminUserProfileTile extends StatelessWidget {
               .textTheme
               .bodyMedium!
               .apply(color: OurColors.white)),
-      trailing: IconButton(
-        onPressed: editProfile,
-        icon: const Icon(
-          Iconsax.edit,
-          color: OurColors.white,
-        ),
-      ),
     );
   }
 }
