@@ -1,13 +1,10 @@
 import 'package:fashion_assistant/constants.dart';
 import 'package:fashion_assistant/models/productcard.dart';
-import 'package:fashion_assistant/tap_map.dart';
 import 'package:fashion_assistant/utils/http/http_client.dart';
 import 'package:fashion_assistant/widgets/product/product_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
 
 class FavoriteScreen extends StatefulWidget {
   const FavoriteScreen({super.key});

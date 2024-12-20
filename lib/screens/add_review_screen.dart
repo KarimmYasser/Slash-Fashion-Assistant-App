@@ -2,7 +2,6 @@ import 'package:fashion_assistant/constants.dart';
 import 'package:fashion_assistant/tap_map.dart';
 import 'package:fashion_assistant/utils/http/http_client.dart';
 import 'package:fashion_assistant/widgets/product_details/rate.dart';
-import 'package:fashion_assistant/widgets/product_details/trusted_with_video_reviews.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_picker/image_picker.dart';

@@ -196,6 +196,7 @@ class _AddToCartDialogState extends State<AddToCartDialog> {
 void _addToCart(int quantity, String productId) async {
   final String url = "api/cart/add";
 
+  // ignore: unused_local_variable
   final response = await HttpHelper.post(url, {
     'productId': productId,
     'quantity': quantity,

@@ -1,9 +1,6 @@
 import 'package:fashion_assistant/constants.dart';
 import 'package:fashion_assistant/models/review.dart';
-import 'package:fashion_assistant/screens/add_review_screen.dart';
 import 'package:fashion_assistant/screens/reviews_screen.dart';
-import 'package:fashion_assistant/screens/show_list_screen.dart';
-import 'package:fashion_assistant/utils/http/http_client.dart';
 import 'package:fashion_assistant/widgets/product_details/five_stars.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -308,6 +305,7 @@ class _ReviewCardState extends State<ReviewCard> {
   int isHelpfulClicked = 0;
 
   void _toggleHelpfulCount() async {
+    // ignore: unused_local_variable
     int helpfulCount = widget.review.likes;
     if (isHelpfulClicked == 1) {
       helpfulCount -= 1;

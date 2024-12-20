@@ -1,9 +1,6 @@
 import 'package:fashion_assistant/utils/http/http_client.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
 
 import 'package:fashion_assistant/constants.dart';
 

@@ -1,8 +1,6 @@
 import 'package:fashion_assistant/constants.dart';
 import 'package:fashion_assistant/tap_map.dart';
 import 'package:fashion_assistant/widgets/admin_mode/admin_custom_navbar.dart';
-import 'package:fashion_assistant/widgets/brand_mode/brand_navbar.dart';
-import 'package:fashion_assistant/widgets/home_page/custom_navbar.dart';
 import 'package:flutter/material.dart';
 
 class AdminTotalScreens extends StatefulWidget {

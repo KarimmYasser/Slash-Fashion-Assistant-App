@@ -1,11 +1,7 @@
-import 'dart:convert';
 import 'package:fashion_assistant/constants.dart';
-import 'package:fashion_assistant/data/authentication.repository/login_data.dart';
 import 'package:fashion_assistant/screens/product_screen.dart';
-import 'package:fashion_assistant/tap_map.dart';
 import 'package:flutter/material.dart';
 import 'package:fashion_assistant/utils/http/http_client.dart';
-import 'package:http/http.dart' as http;
 
 class ChatScreen extends StatefulWidget {
   const ChatScreen({super.key});

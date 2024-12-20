@@ -1,6 +1,5 @@
 import 'package:fashion_assistant/utils/popups/loaders.dart';
 import 'package:fashion_assistant/widgets/common/appbar.dart';
-import 'package:fashion_assistant/widgets/common/circular_image.dart';
 import 'package:fashion_assistant/widgets/common/section_heading.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -14,12 +13,11 @@ import '../../utils/http/http_client.dart';
 import '../../widgets/profile_page/profile_menu.dart';
 import '../authentication/login_screen.dart';
 
-class UserInfoScreen extends StatelessWidget {
-  const UserInfoScreen({super.key});
+class BrandInfoScreen extends StatelessWidget {
+  const BrandInfoScreen({super.key});
 
   void updateField(String field, String value) async {
     try {
-      
       switch (field) {
         case 'firstName':
           UserData.userData!.firstName = value;
@@ -47,7 +45,7 @@ class UserInfoScreen extends StatelessWidget {
     return Scaffold(
       appBar: const Appbar(
         showBackButton: true,
-        title: Text('Profile Info'),
+        title: Text('Brand Info'),
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -59,14 +57,18 @@ class UserInfoScreen extends StatelessWidget {
                 width: double.infinity,
                 child: Column(
                   children: [
-                    CircularImage(
-                      image: UserData.userData!.image,
-                      width: 80,
-                      height: 80,
+                    CircleAvatar(
+                      radius: 50,
+                      backgroundImage: BrandData.brandData!.logo != null
+                          ? NetworkImage(BrandData.brandData!.logo!)
+                          : null,
+                      child: BrandData.brandData!.logo == null
+                          ? const FlutterLogo(size: 50)
+                          : null,
                     ),
-                    TextButton(
-                        onPressed: () {},
-                        child: const Text('Change Profile Picture'))
+                    // TextButton(
+                    //     onPressed: () {},
+                    //     child: const Text('Change Profile Picture'))
                   ],
                 ),
               ),
@@ -76,48 +78,15 @@ class UserInfoScreen extends StatelessWidget {
               const Divider(),
               const SizedBox(height: Sizes.spaceBtwItems),
               const SectionHeading(
-                  title: 'Profile Information', showActionButton: false),
+                  title: 'Brand Information', showActionButton: false),
               const SizedBox(height: Sizes.spaceBtwItems),
 
               ProfileMenu(
-                title: 'First Name',
-                value: UserData.userData!.firstName!,
-                onPressed: () {},
-                icon: Iconsax.arrow_right_34,
-              ),
-              ProfileMenu(
-                title: 'Last Name',
-                value: UserData.userData!.lastName!,
-                onPressed: () {},
-                icon: Iconsax.arrow_right_34,
-              ),
-              ProfileMenu(
-                title: 'UserName',
-                value: UserData.userData!.username!,
+                title: 'Brand ID',
+                value: BrandData.brandData!.id!,
                 onPressed: () {
                   Clipboard.setData(
-                      ClipboardData(text: UserData.userData!.id!));
-                  Loaders.hideSnackBar();
-                  Loaders.successSnackBar(
-                      title: 'Success', message: 'Copied to Clipboard');
-                },
-                icon: Iconsax.copy,
-              ),
-
-              const SizedBox(height: Sizes.spaceBtwItems),
-              const Divider(),
-              const SizedBox(height: Sizes.spaceBtwItems),
-
-              const SectionHeading(
-                  title: 'Personal Information', showActionButton: false),
-              const SizedBox(height: Sizes.spaceBtwItems),
-
-              ProfileMenu(
-                title: 'User ID',
-                value: UserData.userData!.id!,
-                onPressed: () {
-                  Clipboard.setData(
-                      ClipboardData(text: UserData.userData!.id!));
+                      ClipboardData(text: BrandData.brandData!.id!));
                   Loaders.hideSnackBar();
                   Loaders.successSnackBar(
                       title: 'Success', message: 'Copied to Clipboard');
@@ -125,20 +94,23 @@ class UserInfoScreen extends StatelessWidget {
                 icon: Iconsax.copy,
               ),
               ProfileMenu(
-                title: 'E-mail',
-                value: UserData.userData!.email!,
+                title: 'Name',
+                value: BrandData.brandData!.name!,
                 onPressed: () {},
                 icon: Iconsax.arrow_right_34,
               ),
+              ProfileMenu(
+                title: 'Email',
+                value: BrandData.brandData!.email!,
+                onPressed: () {},
+                icon: Iconsax.arrow_right_34,
+              ),
+
+              const SizedBox(height: Sizes.spaceBtwItems),
+
               ProfileMenu(
                 title: 'Phone Number',
-                value: UserData.userData!.phone!,
-                onPressed: () {},
-                icon: Iconsax.arrow_right_34,
-              ),
-              ProfileMenu(
-                title: 'Gender',
-                value: UserData.userData!.gender!,
+                value: BrandData.brandData!.phone!,
                 onPressed: () {},
                 icon: Iconsax.arrow_right_34,
               ),
@@ -176,7 +148,7 @@ class UserInfoScreen extends StatelessWidget {
                         if (confirmClose == true) {
                           // Logout
                           final localStorage = GetStorage();
-                          UserData.userData = null;
+                          BrandData.brandData = null;
                           localStorage.write('IsLoggedIn', false);
                           HttpHelper.token = null;
                           localStorage.remove('TOKEN');

@@ -1,12 +1,6 @@
 import 'package:fashion_assistant/constants.dart';
-import 'package:fashion_assistant/main.dart';
-import 'package:fashion_assistant/screens/create_avatar/male_or_female.dart';
-import 'package:fashion_assistant/screens/product_screen.dart';
-import 'package:fashion_assistant/widgets/home_page/favorite_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:iconsax/iconsax.dart';
 
 class ProductCardBrand extends StatelessWidget {

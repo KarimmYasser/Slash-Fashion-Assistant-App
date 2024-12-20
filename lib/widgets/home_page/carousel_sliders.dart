@@ -1,13 +1,7 @@
-import 'dart:async';
-
-import 'package:carousel_slider/carousel_options.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:fashion_assistant/constants.dart';
-import 'package:fashion_assistant/screens/home_screen.dart';
-import 'package:fashion_assistant/tap_map.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:iconsax/iconsax.dart';
 
 class CustomCarousalSliders extends StatefulWidget {
   const CustomCarousalSliders({super.key, required this.imagesPaths});
@@ -19,6 +13,7 @@ class CustomCarousalSliders extends StatefulWidget {
 
 class _CustomCarousalSlidersState extends State<CustomCarousalSliders> {
   bool isAutoPlayEnabled = true;
+  // ignore: unused_field
   int _activePage = 0;
   final CarouselSliderController _carouselController =
       CarouselSliderController();

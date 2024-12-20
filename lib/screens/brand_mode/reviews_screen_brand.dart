@@ -2,7 +2,6 @@ import 'package:fashion_assistant/constants.dart';
 import 'package:fashion_assistant/models/review.dart';
 import 'package:fashion_assistant/widgets/product_details/reviews.dart';
 import 'package:flutter/material.dart';
-import 'package:fashion_assistant/screens/add_review_screen.dart'; // Import the AddReviewScreen
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class ReviewsScreenBrand extends StatelessWidget {

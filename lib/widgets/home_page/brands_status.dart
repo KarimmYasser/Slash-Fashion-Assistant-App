@@ -5,7 +5,6 @@ import 'package:fashion_assistant/screens/brand_profile_screen.dart';
 import 'package:fashion_assistant/services/brand_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:palette_generator/palette_generator.dart';
 
 class BrandCarousel extends StatefulWidget {
   const BrandCarousel({

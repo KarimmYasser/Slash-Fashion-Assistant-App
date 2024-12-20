@@ -1,9 +1,6 @@
 import 'package:fashion_assistant/screens/brand_mode/add_size.dart';
 import 'package:fashion_assistant/utils/http/http_client.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
 
 class SelectCategory extends StatefulWidget {
   const SelectCategory({super.key});

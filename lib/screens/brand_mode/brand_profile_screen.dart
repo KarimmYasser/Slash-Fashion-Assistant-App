@@ -1,3 +1,4 @@
+import 'package:fashion_assistant/screens/personalization/brand_info_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
@@ -12,7 +13,7 @@ import '../../widgets/common/section_heading.dart';
 import '../../widgets/profile_page/brand_profile_tile.dart';
 import '../../widgets/profile_page/setting_menu_tile.dart';
 import '../authentication/login_screen.dart';
-import '../personalization/user_info_screen.dart';
+import '../personalization/change_password_screen.dart';
 
 class BrandProfileScreen extends StatelessWidget {
   const BrandProfileScreen({super.key});
@@ -43,7 +44,7 @@ class BrandProfileScreen extends StatelessWidget {
                     imageURL: BrandData.brandData!.logo,
                     name: '${BrandData.brandData!.name}',
                     email: '${BrandData.brandData!.email}',
-                    editProfile: () => Get.to(() => const UserInfoScreen()),
+                    editProfile: () => Get.to(() => const BrandInfoScreen()),
                   ),
 
                   const SizedBox(height: Sizes.spaceBtwSections),
@@ -60,10 +61,11 @@ class BrandProfileScreen extends StatelessWidget {
                   const SectionHeading(
                       title: 'Account Settings', showActionButton: false),
                   const SizedBox(height: Sizes.spaceBtwItems),
-                  const SettingMenuTile(
-                      icon: Iconsax.security_card,
-                      title: 'Account Privacy',
-                      subtitle: 'Manage data usage and connected accounts'),
+                  SettingMenuTile(
+                      onTap: () => Get.to(() => const ChangePasswordScreen()),
+                      icon: Iconsax.password_check,
+                      title: 'Change Password',
+                      subtitle: 'Change your account password'),
 
                   /// -- App Settings
                   const SizedBox(height: Sizes.spaceBtwSections),

@@ -102,39 +102,19 @@ class SignUpForm extends StatelessWidget {
           ),
           const SizedBox(height: Sizes.spaceBtwInputFields),
 
-          Row(
-            children: [
-              Expanded(
-                child: DropdownButtonFormField<String>(
-                  items: const [
-                    DropdownMenuItem(value: 'male', child: Text('Male')),
-                    DropdownMenuItem(value: 'female', child: Text('Female')),
-                  ],
-                  validator: (value) =>
-                      Validator.validateEmptyText('Field', value),
-                  onChanged: (value) {
-                    controller.gender = value;
-                  },
-                  hint: const Text('Gender'),
-                ),
-              ),
-              const SizedBox(width: Sizes.spaceBtwInputFields),
-              Expanded(
-                child: DropdownButtonFormField<String>(
-                  items: const [
-                    DropdownMenuItem(value: 'Shopper', child: Text('Shopper')),
-                    DropdownMenuItem(value: 'Brand', child: Text('Brand')),
-                  ],
-                  validator: (value) =>
-                      Validator.validateEmptyText('Field', value),
-                  onChanged: (value) {
-                    controller.userType = value;
-                  },
-                  hint: const Text('User Type'),
-                ),
-              ),
+          DropdownButtonFormField<String>(
+            icon: const Icon(Icons.assignment_ind_outlined),
+            items: const [
+              DropdownMenuItem(value: 'male', child: Text('Male')),
+              DropdownMenuItem(value: 'female', child: Text('Female')),
             ],
+            validator: (value) => Validator.validateEmptyText('Field', value),
+            onChanged: (value) {
+              controller.gender = value;
+            },
+            hint: const Text('Gender'),
           ),
+
           const SizedBox(height: Sizes.spaceBtwInputFields),
 
           // Phone Number

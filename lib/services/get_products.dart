@@ -1,13 +1,10 @@
-import 'dart:convert';
-
 import 'package:fashion_assistant/models/productcard.dart';
 import 'package:fashion_assistant/tap_map.dart';
 import 'package:fashion_assistant/utils/http/http_client.dart';
-import 'package:fashion_assistant/widgets/product/product_card.dart';
-import 'package:http/http.dart' as http;
 import 'package:fashion_assistant/models/product.dart';
 
 class ProductService {
+  // ignore: unused_field
   final String _baseUrl = '$baseURL/'; // Change port as needed
 
   // Method to get all products
@@ -24,6 +21,7 @@ class ProductService {
         .toList();
   }
 
+  // ignore: unused_field
   final String _baseUrlone = '$baseURL/api/product/details';
 
   // Method to get a single product by ID
