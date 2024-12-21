@@ -1,8 +1,6 @@
 import 'package:fashion_assistant/constants.dart';
 import 'package:fashion_assistant/widgets/home_page/brands_status.dart';
 import 'package:fashion_assistant/widgets/home_page/carousel_sliders.dart';
-import 'package:fashion_assistant/widgets/home_page/categories_section.dart';
-import 'package:fashion_assistant/widgets/home_page/flash_counterdown.dart';
 import 'package:fashion_assistant/widgets/home_page/hm_hzt_list.dart';
 
 // import 'package:fashion_assistant/widgets/custom_button.dart';

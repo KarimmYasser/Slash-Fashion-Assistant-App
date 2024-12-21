@@ -16,6 +16,7 @@ import '../../data/authentication.repository/login_data.dart';
 import '../../widgets/common/primary_header_container.dart';
 import '../../widgets/profile_page/user_profile_tile.dart';
 import '../authentication/login_screen.dart';
+import 'change_password_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -135,10 +136,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         title: 'My Orders',
                         subtitle: 'In-progress and Completed Orders',
                         onTap: () => Get.to(() => const OrderScreen())),
-                    const SettingMenuTile(
-                        icon: Iconsax.security_card,
+                    SettingMenuTile(
+                        onTap: () => Get.to(() => const ChangePasswordScreen()),
+                        icon: Iconsax.password_check,
                         title: 'Change Password',
-                        subtitle: 'Manage data security'),
+                        subtitle: 'Change your account password'),
 
                     /// -- App Settings
                     const SizedBox(height: Sizes.spaceBtwSections),

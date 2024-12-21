@@ -7,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fluttermoji/fluttermojiFunctions.dart';
-import 'package:http/http.dart' as http;
 
 class ChooseStyle extends StatefulWidget {
   const ChooseStyle({super.key});

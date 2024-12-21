@@ -1,4 +1,3 @@
-import 'package:fashion_assistant/constants.dart';
 import 'package:flutter/material.dart';
 
 class BrandProfilePage extends StatefulWidget {

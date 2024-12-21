@@ -12,6 +12,7 @@ import 'bindings/general_binding.dart';
 import 'data/authentication.repository/authentication_repoistory.dart';
 
 void main() async {
+  // ignore: unused_local_variable
   final WidgetsBinding widgetsBinding =
       WidgetsFlutterBinding.ensureInitialized();
 

@@ -1,5 +1,4 @@
 import 'package:fashion_assistant/constants.dart';
-import 'package:fashion_assistant/screens/product_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 

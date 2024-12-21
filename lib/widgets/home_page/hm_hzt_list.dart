@@ -1,15 +1,12 @@
 import 'package:fashion_assistant/constants.dart';
 import 'package:fashion_assistant/models/productcard.dart';
 import 'package:fashion_assistant/screens/product_screen.dart';
-import 'package:fashion_assistant/screens/show_list_screen.dart';
 import 'package:fashion_assistant/widgets/product/product_card.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import 'package:iconsax/iconsax.dart';
 import 'package:fashion_assistant/services/get_products.dart';
-import 'package:fashion_assistant/models/product.dart';
 
 class HorizontalList extends StatefulWidget {
   const HorizontalList(

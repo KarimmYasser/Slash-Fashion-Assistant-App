@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:fashion_assistant/constants.dart';
 import 'package:fashion_assistant/screens/create_avatar/avoiding_colors.dart';
@@ -12,7 +11,6 @@ import 'package:fashion_assistant/screens/create_avatar/choose_hair_color.dart';
 import 'package:fashion_assistant/screens/create_avatar/choose_haircut.dart';
 import 'package:fashion_assistant/screens/create_avatar/choose_shirts_style.dart';
 import 'package:fashion_assistant/screens/create_avatar/male_or_female.dart';
-import 'package:fashion_assistant/screens/create_avatar/photos_selection_page.dart';
 import 'package:fashion_assistant/screens/total_screen.dart';
 import 'package:fashion_assistant/tap_map.dart';
 import 'package:fashion_assistant/utils/http/http_client.dart';
@@ -21,10 +19,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fluttermoji/fluttermojiFunctions.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:http/http.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:http/http.dart' as http;
 
 List<Map<String, dynamic>> selectedProducts = [];
 List<String> selectedColors = [];

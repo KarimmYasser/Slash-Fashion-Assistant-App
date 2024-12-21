@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:fashion_assistant/tap_map.dart';
 import 'package:fashion_assistant/widgets/create_avatar/choose_card.dart';
-import 'package:fashion_assistant/widgets/create_avatar/choose_color_card.dart';
 import 'package:fashion_assistant/widgets/create_avatar/question_pubble.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';

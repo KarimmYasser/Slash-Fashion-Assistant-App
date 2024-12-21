@@ -1,6 +1,4 @@
-import 'package:fashion_assistant/constants.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class FiveStarRating extends StatelessWidget {
   final int filledStars; // Number of stars to fill
