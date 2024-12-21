@@ -9,14 +9,14 @@ import '../theme/widget_themes/elevated_button_theme.dart';
 import '../theme/widget_themes/outlined_button_theme.dart';
 import '../theme/widget_themes/text_field_theme.dart';
 import '../theme/widget_themes/text_theme.dart';
-
+import 'package:google_fonts/google_fonts.dart';
 
 class SAppTheme {
   SAppTheme._();
 
   static ThemeData lightTheme = ThemeData(
     useMaterial3: true,
-    fontFamily: 'Urbanist',
+    fontFamily: GoogleFonts.urbanist().fontFamily,
     disabledColor: Colors.grey,
     brightness: Brightness.light,
     primaryColor: OurColors.primaryColor,
@@ -29,5 +29,6 @@ class SAppTheme {
     elevatedButtonTheme: SElevatedButtonTheme.lightElevatedButtonTheme,
     outlinedButtonTheme: SOutlinedButtonTheme.lightOutlinedButtonTheme,
     inputDecorationTheme: STextFormFieldTheme.lightInputDecorationTheme,
+    cardTheme: const CardTheme().copyWith(color: Colors.white),
   );
 }

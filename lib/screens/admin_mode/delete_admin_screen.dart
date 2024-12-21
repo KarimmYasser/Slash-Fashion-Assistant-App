@@ -102,6 +102,7 @@ class DeleteAdminScreen extends StatelessWidget {
                 child: const Icon(Icons.delete, color: Colors.white),
               ),
               child: Card(
+                color: Colors.white,
                 margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
                 elevation: 8,
                 shape: RoundedRectangleBorder(

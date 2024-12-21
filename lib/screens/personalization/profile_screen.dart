@@ -17,6 +17,7 @@ import '../../widgets/common/primary_header_container.dart';
 import '../../widgets/profile_page/user_profile_tile.dart';
 import '../authentication/login_screen.dart';
 import 'change_password_screen.dart';
+import 'my_reviews_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -127,9 +128,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 padding: const EdgeInsets.all(Sizes.defaultSpace),
                 child: Column(
                   children: [
-                    /// -- Account Settings
+                    /// -- About Account
                     const SectionHeading(
-                        title: 'Account Settings', showActionButton: false),
+                        title: 'About Account', showActionButton: false),
                     const SizedBox(height: Sizes.spaceBtwItems),
                     SettingMenuTile(
                         icon: Iconsax.bag_tick,
@@ -137,43 +138,21 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         subtitle: 'In-progress and Completed Orders',
                         onTap: () => Get.to(() => const OrderScreen())),
                     SettingMenuTile(
+                        icon: Iconsax.star,
+                        title: 'My Reviews',
+                        subtitle: 'View all my Reviews',
+                        onTap: () => Get.to(() => const MyReviewsScreen())),
+
+                    /// -- Account Settings
+                    const SizedBox(height: Sizes.spaceBtwSections),
+                    const SectionHeading(
+                        title: 'Account Settings', showActionButton: false),
+                    const SizedBox(height: Sizes.spaceBtwItems),
+                    SettingMenuTile(
                         onTap: () => Get.to(() => const ChangePasswordScreen()),
                         icon: Iconsax.password_check,
                         title: 'Change Password',
                         subtitle: 'Change your account password'),
-
-                    /// -- App Settings
-                    const SizedBox(height: Sizes.spaceBtwSections),
-                    const SectionHeading(
-                        title: 'App Settings', showActionButton: false),
-                    const SizedBox(height: Sizes.spaceBtwItems),
-                    const SettingMenuTile(
-                        icon: Iconsax.document_download,
-                        title: 'Load Data',
-                        subtitle:
-                            'Manually Load Data from your Cloud Database'),
-                    const SettingMenuTile(
-                        icon: Iconsax.document_upload,
-                        title: 'Save Data',
-                        subtitle: 'Manually Save Data to your Cloud Database'),
-                    // SettingMenuTile(
-                    //   icon: Iconsax.location,
-                    //   title: 'Geolocation',
-                    //   subtitle: 'Set recommendation based on location',
-                    //   trailing: Switch(value: true, onChanged: (value) {}),
-                    // ),
-                    // SettingMenuTile(
-                    //   icon: Iconsax.security_user,
-                    //   title: 'Safe Mode',
-                    //   subtitle: 'Search result is safe for all ages',
-                    //   trailing: Switch(value: false, onChanged: (value) {}),
-                    // ),
-                    // SettingMenuTile(
-                    //   icon: Iconsax.image,
-                    //   title: 'HD Image Quality',
-                    //   subtitle: 'Set image quality to be seen',
-                    //   trailing: Switch(value: false, onChanged: (value) {}),
-                    // ),
 
                     /// -- Log Out
                     const SizedBox(height: Sizes.spaceBtwSections),

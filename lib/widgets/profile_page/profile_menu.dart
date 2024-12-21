@@ -23,6 +23,7 @@ class ProfileMenu extends StatelessWidget {
         padding:
             const EdgeInsets.symmetric(vertical: Sizes.spaceBtwItems / 1.5),
         child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Expanded(
               flex: 3,
@@ -34,7 +35,7 @@ class ProfileMenu extends StatelessWidget {
               flex: 5,
               child: Text(value,
                   style: Theme.of(context).textTheme.bodyMedium,
-                  overflow: TextOverflow.ellipsis),
+                  overflow: TextOverflow.clip),
             ),
             if (icon != null) Expanded(child: Icon(icon, size: 18))
           ],

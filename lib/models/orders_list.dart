@@ -1,5 +1,5 @@
 class OrderListItem {
-  final String status;
+  String status;
   final String date;
   final String order;
   final String shippingDate;

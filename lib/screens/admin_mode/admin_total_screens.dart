@@ -36,7 +36,6 @@ class _SuperAdminTotalScreensState extends State<SuperAdminTotalScreens> {
           screenDetailsSuperAdmin[3]['screenName'],
           screenDetailsSuperAdmin[4]['screenName'],
           screenDetailsSuperAdmin[5]['screenName'],
-          screenDetailsSuperAdmin[6]['screenName'],
         ],
       ),
       bottomNavigationBar: CustomSuperAdminNavBar(

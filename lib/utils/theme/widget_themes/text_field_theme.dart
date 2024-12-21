@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import '../../../constants.dart';
 
 class STextFormFieldTheme {
@@ -9,10 +10,10 @@ class STextFormFieldTheme {
     prefixIconColor: OurColors.darkGrey,
     suffixIconColor: OurColors.darkGrey,
     // constraints: const BoxConstraints.expand(height: Sizes.inputFieldHeight),
-    labelStyle: const TextStyle().copyWith(fontSize: Sizes.fontSizeMd, color: OurColors.textPrimary, fontFamily: 'Urbanist'),
-    hintStyle: const TextStyle().copyWith(fontSize: Sizes.fontSizeSm, color: OurColors.textSecondary, fontFamily: 'Urbanist'),
-    errorStyle: const TextStyle().copyWith(fontStyle: FontStyle.normal, fontFamily: 'Urbanist'),
-    floatingLabelStyle: const TextStyle().copyWith(color: OurColors.textSecondary, fontFamily: 'Urbanist'),
+    labelStyle: const TextStyle().copyWith(fontSize: Sizes.fontSizeMd, color: OurColors.textPrimary, fontFamily: GoogleFonts.urbanist().fontFamily),
+    hintStyle: const TextStyle().copyWith(fontSize: Sizes.fontSizeSm, color: OurColors.textSecondary, fontFamily: GoogleFonts.urbanist().fontFamily),
+    errorStyle: const TextStyle().copyWith(fontStyle: FontStyle.normal, fontFamily: GoogleFonts.urbanist().fontFamily),
+    floatingLabelStyle: const TextStyle().copyWith(color: OurColors.textSecondary, fontFamily: GoogleFonts.urbanist().fontFamily),
     border: const OutlineInputBorder().copyWith(
       borderRadius: BorderRadius.circular(Sizes.inputFieldRadius),
       borderSide: const BorderSide(width: 1, color: OurColors.borderPrimary),
@@ -40,9 +41,9 @@ class STextFormFieldTheme {
     prefixIconColor: OurColors.darkGrey,
     suffixIconColor: OurColors.darkGrey,
     // constraints: const BoxConstraints.expand(height: Sizes.inputFieldHeight),
-    labelStyle: const TextStyle().copyWith(fontSize: Sizes.fontSizeMd, color: OurColors.white, fontFamily: 'Urbanist'),
-    hintStyle: const TextStyle().copyWith(fontSize: Sizes.fontSizeSm, color: OurColors.white, fontFamily: 'Urbanist'),
-    floatingLabelStyle: const TextStyle().copyWith(color: OurColors.white.withOpacity(0.8), fontFamily: 'Urbanist'),
+    labelStyle: const TextStyle().copyWith(fontSize: Sizes.fontSizeMd, color: OurColors.white, fontFamily: GoogleFonts.urbanist().fontFamily),
+    hintStyle: const TextStyle().copyWith(fontSize: Sizes.fontSizeSm, color: OurColors.white, fontFamily: GoogleFonts.urbanist().fontFamily),
+    floatingLabelStyle: const TextStyle().copyWith(color: OurColors.white.withOpacity(0.8), fontFamily: GoogleFonts.urbanist().fontFamily),
     border: const OutlineInputBorder().copyWith(
       borderRadius: BorderRadius.circular(Sizes.inputFieldRadius),
       borderSide: const BorderSide(width: 1, color: OurColors.darkGrey),

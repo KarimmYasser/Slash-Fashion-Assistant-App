@@ -64,7 +64,9 @@ class Sizes {
   static const double cardRadiusMd = 12.0;
   static const double cardRadiusSm = 10.0;
   static const double cardRadiusXs = 6.0;
-  static const double cardElevation = 2.0;
+  static const double cardElevation = 6.0;
+  static const double cardHorizontalMargin = 16.0;
+  static const double cardVerticalMargin = 8.0;
 
   // Image carousel height
   static const double imageCarouselHeight = 200.0;

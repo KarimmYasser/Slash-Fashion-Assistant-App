@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import '../../../constants.dart';
 
@@ -15,7 +16,7 @@ class SOutlinedButtonTheme {
       side: const BorderSide(color: OurColors.borderPrimary),
       padding: const EdgeInsets.symmetric(vertical: Sizes.buttonHeight, horizontal: 20),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(Sizes.buttonRadius)),
-      textStyle: const TextStyle(fontSize: 16, color: OurColors.black, fontWeight: FontWeight.w600, fontFamily: 'Urbanist'),
+      textStyle: TextStyle(fontSize: 16, color: OurColors.black, fontWeight: FontWeight.w600, fontFamily: GoogleFonts.urbanist().fontFamily),
     ),
   );
 
@@ -26,7 +27,7 @@ class SOutlinedButtonTheme {
       side: const BorderSide(color: OurColors.borderPrimary),
       padding: const EdgeInsets.symmetric(vertical: Sizes.buttonHeight, horizontal: 20),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(Sizes.buttonRadius)),
-      textStyle: const TextStyle(fontSize: 16, color: OurColors.textWhite, fontWeight: FontWeight.w600, fontFamily: 'Urbanist'),
+      textStyle: TextStyle(fontSize: 16, color: OurColors.textWhite, fontWeight: FontWeight.w600, fontFamily: GoogleFonts.urbanist().fontFamily),
     ),
   );
 }
