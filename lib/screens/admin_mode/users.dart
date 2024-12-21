@@ -2,6 +2,7 @@ import 'package:fashion_assistant/constants.dart';
 import 'package:fashion_assistant/utils/http/http_client.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fl_chart/fl_chart.dart';
 
 class Users extends StatefulWidget {
   const Users({super.key});
@@ -149,15 +150,15 @@ class UserCard extends StatefulWidget {
     required this.user,
     required this.onBlockToggle,
     required this.onDeleteReview,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   State<UserCard> createState() => _UserCardState();
 }
 
 class _UserCardState extends State<UserCard> {
-  bool showReviews = false;
+  bool showDetails = false;
   List<dynamic> reviews = [];
   bool isLoadingReviews = false;
 
@@ -241,15 +242,15 @@ class _UserCardState extends State<UserCard> {
                     ),
                     IconButton(
                       icon: Icon(
-                        showReviews
+                        showDetails
                             ? Icons.keyboard_arrow_up
                             : Icons.keyboard_arrow_down,
                       ),
                       onPressed: () {
                         setState(() {
-                          showReviews = !showReviews;
+                          showDetails = !showDetails;
                         });
-                        if (showReviews) {
+                        if (showDetails) {
                           // Fetch reviews when expanding
                           _fetchReviews(user['id']);
                         }
@@ -260,122 +261,142 @@ class _UserCardState extends State<UserCard> {
               ],
             ),
             const SizedBox(height: 10),
-            // Reviews Section
-            if (showReviews)
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text(
-                    'Reviews:',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16,
+            if (showDetails)
+              SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // Statistics Section
+                    const Text(
+                      'Statistics:',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: 10),
-                  if (isLoadingReviews)
-                    const Center(child: CircularProgressIndicator())
-                  else if (reviews.isEmpty)
-                    const Center(child: Text('No reviews found'))
-                  else
-                    ...reviews.map<Widget>((review) {
-                      return Card(
-                        color: Colors.white,
-                        margin: const EdgeInsets.only(bottom: 10),
-                        elevation: 3,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10)),
-                        child: Padding(
-                          padding: const EdgeInsets.all(10),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              // Review Comment
-                              if (review['comment'] != null)
+                    const SizedBox(height: 10),
+                    UserStatitics(user: user),
+                    const SizedBox(height: Sizes.spaceBtwSections),
+                    // Reviews Section
+                    const Text(
+                      'Reviews:',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    if (isLoadingReviews)
+                      const Center(child: CircularProgressIndicator())
+                    else if (reviews.isEmpty)
+                      const Padding(
+                        padding: EdgeInsets.all(Sizes.defaultSpace),
+                        child: Center(child: Text('No reviews found')),
+                      )
+                    else
+                      ...reviews.map<Widget>((review) {
+                        return Card(
+                          color: Colors.white,
+                          margin: const EdgeInsets.only(bottom: 10),
+                          elevation: 3,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10)),
+                          child: Padding(
+                            padding: const EdgeInsets.all(10),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                // Review Comment
+                                if (review['comment'] != null)
+                                  Text(
+                                    'Comment: ${review['comment']}',
+                                    style: const TextStyle(
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                const SizedBox(height: 5),
+
+                                // Review Ratings
+                                Text('Rating: ${review['rating']}'),
                                 Text(
-                                  'Comment: ${review['comment']}',
-                                  style: const TextStyle(
-                                      fontWeight: FontWeight.bold),
-                                ),
-                              const SizedBox(height: 5),
+                                    'Accuracy Rate: ${review['accuracy_rate']}'),
+                                Text('Quality Rate: ${review['quality_rate']}'),
+                                Text(
+                                    'Shipping Rate: ${review['shipping_rate']}'),
+                                Text(
+                                    'Value for Money Rate: ${review['valueForMoney_rate']}'),
+                                const SizedBox(height: 10),
 
-                              // Review Ratings
-                              Text('Rating: ${review['rating']}'),
-                              Text('Accuracy Rate: ${review['accuracy_rate']}'),
-                              Text('Quality Rate: ${review['quality_rate']}'),
-                              Text('Shipping Rate: ${review['shipping_rate']}'),
-                              Text(
-                                  'Value for Money Rate: ${review['valueForMoney_rate']}'),
-                              const SizedBox(height: 10),
+                                // Product Information
+                                if (review['product'] != null)
+                                  Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      // Product Image
+                                      if (review['product']['image'] != null)
+                                        Image.network(
+                                          review['product']['image'],
+                                          width: 50,
+                                          height: 50,
+                                          fit: BoxFit.cover,
+                                        ),
+                                      const SizedBox(width: 10),
 
-                              // Product Information
-                              if (review['product'] != null)
-                                Row(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    // Product Image
-                                    if (review['product']['image'] != null)
-                                      Image.network(
-                                        review['product']['image'],
-                                        width: 50,
-                                        height: 50,
-                                        fit: BoxFit.cover,
-                                      ),
-                                    const SizedBox(width: 10),
-
-                                    // Product Details
-                                    Expanded(
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            review['product']['name'] ??
-                                                'No product name',
-                                            style: const TextStyle(
-                                                fontWeight: FontWeight.bold),
-                                          ),
-                                          Text(
-                                              'Price: \$${review['product']['price']}'),
-                                          Text(
-                                              'Material: ${review['product']['material']}'),
-                                          Text(
-                                              'Rating: ${review['product']['rating']}'),
-                                          if (review['product']
-                                                  ['description'] !=
-                                              null)
+                                      // Product Details
+                                      Expanded(
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
                                             Text(
-                                              review['product']['description'],
-                                              maxLines: 2,
-                                              overflow: TextOverflow.ellipsis,
-                                              style:
-                                                  const TextStyle(fontSize: 12),
+                                              review['product']['name'] ??
+                                                  'No product name',
+                                              style: const TextStyle(
+                                                  fontWeight: FontWeight.bold),
                                             ),
-                                        ],
+                                            Text(
+                                                'Price: \$${review['product']['price']}'),
+                                            Text(
+                                                'Material: ${review['product']['material']}'),
+                                            Text(
+                                                'Rating: ${review['product']['rating']}'),
+                                            if (review['product']
+                                                    ['description'] !=
+                                                null)
+                                              Text(
+                                                review['product']
+                                                    ['description'],
+                                                maxLines: 2,
+                                                overflow: TextOverflow.ellipsis,
+                                                style: const TextStyle(
+                                                    fontSize: 12),
+                                              ),
+                                          ],
+                                        ),
                                       ),
-                                    ),
-                                  ],
-                                ),
-                              const SizedBox(height: 10),
+                                    ],
+                                  ),
+                                const SizedBox(height: 10),
 
-                              // Delete Button
-                              Align(
-                                alignment: Alignment.centerRight,
-                                child: IconButton(
-                                  icon: const Icon(Icons.delete,
-                                      color: OurColors.primaryColor),
-                                  onPressed: () {
-                                    widget.onDeleteReview(
-                                        review['id'], review['image']);
-                                  },
+                                // Delete Button
+                                Align(
+                                  alignment: Alignment.centerRight,
+                                  child: IconButton(
+                                    icon: const Icon(Icons.delete,
+                                        color: OurColors.primaryColor),
+                                    onPressed: () {
+                                      widget.onDeleteReview(
+                                          review['id'], review['image']);
+                                    },
+                                  ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
-                        ),
-                      );
-                    }).toList(),
-                ],
+                        );
+                      }).toList(),
+                  ],
+                ),
               ),
           ],
         ),
@@ -383,3 +404,94 @@ class _UserCardState extends State<UserCard> {
     );
   }
 }
+
+class UserStatitics extends StatelessWidget {
+  const UserStatitics({super.key, required this.user});
+
+  final dynamic user;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        SizedBox(
+          height: 200,
+          width: 200,
+          child: PieChart(
+            PieChartData(
+              sections: _createSections(),
+              sectionsSpace: 2,
+              centerSpaceRadius: 40,
+              borderData: FlBorderData(show: false),
+            ),
+          ),
+        ),
+        const SizedBox(height: 20),
+        Table(
+          border: TableBorder.all(),
+          children: [
+            _buildTableRow('Total Orders', user['TotalOrders']!),
+            _buildTableRow('Total Chats', user['TotalChats']!),
+            _buildTableRow('Total Cart Items', user['TotalCartItems']!),
+            _buildTableRow('Total Wishlist Items', user['TotalWishlistItems']!),
+          ],
+        ),
+      ],
+    );
+  }
+
+  List<PieChartSectionData> _createSections() {
+    return [
+      PieChartSectionData(
+        color: Colors.blue,
+        value: user['TotalOrders']!.toDouble(),
+        title: 'Orders',
+        radius: 50,
+        titleStyle: const TextStyle(
+            fontSize: 14, fontWeight: FontWeight.bold, color: Colors.white),
+      ),
+      PieChartSectionData(
+        color: Colors.red,
+        value: user['TotalChats']!.toDouble(),
+        title: 'Chats',
+        radius: 50,
+        titleStyle: const TextStyle(
+            fontSize: 14, fontWeight: FontWeight.bold, color: Colors.white),
+      ),
+      PieChartSectionData(
+        color: Colors.green,
+        value: user['TotalCartItems']!.toDouble(),
+        title: 'Cart',
+        radius: 50,
+        titleStyle: const TextStyle(
+            fontSize: 14, fontWeight: FontWeight.bold, color: Colors.white),
+      ),
+      PieChartSectionData(
+        color: Colors.orange,
+        value: user['TotalWishlistItems']!.toDouble(),
+        title: 'Wishlist',
+        radius: 50,
+        titleStyle: const TextStyle(
+            fontSize: 14, fontWeight: FontWeight.bold, color: Colors.white),
+      ),
+    ];
+  }
+
+  TableRow _buildTableRow(String title, int value) {
+    return TableRow(
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child:
+              Text(title, style: const TextStyle(fontWeight: FontWeight.bold)),
+        ),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Text(value.toString()),
+        ),
+      ],
+    );
+  }
+}
+
+

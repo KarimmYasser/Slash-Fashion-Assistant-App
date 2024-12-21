@@ -188,9 +188,47 @@ class BrandCard extends StatelessWidget {
               brand['description'] ?? 'No description available',
               style: const TextStyle(fontSize: 14),
             ),
+            const SizedBox(height: Sizes.spaceBtwSections),
+            // Brand Statistics
+            BrandStatistics(brand: brand),
+            const SizedBox(height: Sizes.spaceBtwItems),
           ],
         ),
       ),
+    );
+  }
+}
+
+class BrandStatistics extends StatelessWidget {
+  const BrandStatistics({super.key, required this.brand});
+
+  final dynamic brand;
+
+  @override
+  Widget build(BuildContext context) {
+    return Table(
+      border: TableBorder.all(),
+      children: [
+        _buildTableRow('Total Products', brand['totalProducts']!),
+        _buildTableRow('Total Wishlist', brand['totalWishlist']!),
+        _buildTableRow('Total Orders', brand['totalOrders']!),
+      ],
+    );
+  }
+
+  TableRow _buildTableRow(String title, int value) {
+    return TableRow(
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child:
+              Text(title, style: const TextStyle(fontWeight: FontWeight.bold)),
+        ),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Text(value.toString()),
+        ),
+      ],
     );
   }
 }
