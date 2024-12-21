@@ -50,7 +50,7 @@ class AuthenticationRepository extends GetxController {
           Get.offAll(() => const TotalScreens());
         } else if (response['role'] == 'ADMIN') {
           AdminData.adminData = AdminData(response['user']);
-          Get.offAll(() => const AdminTotalScreens());
+          Get.offAll(() => const SuperAdminTotalScreens());
         }
       } catch (e) {
         deviceStorage.write('IsLoggedIn', false);

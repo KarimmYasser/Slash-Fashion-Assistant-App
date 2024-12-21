@@ -50,15 +50,26 @@ class HttpHelper {
   // Helper method to make a DELETE request
   static Future<Map<String, dynamic>> delete(
       String endpoint, dynamic data) async {
-    final response = await http.delete(
-      Uri.parse('$_baseUrl/$endpoint'),
-      headers: {
-        'Authorization': 'Bearer $token',
-        'Content-Type': 'application/json'
-      },
-      body: json.encode(data),
-    );
-    return _handleResponse(response);
+    if (data == {}) {
+      final response = await http.delete(
+        Uri.parse('$_baseUrl/$endpoint'),
+        headers: {
+          'Authorization': 'Bearer $token',
+          'Content-Type': 'application/json'
+        },
+      );
+      return _handleResponse(response);
+    } else {
+      final response = await http.delete(
+        Uri.parse('$_baseUrl/$endpoint'),
+        headers: {
+          'Authorization': 'Bearer $token',
+          'Content-Type': 'application/json'
+        },
+        body: json.encode(data),
+      );
+      return _handleResponse(response);
+    }
   }
 
   // Handle the HTTP response

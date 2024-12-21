@@ -3,8 +3,8 @@ import 'package:fashion_assistant/constants.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:iconsax/iconsax.dart';
 
-class CustomSuperAdminNavBar extends StatefulWidget {
-  const CustomSuperAdminNavBar({
+class CustomCustomerAdminNavBar extends StatefulWidget {
+  const CustomCustomerAdminNavBar({
     super.key,
     required this.ontap,
     required this.activeScreen,
@@ -13,10 +13,11 @@ class CustomSuperAdminNavBar extends StatefulWidget {
   final int activeScreen;
 
   @override
-  State<CustomSuperAdminNavBar> createState() => _CustomSuperAdminNavBarState();
+  State<CustomCustomerAdminNavBar> createState() =>
+      _CustomCustomerAdminNavBarState();
 }
 
-class _CustomSuperAdminNavBarState extends State<CustomSuperAdminNavBar> {
+class _CustomCustomerAdminNavBarState extends State<CustomCustomerAdminNavBar> {
   double iconSize = Sizes.iconLg;
 
   @override
@@ -44,45 +45,15 @@ class _CustomSuperAdminNavBarState extends State<CustomSuperAdminNavBar> {
         ),
         BottomNavigationBarItem(
           icon: Icon(
-            Iconsax.chart_1,
-            color: widget.activeScreen == 1
-                ? OurColors.primaryColor
-                : OurColors.iconPrimary,
-          ),
-          label: 'Statistics',
-        ),
-        BottomNavigationBarItem(
-          icon: widget.activeScreen == 2
-              ? const Icon(
-                  Iconsax.receipt_item,
-                  color: OurColors.primaryColor,
-                )
-              : const Icon(
-                  Iconsax.receipt_item,
-                  color: OurColors.iconPrimary,
-                ),
-          label: 'Products',
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(
-            Iconsax.chart,
-            color: widget.activeScreen == 3
-                ? OurColors.primaryColor
-                : OurColors.iconPrimary,
-          ),
-          label: 'Brands',
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(
             Iconsax.profile_2user,
-            color: widget.activeScreen == 4
+            color: widget.activeScreen == 1
                 ? OurColors.primaryColor
                 : OurColors.iconPrimary,
           ),
           label: 'Users',
         ),
         BottomNavigationBarItem(
-          icon: widget.activeScreen == 5
+          icon: widget.activeScreen == 2
               ? Image.asset('assets/icons/profilem.png',
                   width: iconSize.w, height: iconSize.h)
               : Image.asset('assets/icons/profile.png',
