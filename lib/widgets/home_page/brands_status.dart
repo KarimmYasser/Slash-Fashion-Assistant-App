@@ -112,35 +112,58 @@ class _BrandCarouselState extends State<BrandCarousel> {
                           context,
                           MaterialPageRoute(
                             builder: (context) => BrandProfilePage(
+                              brandId: brand.id,
                               brandName: brand.name,
                               brandDescription: brand.description,
                               brandImage: brand.logo,
+                              isFollowing: brand.isFollowed,
                             ),
                           ),
                         );
                       },
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                        child: Column(
-                          children: [
-                            CircleAvatar(
-                              backgroundColor:
-                                  dominantColor, // Dynamic border color
-                              radius:
-                                  35, // Size of the circular image container
-                              child: CircleAvatar(
-                                radius:
-                                    30, // Inner circle size (smaller for border effect)
-                                backgroundImage: NetworkImage(brand.logo),
-                                backgroundColor: Colors.transparent,
+                      child: GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => BrandProfilePage(
+                                brandId: brand.id,
+                                brandName: brand.name,
+                                brandDescription: brand.description,
+                                brandImage: brand.logo,
+                                isFollowing: brand.isFollowed,
                               ),
                             ),
-                            const SizedBox(height: 4.0),
-                            Text(
-                              brand.name,
-                              style: const TextStyle(fontSize: 12),
-                            ),
-                          ],
+                          ).then((_) {
+                            // Reload the brands list when coming back
+                            setState(() {
+                              _brandsFuture = BrandService().fetchBrands();
+                            });
+                          });
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                          child: Column(
+                            children: [
+                              CircleAvatar(
+                                backgroundColor:
+                                    dominantColor, // Dynamic border color
+                                radius:
+                                    35, // Size of the circular image container
+                                child: CircleAvatar(
+                                  radius:
+                                      30, // Inner circle size (smaller for border effect)
+                                  backgroundImage: NetworkImage(brand.logo),
+                                  backgroundColor: Colors.transparent,
+                                ),
+                              ),
+                              const SizedBox(height: 4.0),
+                              Text(
+                                brand.name,
+                                style: const TextStyle(fontSize: 12),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     );

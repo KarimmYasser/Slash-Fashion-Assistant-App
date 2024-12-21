@@ -11,8 +11,10 @@ class Brand {
   final String website;
   final String createdAt;
   final String updatedAt;
+  final bool isFollowed;
 
   Brand({
+    required this.isFollowed,
     required this.id,
     required this.name,
     required this.email,
@@ -29,6 +31,7 @@ class Brand {
 
   factory Brand.fromJson(Map<String, dynamic> json) {
     return Brand(
+      isFollowed: json['followed'] ?? false,
       id: json['id'] ?? '',
       name: json['name'] ?? '',
       email: json['email'] ?? '',

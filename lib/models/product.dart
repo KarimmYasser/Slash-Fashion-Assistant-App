@@ -20,8 +20,9 @@ class Product {
   final Brand brand;
   final Category category;
   final List<Variant> variants;
-
+  bool isFollowing;
   Product({
+    required this.isFollowing,
     required this.id,
     required this.brandID,
     required this.categoryID,
@@ -47,6 +48,7 @@ class Product {
 
   factory Product.fromJson(Map<String, dynamic> json) {
     return Product(
+      isFollowing: json['followedBrand'] ?? false,
       id: json['id'] ?? '',
       brandID: json['brand_id'] ?? '',
       categoryID: json['category_id'] ?? '',

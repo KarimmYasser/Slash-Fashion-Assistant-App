@@ -105,35 +105,6 @@ class _HomeScreenState extends State<HomeScreen> {
             fontSize: 20,
           ),
         ),
-        actions: [
-          // Points Container
-          Container(
-            margin: const EdgeInsets.only(right: 16.0),
-            padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
-            decoration: BoxDecoration(
-              color: OurColors.containerBackgroundColor,
-              borderRadius: BorderRadius.circular(8.r),
-            ),
-            child: const Row(
-              children: [
-                Icon(
-                  Icons.card_giftcard,
-                  color: OurColors.secondaryColor,
-                  size: 20,
-                ),
-                SizedBox(width: 4),
-                Text(
-                  '1,000 Points',
-                  style: TextStyle(
-                    color: OurColors.secondaryColor,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          // Notification Icon with Red Dot
-        ],
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -162,7 +133,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 10.w),
-              child: const Text('Events This Month',
+              child: const Text('Hot Deals',
                   style: TextStyle(
                       color: OurColors.textColor,
                       fontWeight: FontWeight.w500,

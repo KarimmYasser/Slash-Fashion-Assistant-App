@@ -12,8 +12,11 @@ class Review {
   final DateTime createdAt;
   final DateTime updatedAt;
   final int likes;
-
+  final bool liked;
+  final String firstname, lastname;
   Review({
+    required this.firstname,
+    required this.lastname,
     required this.likes,
     required this.image,
     required this.id,
@@ -27,10 +30,12 @@ class Review {
     required this.comment,
     required this.createdAt,
     required this.updatedAt,
+    required this.liked,
   });
 
   factory Review.fromJson(Map<String, dynamic> json) {
     return Review(
+      liked: json['liked'] ?? false,
       image: json['image'] ?? '',
       id: json['id'] ?? '',
       userId: json['user_id'] ?? '',
@@ -44,6 +49,8 @@ class Review {
       createdAt: DateTime.parse(json['created_at']),
       updatedAt: DateTime.parse(json['updated_at']),
       likes: json['likes'] ?? 0,
+      firstname: json['user']['firstName'] ?? '',
+      lastname: json['user']['lastName'] ?? '',
     );
   }
 

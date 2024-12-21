@@ -5,15 +5,27 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:iconsax/iconsax.dart';
 
-class AboutBrand extends StatelessWidget {
-  const AboutBrand(
-      {super.key,
-      required this.logo,
-      required this.name,
-      required this.description,
-      required this.rate});
+class AboutBrand extends StatefulWidget {
+  const AboutBrand({
+    super.key,
+    required this.logo,
+    required this.name,
+    required this.description,
+    required this.rate,
+    required this.onFollowTap,
+    required this.isFollowed,
+  });
+
   final String logo, name, description;
   final double rate;
+  final VoidCallback onFollowTap; // Function to handle follow button tap
+  final bool isFollowed;
+
+  @override
+  State<AboutBrand> createState() => _AboutBrandState();
+}
+
+class _AboutBrandState extends State<AboutBrand> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -27,19 +39,19 @@ class AboutBrand extends StatelessWidget {
             Text(
               'About the Brand',
               style: TextStyle(
-                  fontSize: Sizes.fontSizeLg,
-                  color: OurColors.textColor,
-                  fontWeight: FontWeight.bold),
+                fontSize: Sizes.fontSizeLg,
+                color: OurColors.textColor,
+                fontWeight: FontWeight.bold,
+              ),
             ),
             SizedBox(
               height: 16.h,
             ),
             Row(
               children: [
-                // Size of the circular image container
                 CircleAvatar(
-                  radius: 28, // Inner circle size (smaller for border effect)
-                  backgroundImage: NetworkImage(logo),
+                  radius: 28,
+                  backgroundImage: NetworkImage(widget.logo),
                   backgroundColor: Colors.transparent,
                 ),
                 SizedBox(
@@ -49,9 +61,11 @@ class AboutBrand extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "$name",
+                      widget.name,
                       style: TextStyle(
-                          fontSize: 20.sp, fontWeight: FontWeight.w500),
+                        fontSize: 20.sp,
+                        fontWeight: FontWeight.w500,
+                      ),
                     ),
                     Row(
                       children: [
@@ -60,9 +74,11 @@ class AboutBrand extends StatelessWidget {
                           width: 6.w,
                         ),
                         Text(
-                          '($rate/5)',
+                          '(${widget.rate}/5)',
                           style: TextStyle(
-                              fontSize: 14.sp, fontWeight: FontWeight.w500),
+                            fontSize: 14.sp,
+                            fontWeight: FontWeight.w500,
+                          ),
                         )
                       ],
                     )
@@ -70,7 +86,7 @@ class AboutBrand extends StatelessWidget {
                 ),
                 const Spacer(),
                 GestureDetector(
-                  onTap: () {},
+                  onTap: widget.onFollowTap, // Call the passed function
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 4),
                     child: Container(
@@ -84,7 +100,7 @@ class AboutBrand extends StatelessWidget {
                         padding: const EdgeInsets.all(4.0),
                         child: Center(
                           child: Text(
-                            'Follow',
+                            widget.isFollowed ? 'Following' : 'Follow',
                           ),
                         ),
                       ),
