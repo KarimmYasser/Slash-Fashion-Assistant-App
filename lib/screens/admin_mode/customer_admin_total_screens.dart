@@ -1,16 +1,20 @@
 import 'package:fashion_assistant/constants.dart';
 import 'package:fashion_assistant/tap_map.dart';
 import 'package:fashion_assistant/widgets/admin_mode/admin_custom_navbar.dart';
+import 'package:fashion_assistant/widgets/admin_mode/customer_admin_navbar.dart';
+import 'package:fashion_assistant/widgets/brand_mode/brand_navbar.dart';
+import 'package:fashion_assistant/widgets/home_page/custom_navbar.dart';
 import 'package:flutter/material.dart';
 
-class SuperAdminTotalScreens extends StatefulWidget {
-  const SuperAdminTotalScreens({super.key});
+class CustomerAdminTotalScreens extends StatefulWidget {
+  const CustomerAdminTotalScreens({super.key});
 
   @override
-  State<SuperAdminTotalScreens> createState() => _SuperAdminTotalScreensState();
+  State<CustomerAdminTotalScreens> createState() =>
+      _CustomerAdminTotalScreensState();
 }
 
-class _SuperAdminTotalScreensState extends State<SuperAdminTotalScreens> {
+class _CustomerAdminTotalScreensState extends State<CustomerAdminTotalScreens> {
   int _activeScreen = 0;
   final PageController _pageController = PageController(initialPage: 0);
   @override
@@ -30,16 +34,13 @@ class _SuperAdminTotalScreensState extends State<SuperAdminTotalScreens> {
           });
         },
         children: [
-          screenDetailsSuperAdmin[0]['screenName'],
-          screenDetailsSuperAdmin[1]['screenName'],
-          screenDetailsSuperAdmin[2]['screenName'],
-          screenDetailsSuperAdmin[3]['screenName'],
-          screenDetailsSuperAdmin[4]['screenName'],
-          screenDetailsSuperAdmin[5]['screenName'],
-          screenDetailsSuperAdmin[6]['screenName'],
+          screenDetailsCustomerAdmin[0]['screenName'],
+          screenDetailsCustomerAdmin[1]['screenName'],
+          screenDetailsCustomerAdmin[2]['screenName'],
+          screenDetailsCustomerAdmin[3]['screenName'],
         ],
       ),
-      bottomNavigationBar: CustomSuperAdminNavBar(
+      bottomNavigationBar: CustomCustomerAdminNavBar(
         activeScreen: _activeScreen,
         ontap: (index) {
           _pageController.animateToPage(index,

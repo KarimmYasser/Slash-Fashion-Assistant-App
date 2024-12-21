@@ -78,7 +78,7 @@ class LoginController extends GetxController {
             } else if (loginResponse['role'] == 'USER') {
               Get.offAll(() => const TotalScreens());
             } else if (loginResponse['role'] == 'ADMIN') {
-              Get.offAll(() => const AdminTotalScreens());
+              Get.offAll(() => const SuperAdminTotalScreens());
             }
           },
         ),
