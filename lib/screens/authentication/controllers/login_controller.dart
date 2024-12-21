@@ -9,6 +9,8 @@ import '../../../data/authentication.repository/login_data.dart';
 import '../../../utils/helpers/network_manager.dart';
 import '../../../utils/http/http_client.dart';
 import '../../../utils/popups/loaders.dart';
+import '../../admin_mode/brand_manager_total_screens.dart';
+import '../../admin_mode/customer_admin_total_screens.dart';
 import '../../total_screen.dart';
 import '../success_screen.dart';
 
@@ -78,7 +80,23 @@ class LoginController extends GetxController {
             } else if (loginResponse['role'] == 'USER') {
               Get.offAll(() => const TotalScreens());
             } else if (loginResponse['role'] == 'ADMIN') {
-              Get.offAll(() => const SuperAdminTotalScreens());
+              switch (AdminData.adminData!.role) {
+                case 'CustomerService':
+                  Get.offAll(() => const CustomerAdminTotalScreens());
+                  break;
+                case 'SuperAdmin':
+                  Get.offAll(() => const SuperAdminTotalScreens());
+                  break;
+                case 'SystemAdmin':
+                  Get.offAll(() => const SuperAdminTotalScreens());
+                  break;
+                case 'BrandManager':
+                  Get.offAll(() => const BrandAdminTotalScreens());
+                  break;
+
+                default:
+                  Get.offAll(() => const CustomerAdminTotalScreens());
+              }
             }
           },
         ),

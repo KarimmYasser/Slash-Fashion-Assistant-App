@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import '../../../constants.dart';
 
 /* -- Light & Dark Elevated Button Themes -- */
@@ -17,11 +18,11 @@ class SElevatedButtonTheme {
       padding: const EdgeInsets.symmetric(vertical: Sizes.buttonHeight),
       shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(Sizes.buttonRadius)),
-      textStyle: const TextStyle(
+      textStyle: TextStyle(
           fontSize: 16,
           color: OurColors.textWhite,
           fontWeight: FontWeight.w500,
-          fontFamily: 'Urbanist'),
+          fontFamily: GoogleFonts.urbanist().fontFamily),
     ),
   );
 
@@ -37,11 +38,11 @@ class SElevatedButtonTheme {
       padding: const EdgeInsets.symmetric(vertical: Sizes.buttonHeight),
       shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(Sizes.buttonRadius)),
-      textStyle: const TextStyle(
+      textStyle: TextStyle(
           fontSize: 16,
           color: OurColors.textWhite,
           fontWeight: FontWeight.w600,
-          fontFamily: 'Urbanist'),
+          fontFamily: GoogleFonts.urbanist().fontFamily),
     ),
   );
 }

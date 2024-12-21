@@ -1,7 +1,9 @@
+import 'package:fashion_assistant/utils/popups/loaders.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../constants.dart';
+import '../../widgets/cart_item_card.dart';
 import 'checkout_screen.dart';
 import 'controllers/cart_controller.dart';
 
@@ -30,33 +32,54 @@ class CartScreen extends StatelessWidget {
                   itemCount: controller.cartItems.length,
                   itemBuilder: (context, index) {
                     final item = controller.cartItems[index];
-                    return ListTile(
-                      leading: Image.network(item.imageUrl,
-                          width: 50, height: 50, fit: BoxFit.cover),
-                      title: Text(
-                        item.name,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      subtitle: Row(
-                        children: [
-                          IconButton(
-                            icon: const Icon(Icons.remove),
-                            onPressed: () => controller.decreaseQuantity(item),
+                    return Dismissible(
+                      key: Key(item.id.toString()),
+                      direction: DismissDirection.endToStart,
+                      confirmDismiss: (direction) async {
+                        return await showDialog(
+                          context: context,
+                          builder: (context) {
+                            return AlertDialog(
+                              title: const Text('Confirm'),
+                              content: const Text(
+                                  'Are you sure you want to delete this item?'),
+                              actions: [
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.of(context).pop(false);
+                                  },
+                                  child: const Text('Cancel'),
+                                ),
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.of(context).pop(true);
+                                  },
+                                  child: const Text('Delete'),
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                      },
+                      onDismissed: (direction) {
+                        controller.removeItem(item);
+                        Loaders.successSnackBar(
+                            title: 'Item removed', message: item.name);
+                      },
+                      background: Container(
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            colors: [Colors.red.shade400, Colors.red.shade900],
+                            begin: Alignment.centerLeft,
+                            end: Alignment.centerRight,
                           ),
-                          Text('${item.quantity}'),
-                          IconButton(
-                            icon: const Icon(Icons.add),
-                            onPressed: () => controller.increaseQuantity(item),
-                          ),
-                          const Spacer(),
-                          Text(
-                              'EGP ${(item.price * item.quantity).toStringAsFixed(2)}'),
-                        ],
+                        ),
+                        alignment: Alignment.centerRight,
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: Sizes.defaultSpace),
+                        child: const Icon(Icons.delete, color: OurColors.white),
                       ),
-                      trailing: IconButton(
-                        icon: const Icon(Icons.close),
-                        onPressed: () => controller.removeItem(item),
-                      ),
+                      child: CartItemCard(item: item),
                     );
                   },
                 ),
@@ -83,6 +106,7 @@ class CartScreen extends StatelessWidget {
                                         'price': item.price,
                                         'quantity': item.quantity,
                                         'imageUrl': item.imageUrl,
+                                        'discount': item.discount,
                                       })
                                   .toList(),
                             )),

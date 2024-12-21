@@ -1,3 +1,5 @@
+import 'package:fashion_assistant/screens/admin_mode/brand_manager_total_screens.dart';
+import 'package:fashion_assistant/screens/admin_mode/customer_admin_total_screens.dart';
 import 'package:fashion_assistant/screens/authentication/login_screen.dart';
 import 'package:fashion_assistant/screens/authentication/onboarding.dart';
 import 'package:fashion_assistant/utils/http/http_client.dart';
@@ -50,7 +52,23 @@ class AuthenticationRepository extends GetxController {
           Get.offAll(() => const TotalScreens());
         } else if (response['role'] == 'ADMIN') {
           AdminData.adminData = AdminData(response['user']);
-          Get.offAll(() => const SuperAdminTotalScreens());
+          switch (AdminData.adminData!.role) {
+            case 'CustomerService':
+              Get.offAll(() => const CustomerAdminTotalScreens());
+              break;
+            case 'SuperAdmin':
+              Get.offAll(() => const SuperAdminTotalScreens());
+              break;
+            case 'SystemAdmin':
+              Get.offAll(() => const SuperAdminTotalScreens());
+              break;
+            case 'BrandManager':
+              Get.offAll(() => const BrandAdminTotalScreens());
+              break;
+
+            default:
+              Get.offAll(() => const CustomerAdminTotalScreens());
+          }
         }
       } catch (e) {
         deviceStorage.write('IsLoggedIn', false);

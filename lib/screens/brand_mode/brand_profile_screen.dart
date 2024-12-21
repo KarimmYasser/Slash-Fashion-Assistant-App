@@ -67,20 +67,6 @@ class BrandProfileScreen extends StatelessWidget {
                       title: 'Change Password',
                       subtitle: 'Change your account password'),
 
-                  /// -- App Settings
-                  const SizedBox(height: Sizes.spaceBtwSections),
-                  const SectionHeading(
-                      title: 'App Settings', showActionButton: false),
-                  const SizedBox(height: Sizes.spaceBtwItems),
-                  const SettingMenuTile(
-                      icon: Iconsax.document_download,
-                      title: 'Load Data',
-                      subtitle: 'Manually Load Data from your Cloud Database'),
-                  const SettingMenuTile(
-                      icon: Iconsax.document_upload,
-                      title: 'Save Data',
-                      subtitle: 'Manually Save Data to your Cloud Database'),
-
                   /// -- Log Out
                   const SizedBox(height: Sizes.spaceBtwSections),
                   SizedBox(

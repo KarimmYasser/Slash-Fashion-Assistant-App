@@ -17,15 +17,19 @@ class CartController extends GetxController {
 
   Future<void> fetchCartItems() async {
     try {
+      clearCart();
+      isLoading = true.obs;
       final response = await HttpHelper.get('api/cart');
-      final List<dynamic> fetchedItems = response["items"];
+      final List<dynamic> fetchedItems = response["cart"]["items"];
       final List<CartItem> loadedItems = fetchedItems
           .map((row) => CartItem(
                 name: row['product']['product']['name'] as String,
                 price: (row['product']['product']['price'] as num).toDouble(),
+                discount:
+                    (row['product']['product']['discount'] as num).toDouble(),
                 quantity: row['quantity'],
                 imageUrl: row['product']['product']['image'] as String,
-                id: row['cart_id'] as String,
+                id: row['id'] as String,
               ))
           .toList();
       cartItems.assignAll(loadedItems);
@@ -44,10 +48,10 @@ class CartController extends GetxController {
 
   void removeItem(CartItem item) async {
     try {
-      await HttpHelper.delete('api/cart/remove/${item.id}', {});
+      await HttpHelper.delete('api/cart/remove/${item.id}', {'id': item.id});
       cartItems.remove(item);
     } catch (e) {
-      Loaders.errorSnackBar(title: 'Error', message: e.toString());
+      Loaders.errorSnackBar(title: 'Failed to remove', message: e.toString());
     }
     updateCart();
   }
@@ -55,18 +59,6 @@ class CartController extends GetxController {
   void clearCart() {
     cartItems.clear();
     updateCart();
-  }
-
-  void increaseQuantity(CartItem item) {
-    item.quantity++;
-    updateCart();
-  }
-
-  void decreaseQuantity(CartItem item) {
-    if (item.quantity > 1) {
-      item.quantity--;
-      updateCart();
-    }
   }
 
   void updateCart() {
@@ -79,7 +71,7 @@ class CartController extends GetxController {
   double calculateTotalPrice() {
     double total = 0.0;
     for (var item in cartItems) {
-      total += item.price * item.quantity;
+      total += item.price * (1 - item.discount / 100) * item.quantity;
     }
     return total;
   }
