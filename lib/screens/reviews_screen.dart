@@ -12,6 +12,17 @@ class ReviewsScreen extends StatelessWidget {
   final String productId;
   @override
   Widget build(BuildContext context) {
+    int fiveStarCount =
+        reviews.where((review) => review['rating'].toInt() == 5).length;
+    int fourStarCount =
+        reviews.where((review) => review['rating'].toInt() == 4).length;
+    int threeStarCount =
+        reviews.where((review) => review['rating'].toInt() == 3).length;
+    int twoStarCount =
+        reviews.where((review) => review['rating'].toInt() == 2).length;
+    int oneStarCount =
+        reviews.where((review) => review['rating'].toInt() == 1).length;
+
     return Scaffold(
       backgroundColor: OurColors.secondaryBackgroundColor,
       appBar: AppBar(
@@ -26,13 +37,22 @@ class ReviewsScreen extends StatelessWidget {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            StarsSection(stars: 4.5),
+            StarsSection(
+              stars: 4.5,
+              fiveStarCount: fiveStarCount,
+              fourStarCount: fourStarCount,
+              threeStarCount: threeStarCount,
+              twoStarCount: twoStarCount,
+              oneStarCount: oneStarCount,
+            ),
             SizedBox(
               height: 10.h,
             ),
             Padding(
               padding: EdgeInsets.only(top: 18.h, left: 16.w),
-              child: RatingsCardsList(),
+              child: RatingsCardsList(
+                reviews: reviews,
+              ),
             ),
             Padding(
               padding: EdgeInsets.all(16),
@@ -68,7 +88,7 @@ class ReviewsScreen extends StatelessWidget {
                 ),
               ),
             ),
-            Text('6 Reviews',
+            Text('Reviews',
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
             ListView.builder(
               shrinkWrap: true,

@@ -1,14 +1,49 @@
+import 'dart:convert';
+
 import 'package:fashion_assistant/constants.dart';
 import 'package:fashion_assistant/data/authentication.repository/login_data.dart';
+import 'package:fashion_assistant/tap_map.dart';
+import 'package:fashion_assistant/utils/http/http_client.dart';
 import 'package:fashion_assistant/widgets/brand_mode/products_list.dart';
 import 'package:fashion_assistant/widgets/product_details/five_stars.dart';
 import 'package:fashion_assistant/widgets/product_details/row_aboutbrand.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:http/http.dart' as http;
 
-class BrandModeScreen extends StatelessWidget {
+class BrandModeScreen extends StatefulWidget {
   const BrandModeScreen({super.key});
+
+  @override
+  State<BrandModeScreen> createState() => _BrandModeScreenState();
+}
+
+class _BrandModeScreenState extends State<BrandModeScreen> {
+  String brandName = '';
+  String? brandLogoUrl;
+  double rating = 0;
+  @override
+  void initState() {
+    super.initState();
+    fetchBrandData();
+  }
+
+  Future<void> fetchBrandData() async {
+    final response = await http.get(Uri.parse(
+        '$baseURL/api/brand/get-single-brand/${BrandData.brandData!.id}'));
+
+    if (response.statusCode == 200) {
+      final data = jsonDecode(response.body);
+      setState(() {
+        brandName = data['brand']['name'];
+        brandLogoUrl = data['brand']['logo'];
+        rating = data['brand']['rating'] ?? 0;
+      });
+    } else {
+      // Handle error
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -63,7 +98,13 @@ class BrandModeScreen extends StatelessWidget {
       ),
       body: SingleChildScrollView(
         child: Column(
-          children: [BrandDetails()],
+          children: [
+            BrandDetails(
+              brandName: brandName,
+              logo: brandLogoUrl,
+              rating: rating,
+            )
+          ],
         ),
       ),
     );
@@ -71,45 +112,14 @@ class BrandModeScreen extends StatelessWidget {
 }
 
 class BrandDetails extends StatelessWidget {
-  const BrandDetails({super.key});
-  void _editBrand(BuildContext context) {
-    // Show a dialog or navigate to a new screen for editing
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Edit Brand'),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              TextField(
-                decoration: InputDecoration(labelText: 'Brand Name'),
-              ),
-              TextField(
-                decoration: InputDecoration(labelText: 'Brand Photo URL'),
-              ),
-            ],
-          ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: Text('Cancel'),
-            ),
-            TextButton(
-              onPressed: () {
-                // Save the changes
-                Navigator.of(context).pop();
-              },
-              child: Text('Save'),
-            ),
-          ],
-        );
-      },
-    );
-  }
-
+  const BrandDetails(
+      {super.key,
+      required this.brandName,
+      required this.logo,
+      required this.rating});
+  final String brandName;
+  final String? logo;
+  final double rating;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -135,9 +145,8 @@ class BrandDetails extends StatelessWidget {
                 // Size of the circular image container
                 CircleAvatar(
                   radius: 28, // Inner circle size (smaller for border effect)
-                  backgroundImage: NetworkImage(
-                    "https://media.istockphoto.com/id/1398610798/photo/young-woman-in-linen-shirt-shorts-and-high-heels-pointing-to-the-side-and-talking.jpg?s=1024x1024&w=is&k=20&c=IdY440I0pLdmANsNZRXhjSS7K9Q-Xxvnwf4YzH9qQbQ=",
-                  ),
+                  backgroundImage:
+                      logo != null ? NetworkImage(logo!) : NetworkImage(''),
                   backgroundColor: Colors.transparent,
                 ),
                 SizedBox(
@@ -147,25 +156,18 @@ class BrandDetails extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Fashoni',
+                      brandName,
                       style: TextStyle(
                           fontSize: 20.sp, fontWeight: FontWeight.w500),
                     ),
-                    IconButton(
-                      icon: Icon(Iconsax.edit_2),
-                      onPressed: () {
-                        // Implement the edit functionality here
-                        _editBrand(context);
-                      },
-                    ),
                     Row(
                       children: [
-                        FiveStarRating(filledStars: 3),
+                        FiveStarRating(filledStars: rating.toInt()),
                         SizedBox(
                           width: 6.w,
                         ),
                         Text(
-                          '(4.5/5)',
+                          '($rating/5)',
                           style: TextStyle(
                               fontSize: 14.sp, fontWeight: FontWeight.w500),
                         )
@@ -184,31 +186,6 @@ class BrandDetails extends StatelessWidget {
                     ),
                   ),
                 ),
-              ],
-            ),
-            SizedBox(
-              height: 10.h,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                RowAboutbrand(
-                    icon: Iconsax.like_tag, text: '98% Positive Reviews'),
-                RowAboutbrand(
-                    icon: Icons.handshake_outlined,
-                    text: 'Partner since 2+ years'),
-              ],
-            ),
-            SizedBox(
-              height: 10.h,
-            ),
-            Row(
-              children: [
-                RowAboutbrand(
-                    row: true,
-                    perc: 0.84,
-                    icon: Icons.handshake_outlined,
-                    text: 'Items as Described'),
               ],
             ),
             Padding(

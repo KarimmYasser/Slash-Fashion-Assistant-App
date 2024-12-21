@@ -12,6 +12,17 @@ class ReviewsWidget extends StatelessWidget {
   final List<Map<String, dynamic>> reviews;
   @override
   Widget build(BuildContext context) {
+    int fiveStarCount =
+        reviews.where((review) => review['rating'].toInt() == 5).length;
+    int fourStarCount =
+        reviews.where((review) => review['rating'].toInt() == 4).length;
+    int threeStarCount =
+        reviews.where((review) => review['rating'].toInt() == 3).length;
+    int twoStarCount =
+        reviews.where((review) => review['rating'].toInt() == 2).length;
+    int oneStarCount =
+        reviews.where((review) => review['rating'].toInt() == 1).length;
+
     return Container(
       width: double.infinity,
       color: OurColors.white,
@@ -29,7 +40,14 @@ class ReviewsWidget extends StatelessWidget {
               ),
             ),
           ),
-          StarsSection(stars: rate),
+          StarsSection(
+            stars: rate,
+            fiveStarCount: fiveStarCount,
+            fourStarCount: fourStarCount,
+            threeStarCount: threeStarCount,
+            twoStarCount: twoStarCount,
+            oneStarCount: oneStarCount,
+          ),
           SizedBox(
             height: 10.h,
           ),
@@ -37,7 +55,9 @@ class ReviewsWidget extends StatelessWidget {
             padding: EdgeInsets.only(top: 18.h, left: 16.w),
             child: Column(
               children: [
-                RatingsCardsList(),
+                RatingsCardsList(
+                  reviews: reviews,
+                ),
                 SizedBox(
                   height: 14.h,
                 ),
@@ -54,11 +74,27 @@ class ReviewsWidget extends StatelessWidget {
 }
 
 class StarsSection extends StatelessWidget {
-  const StarsSection({super.key, required this.stars});
+  const StarsSection(
+      {super.key,
+      required this.stars,
+      required this.fiveStarCount,
+      required this.fourStarCount,
+      required this.threeStarCount,
+      required this.twoStarCount,
+      required this.oneStarCount});
   final double stars;
-
+  final int fiveStarCount;
+  final int fourStarCount;
+  final int threeStarCount;
+  final int twoStarCount;
+  final int oneStarCount;
   @override
   Widget build(BuildContext context) {
+    int sum = fiveStarCount +
+        fourStarCount +
+        threeStarCount +
+        twoStarCount +
+        oneStarCount;
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
       child: Row(
@@ -79,7 +115,7 @@ class StarsSection extends StatelessWidget {
               FiveStarRating(filledStars: stars.toInt()),
               SizedBox(height: 4.h),
               Text(
-                'Based on 1.2k reviews',
+                'Based on $sum reviews',
                 style: TextStyle(
                   fontSize: Sizes.fontSizeSm,
                   color: OurColors.darkGrey,
@@ -87,7 +123,13 @@ class StarsSection extends StatelessWidget {
               ),
             ],
           ),
-          const RatingBreakdown(),
+          RatingBreakdown(
+            fiveStarCount: fiveStarCount,
+            fourStarCount: fourStarCount,
+            threeStarCount: threeStarCount,
+            twoStarCount: twoStarCount,
+            oneStarCount: oneStarCount,
+          ),
         ],
       ),
     );
@@ -95,18 +137,48 @@ class StarsSection extends StatelessWidget {
 }
 
 class RatingBreakdown extends StatelessWidget {
-  const RatingBreakdown({super.key});
-
+  const RatingBreakdown(
+      {super.key,
+      required this.fiveStarCount,
+      required this.fourStarCount,
+      required this.threeStarCount,
+      required this.twoStarCount,
+      required this.oneStarCount});
+  final int fiveStarCount;
+  final int fourStarCount;
+  final int threeStarCount;
+  final int twoStarCount;
+  final int oneStarCount;
   @override
   Widget build(BuildContext context) {
+    int sum = fiveStarCount +
+        fourStarCount +
+        threeStarCount +
+        twoStarCount +
+        oneStarCount;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      children: const [
-        RatingBar(stars: 5, percentage: 78, color: Colors.green),
-        RatingBar(stars: 4, percentage: 8, color: Colors.greenAccent),
-        RatingBar(stars: 3, percentage: 2, color: OurColors.starColor),
-        RatingBar(stars: 2, percentage: 1, color: Colors.orange),
-        RatingBar(stars: 1, percentage: 1, color: Colors.red),
+      children: [
+        RatingBar(
+            stars: 5,
+            percentage: (fiveStarCount / sum * 100).toInt(),
+            color: Colors.green),
+        RatingBar(
+            stars: 4,
+            percentage: (fourStarCount / sum * 100).toInt(),
+            color: Colors.greenAccent),
+        RatingBar(
+            stars: 3,
+            percentage: (threeStarCount / sum * 100).toInt(),
+            color: OurColors.starColor),
+        RatingBar(
+            stars: 2,
+            percentage: (twoStarCount / sum * 100).toInt(),
+            color: Colors.orange),
+        RatingBar(
+            stars: 1,
+            percentage: (oneStarCount / sum * 100).toInt(),
+            color: Colors.red),
       ],
     );
   }
@@ -153,18 +225,38 @@ class RatingBar extends StatelessWidget {
 }
 
 class RatingsCardsList extends StatelessWidget {
-  RatingsCardsList({super.key});
+  final List<Map<String, dynamic>> reviews;
 
-  final Map<String, dynamic> list = {
-    'Quality': 4.5,
-    'Value for Money': 4,
-    'Shipping': 3.8,
-    'Recommendation': 3.8,
-  };
+  RatingsCardsList({super.key, required this.reviews});
+
+  Map<String, dynamic> getAverageRatings() {
+    double qualitySum = 0;
+    double valueForMoneySum = 0;
+    double shippingSum = 0;
+    double recommendationSum = 0;
+
+    for (var review in reviews) {
+      qualitySum += review['quality_rate'];
+      valueForMoneySum += review['valueForMoney_rate'];
+      shippingSum += review['shipping_rate'];
+      recommendationSum += review['rating'];
+    }
+
+    int reviewCount = reviews.length;
+
+    return {
+      'Quality': qualitySum / reviewCount,
+      'Value for Money': valueForMoneySum / reviewCount,
+      'Shipping': shippingSum / reviewCount,
+      'Recommendation': recommendationSum / reviewCount,
+    };
+  }
 
   @override
   Widget build(BuildContext context) {
+    final list = getAverageRatings();
     final keys = list.keys.toList(); // Extract keys from the map
+
     return SizedBox(
       height: 40.h, // Constrain the height of the ListView
       child: ListView.builder(
@@ -203,7 +295,9 @@ class RatingsCardsList extends StatelessWidget {
                         width: 2.w,
                       ),
                       Text(
-                        ' ' + value.toString(), // Display the rating (value)
+                        ' ' +
+                            value.toStringAsFixed(
+                                1), // Display the rating (value)
                         style: TextStyle(
                           fontSize: 10.sp,
                           fontWeight: FontWeight.bold,

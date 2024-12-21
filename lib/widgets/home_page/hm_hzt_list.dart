@@ -20,10 +20,46 @@ class HorizontalList extends StatefulWidget {
 
 class _HorizontalListState extends State<HorizontalList> {
   late Future<List<ProductCardModel>> _products;
+  List<ProductCardModel> _filteredProducts = [];
+  final TextEditingController _searchController = TextEditingController();
+
   @override
   void initState() {
     super.initState();
+    _fetchProducts();
+    _searchController.addListener(_filterProducts);
+  }
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
+
+  void _fetchProducts() {
     _products = ProductService().getAllProducts(widget.endpouint);
+    _products.then((products) {
+      setState(() {
+        _filteredProducts = products;
+      });
+    });
+  }
+
+  void _filterProducts() {
+    final query = _searchController.text.toLowerCase();
+    setState(() {
+      if (query.isEmpty) {
+        // If the search input is empty, reset the filtered products to the full product list
+        _products.then((products) {
+          _filteredProducts = products;
+        });
+      } else {
+        // Filter the products based on the search query
+        _filteredProducts = _filteredProducts
+            .where((product) => product.name.toLowerCase().contains(query))
+            .toList();
+      }
+    });
   }
 
   @override
@@ -32,6 +68,21 @@ class _HorizontalListState extends State<HorizontalList> {
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        // Search Bar
+        Padding(
+          padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 10.h),
+          child: TextField(
+            controller: _searchController,
+            decoration: InputDecoration(
+              hintText: 'Search for a product',
+              prefixIcon: Icon(Icons.search, color: OurColors.textColor),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10),
+                borderSide: BorderSide(color: OurColors.textColor),
+              ),
+            ),
+          ),
+        ),
         Padding(
           padding: EdgeInsets.only(left: 10.w),
           child: Text(
@@ -45,23 +96,21 @@ class _HorizontalListState extends State<HorizontalList> {
         SizedBox(
           height: 410.h,
           child: FutureBuilder<List<ProductCardModel>>(
-            future:
-                _products, // Make sure _products is defined elsewhere in the code
+            future: _products,
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return Center(child: CircularProgressIndicator());
               } else if (snapshot.hasError) {
                 return Center(child: Text('Error: ${snapshot.error}'));
-              } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                return Center(child: Text('No products available'));
+              } else if (_filteredProducts.isEmpty) {
+                return Center(child: Text('No products found'));
               }
 
-              final products = snapshot.data!;
               return ListView.builder(
                 scrollDirection: Axis.horizontal,
-                itemCount: products.length,
+                itemCount: _filteredProducts.length,
                 itemBuilder: (context, index) {
-                  final product = products[index];
+                  final product = _filteredProducts[index];
                   return GestureDetector(
                     onTap: () {
                       Navigator.push(

@@ -1,4 +1,5 @@
 import 'package:fashion_assistant/constants.dart';
+import 'package:fashion_assistant/utils/http/http_client.dart';
 import 'package:fashion_assistant/widgets/home_page/brands_status.dart';
 import 'package:fashion_assistant/widgets/home_page/carousel_sliders.dart';
 import 'package:fashion_assistant/widgets/home_page/hm_hzt_list.dart';
@@ -50,8 +51,43 @@ final List<Map<String, String>> brands = [
   },
 ];
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  List<Map<String, dynamic>> list1 = [];
+  List<Map<String, dynamic>> list2 = [];
+
+  @override
+  void initState() {
+    super.initState();
+    fetchOffers();
+  }
+
+  Future<void> fetchOffers() async {
+    try {
+      final response = await HttpHelper.get('api/user/offers');
+
+      final offers = response['offers'] as List;
+
+      setState(() {
+        list1 = offers
+            .where((offer) => offer['list_number'] == 1)
+            .toList()
+            .cast<Map<String, dynamic>>();
+        list2 = offers
+            .where((offer) => offer['list_number'] == 2)
+            .toList()
+            .cast<Map<String, dynamic>>();
+      });
+    } catch (e) {
+      print('Error: $e');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -97,35 +133,6 @@ class HomeScreen extends StatelessWidget {
             ),
           ),
           // Notification Icon with Red Dot
-          Stack(
-            children: [
-              IconButton(
-                icon: const Icon(
-                  Iconsax.notification,
-                  color: Colors.black,
-                  size: Sizes.iconMd,
-                ),
-                onPressed: () {
-                  // Handle notification click
-                },
-              ),
-              Positioned(
-                right: 15,
-                top: 15,
-                child: Container(
-                  padding: const EdgeInsets.all(2),
-                  decoration: const BoxDecoration(
-                    color: Colors.red,
-                    shape: BoxShape.circle,
-                  ),
-                  constraints: const BoxConstraints(
-                    minWidth: 8,
-                    minHeight: 8,
-                  ),
-                ),
-              ),
-            ],
-          ),
         ],
       ),
       body: SingleChildScrollView(
@@ -133,52 +140,6 @@ class HomeScreen extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Padding(
-              padding: const EdgeInsets.all(14.0),
-              child: Row(
-                children: [
-                  // Search Bar
-                  Container(
-                    width: 290.w,
-                    decoration: BoxDecoration(
-                      color: OurColors.containerBackgroundColor,
-                      borderRadius:
-                          BorderRadius.circular(16.r), // Circular shape
-                    ),
-                    child: const TextField(
-                      decoration: InputDecoration(
-                        hintText: 'Search here..',
-                        prefixIcon: Icon(Iconsax.search_favorite,
-                            color: OurColors.grey),
-                        border: InputBorder.none, // Remove default border
-                        enabledBorder:
-                            InputBorder.none, // Remove enabled border
-                        focusedBorder:
-                            InputBorder.none, // Remove focused border
-                        contentPadding:
-                            EdgeInsets.symmetric(vertical: 14), // Center text
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    width: 5.w,
-                  ),
-                  Container(
-                    width: 50.w,
-                    height: 50,
-                    decoration: BoxDecoration(
-                      color: OurColors.containerBackgroundColor,
-                      borderRadius:
-                          BorderRadius.circular(16.r), // Circular shape
-                    ),
-                    child: Image.asset(
-                      'assets/icons/filter.png',
-                      scale: 2,
-                    ),
-                  ),
-                ],
-              ),
-            ),
             SizedBox(
               height: 10.h,
             ),
@@ -194,7 +155,7 @@ class HomeScreen extends StatelessWidget {
               height: 16.h,
             ),
             CustomCarousalSliders(
-              imagesPaths: imagesPaths,
+              offers: list1,
             ),
             SizedBox(
               height: 20.h,
@@ -211,7 +172,7 @@ class HomeScreen extends StatelessWidget {
               height: 16.h,
             ),
             CustomCarousalSliders(
-              imagesPaths: imagesPaths,
+              offers: list2,
             ),
             SizedBox(
               height: 16.h,

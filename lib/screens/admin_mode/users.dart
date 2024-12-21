@@ -12,7 +12,9 @@ class Users extends StatefulWidget {
 
 class _UsersState extends State<Users> {
   List<dynamic> users = [];
+  List<dynamic> filteredUsers = [];
   bool isLoading = true;
+  String searchQuery = '';
 
   @override
   void initState() {
@@ -26,6 +28,7 @@ class _UsersState extends State<Users> {
       final response = await HttpHelper.get('api/user');
       setState(() {
         users = response['users'];
+        filteredUsers = users; // Initially, show all users
         isLoading = false;
       });
     } catch (e) {
@@ -38,6 +41,18 @@ class _UsersState extends State<Users> {
         );
       }
     }
+  }
+
+  // Filter users based on the search query
+  void _filterUsers(String query) {
+    setState(() {
+      searchQuery = query;
+      filteredUsers = users
+          .where((user) => '${user['firstName']} ${user['lastName']}'
+              .toLowerCase()
+              .contains(query.toLowerCase()))
+          .toList();
+    });
   }
 
   // Block or Unblock user
@@ -63,9 +78,10 @@ class _UsersState extends State<Users> {
   }
 
   // Delete a review
-  Future<void> _deleteReview(String reviewId) async {
+  Future<void> _deleteReview(String reviewId, String? image) async {
     try {
-      await HttpHelper.delete('api/review/image', {"reviewId": reviewId});
+      if (image != null)
+        await HttpHelper.delete('api/review/image', {"reviewId": reviewId});
       await HttpHelper.delete('api/review/$reviewId', {});
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Review deleted successfully')),
@@ -84,21 +100,42 @@ class _UsersState extends State<Users> {
       appBar: AppBar(
         title: const Text('Users'),
       ),
-      body: isLoading
-          ? const Center(child: CircularProgressIndicator())
-          : users.isEmpty
-              ? const Center(child: Text('No users found'))
-              : ListView.builder(
-                  itemCount: users.length,
-                  itemBuilder: (context, index) {
-                    final user = users[index];
-                    return UserCard(
-                      user: user,
-                      onBlockToggle: _toggleBlockUser,
-                      onDeleteReview: _deleteReview,
-                    );
-                  },
+      body: Column(
+        children: [
+          // Search Bar
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: TextField(
+              onChanged: _filterUsers,
+              decoration: InputDecoration(
+                hintText: 'Search for a user by name...',
+                prefixIcon: const Icon(Icons.search),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
                 ),
+              ),
+            ),
+          ),
+          // User List
+          Expanded(
+            child: isLoading
+                ? const Center(child: CircularProgressIndicator())
+                : filteredUsers.isEmpty
+                    ? const Center(child: Text('No users found'))
+                    : ListView.builder(
+                        itemCount: filteredUsers.length,
+                        itemBuilder: (context, index) {
+                          final user = filteredUsers[index];
+                          return UserCard(
+                            user: user,
+                            onBlockToggle: _toggleBlockUser,
+                            onDeleteReview: _deleteReview,
+                          );
+                        },
+                      ),
+          ),
+        ],
+      ),
     );
   }
 }
@@ -106,7 +143,7 @@ class _UsersState extends State<Users> {
 class UserCard extends StatefulWidget {
   final dynamic user;
   final Function(String userId, bool isBlocked) onBlockToggle;
-  final Function(String reviewId) onDeleteReview;
+  final Function(String reviewId, String? image) onDeleteReview;
 
   const UserCard({
     required this.user,
@@ -121,12 +158,36 @@ class UserCard extends StatefulWidget {
 
 class _UserCardState extends State<UserCard> {
   bool showReviews = false;
+  List<dynamic> reviews = [];
+  bool isLoadingReviews = false;
+
+  // Fetch reviews for the user
+  Future<void> _fetchReviews(String userId) async {
+    setState(() {
+      isLoadingReviews = true;
+    });
+
+    try {
+      final response = await HttpHelper.get('api/admin/reviews/$userId');
+      setState(() {
+        reviews = response[
+            'reviews']; // Assuming the endpoint returns a list of reviews
+        isLoadingReviews = false;
+      });
+    } catch (e) {
+      setState(() {
+        isLoadingReviews = false;
+      });
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Failed to load reviews: $e')),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     final user = widget.user;
     final isBlocked = user['is_blocked'];
-    final reviews = user['reviews'] ?? [];
 
     return Card(
       color: Colors.white,
@@ -171,10 +232,10 @@ class _UserCardState extends State<UserCard> {
                   children: [
                     ElevatedButton(
                       onPressed: () =>
-                          widget.onBlockToggle(user['id'], isBlocked),
+                          widget.onBlockToggle(user['user_id'], isBlocked),
                       style: ElevatedButton.styleFrom(
                         backgroundColor:
-                            isBlocked ? Colors.white : OurColors.primaryColor,
+                            isBlocked ? Colors.red : OurColors.primaryColor,
                       ),
                       child: Text(isBlocked ? 'Unblock' : 'Block'),
                     ),
@@ -188,6 +249,10 @@ class _UserCardState extends State<UserCard> {
                         setState(() {
                           showReviews = !showReviews;
                         });
+                        if (showReviews) {
+                          // Fetch reviews when expanding
+                          _fetchReviews(user['id']);
+                        }
                       },
                     ),
                   ],
@@ -208,23 +273,108 @@ class _UserCardState extends State<UserCard> {
                     ),
                   ),
                   const SizedBox(height: 10),
-                  ...reviews.map<Widget>((review) {
-                    return Card(
-                      color: Colors.white,
-                      margin: const EdgeInsets.only(bottom: 10),
-                      elevation: 3,
-                      child: ListTile(
-                        title: Text(review['content'] ?? 'No content'),
-                        trailing: IconButton(
-                          icon: const Icon(Icons.delete,
-                              color: OurColors.primaryColor),
-                          onPressed: () {
-                            widget.onDeleteReview(review['id']);
-                          },
+                  if (isLoadingReviews)
+                    const Center(child: CircularProgressIndicator())
+                  else if (reviews.isEmpty)
+                    const Center(child: Text('No reviews found'))
+                  else
+                    ...reviews.map<Widget>((review) {
+                      return Card(
+                        color: Colors.white,
+                        margin: const EdgeInsets.only(bottom: 10),
+                        elevation: 3,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10)),
+                        child: Padding(
+                          padding: const EdgeInsets.all(10),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              // Review Comment
+                              if (review['comment'] != null)
+                                Text(
+                                  'Comment: ${review['comment']}',
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              const SizedBox(height: 5),
+
+                              // Review Ratings
+                              Text('Rating: ${review['rating']}'),
+                              Text('Accuracy Rate: ${review['accuracy_rate']}'),
+                              Text('Quality Rate: ${review['quality_rate']}'),
+                              Text('Shipping Rate: ${review['shipping_rate']}'),
+                              Text(
+                                  'Value for Money Rate: ${review['valueForMoney_rate']}'),
+                              const SizedBox(height: 10),
+
+                              // Product Information
+                              if (review['product'] != null)
+                                Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    // Product Image
+                                    if (review['product']['image'] != null)
+                                      Image.network(
+                                        review['product']['image'],
+                                        width: 50,
+                                        height: 50,
+                                        fit: BoxFit.cover,
+                                      ),
+                                    const SizedBox(width: 10),
+
+                                    // Product Details
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            review['product']['name'] ??
+                                                'No product name',
+                                            style: const TextStyle(
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                          Text(
+                                              'Price: \$${review['product']['price']}'),
+                                          Text(
+                                              'Material: ${review['product']['material']}'),
+                                          Text(
+                                              'Rating: ${review['product']['rating']}'),
+                                          if (review['product']
+                                                  ['description'] !=
+                                              null)
+                                            Text(
+                                              review['product']['description'],
+                                              maxLines: 2,
+                                              overflow: TextOverflow.ellipsis,
+                                              style:
+                                                  const TextStyle(fontSize: 12),
+                                            ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              const SizedBox(height: 10),
+
+                              // Delete Button
+                              Align(
+                                alignment: Alignment.centerRight,
+                                child: IconButton(
+                                  icon: const Icon(Icons.delete,
+                                      color: OurColors.primaryColor),
+                                  onPressed: () {
+                                    widget.onDeleteReview(
+                                        review['id'], review['image']);
+                                  },
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                    );
-                  }).toList(),
+                      );
+                    }).toList(),
                 ],
               ),
           ],

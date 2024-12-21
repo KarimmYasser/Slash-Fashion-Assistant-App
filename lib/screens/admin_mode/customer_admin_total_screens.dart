@@ -37,7 +37,6 @@ class _CustomerAdminTotalScreensState extends State<CustomerAdminTotalScreens> {
           screenDetailsCustomerAdmin[0]['screenName'],
           screenDetailsCustomerAdmin[1]['screenName'],
           screenDetailsCustomerAdmin[2]['screenName'],
-          screenDetailsCustomerAdmin[3]['screenName'],
         ],
       ),
       bottomNavigationBar: CustomCustomerAdminNavBar(

@@ -1,11 +1,15 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:fashion_assistant/constants.dart';
+import 'package:fashion_assistant/screens/product_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class CustomCarousalSliders extends StatefulWidget {
-  const CustomCarousalSliders({super.key, required this.imagesPaths});
-  final List<String> imagesPaths;
+  const CustomCarousalSliders({
+    super.key,
+    required this.offers,
+  });
+  final List<Map<String, dynamic>> offers;
 
   @override
   State<CustomCarousalSliders> createState() => _CustomCarousalSlidersState();
@@ -17,6 +21,14 @@ class _CustomCarousalSlidersState extends State<CustomCarousalSliders> {
   int _activePage = 0;
   final CarouselSliderController _carouselController =
       CarouselSliderController();
+  void navigateToProductPage(BuildContext context, String productId) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => ProductScreen(productID: productId),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -39,19 +51,24 @@ class _CustomCarousalSlidersState extends State<CustomCarousalSliders> {
               height: 140.h,
               child: CarouselSlider(
                   carouselController: _carouselController,
-                  items: widget.imagesPaths.map((imagePath) {
+                  items: widget.offers.map((offer) {
                     return Builder(
                       builder: (BuildContext context) {
-                        return Container(
-                          width: 300.w,
-                          decoration: BoxDecoration(
-                            color: OurColors.white,
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(20),
-                            child: Container(
-                                child: ImagePlaceholder(imagePath: imagePath)),
+                        return GestureDetector(
+                          onTap: () => navigateToProductPage(
+                              context, offer['product_id']),
+                          child: Container(
+                            width: 300.w,
+                            decoration: BoxDecoration(
+                              color: OurColors.white,
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(20),
+                              child: Container(
+                                  child: ImagePlaceholder(
+                                      imagePath: offer['image'])),
+                            ),
                           ),
                         );
                       },

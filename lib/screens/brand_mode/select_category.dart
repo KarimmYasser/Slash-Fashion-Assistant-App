@@ -32,9 +32,11 @@ class _SelectCategoryState extends State<SelectCategory> {
         SnackBar(content: Text('Failed to fetch categories: $e')),
       );
     } finally {
-      setState(() {
-        isLoading = false; // Stop loading
-      });
+      if (mounted) {
+        setState(() {
+          isLoading = false; // Stop loading
+        });
+      }
     }
   }
 

@@ -98,28 +98,6 @@ class AboutBrand extends StatelessWidget {
             SizedBox(
               height: 10.h,
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                RowAboutbrand(
-                    icon: Iconsax.like_tag, text: '98% Positive Reviews'),
-                RowAboutbrand(
-                    icon: Icons.handshake_outlined,
-                    text: 'Partner since 2+ years'),
-              ],
-            ),
-            SizedBox(
-              height: 10.h,
-            ),
-            Row(
-              children: [
-                RowAboutbrand(
-                    row: true,
-                    perc: 0.84,
-                    icon: Icons.handshake_outlined,
-                    text: 'Items as Described'),
-              ],
-            ),
           ],
         ),
       ),
