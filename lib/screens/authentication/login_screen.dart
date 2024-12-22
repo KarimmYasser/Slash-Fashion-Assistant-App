@@ -1,4 +1,3 @@
-import 'package:fashion_assistant/screens/create_avatar/male_or_female.dart';
 import 'package:get/get.dart';
 
 import '../../widgets/login_page/login_form.dart';
@@ -6,7 +5,6 @@ import '../../widgets/login_page/page_header.dart';
 import 'package:flutter/material.dart';
 
 import '../../constants.dart';
-import '../../widgets/login_signup/form_divider.dart';
 import 'brand_signup_screen.dart';
 
 class LoginScreen extends StatelessWidget {
@@ -28,24 +26,6 @@ class LoginScreen extends StatelessWidget {
             children: <Widget>[
               const LoginPageHeader(),
               const LoginPageForm(),
-              const FormDivider(
-                text: 'Or',
-              ),
-              const SizedBox(height: Sizes.spaceBtwSections),
-              SizedBox(
-                width: double.infinity,
-                child: OutlinedButton(
-                    style: Theme.of(context)
-                        .outlinedButtonTheme
-                        .style!
-                        .copyWith(
-                            backgroundColor: const WidgetStatePropertyAll(
-                                OurColors.darkerGrey),
-                            foregroundColor:
-                                const WidgetStatePropertyAll(OurColors.light)),
-                    onPressed: () => Get.offAll(() => const MaleOrFemale()),
-                    child: const Text('Continue as a Guest')),
-              ),
               const SizedBox(height: Sizes.spaceBtwSections),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
