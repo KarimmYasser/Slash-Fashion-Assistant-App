@@ -13,7 +13,7 @@ class MaterialList extends StatelessWidget {
       children: [
         Padding(
           padding: EdgeInsets.only(left: 10.w),
-          child: Text(
+          child: const Text(
             'Material:',
             style: TextStyle(
                 color: OurColors.textColor,

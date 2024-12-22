@@ -78,7 +78,7 @@ class ProductCardBrand extends StatelessWidget {
                         ),
                         child: Row(
                           children: [
-                            Center(
+                            const Center(
                               child: Icon(
                                 Iconsax.heart5,
                                 color: OurColors.primaryColor,

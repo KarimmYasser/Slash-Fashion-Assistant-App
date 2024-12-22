@@ -14,9 +14,6 @@ import 'package:fashion_assistant/widgets/product_details/policy.dart';
 import 'package:fashion_assistant/widgets/product_details/reviews.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:iconsax/iconsax.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
 
 class ProductScreen extends StatefulWidget {
   const ProductScreen({super.key, required this.productID});
@@ -41,7 +38,7 @@ class _ProductScreenState extends State<ProductScreen> {
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('An error occurred. Please try again.')),
+          const SnackBar(content: Text('An error occurred. Please try again.')),
         );
       }
     }
@@ -75,15 +72,13 @@ class _ProductScreenState extends State<ProductScreen> {
       );
 
       // Log the response to check if the operation succeeded
-      print('Response: ${response['message']}');
 
       setState(() {
         product!.isFollowing = !product!.isFollowing;
         isFollowing = product!.isFollowing;
       });
-    } catch (e) {
-      print('Error: $e');
-    }
+      // ignore: empty_catches
+    } catch (e) {}
   }
 
   @override
@@ -92,7 +87,7 @@ class _ProductScreenState extends State<ProductScreen> {
       backgroundColor: OurColors.secondaryBackgroundColor,
       appBar: AppBar(
         leading: IconButton(
-          icon: Icon(
+          icon: const Icon(
             Icons.arrow_back,
             color: OurColors.grey,
             size: Sizes.iconMd,
@@ -104,7 +99,7 @@ class _ProductScreenState extends State<ProductScreen> {
         toolbarHeight: Sizes.appBarHeight,
         backgroundColor: OurColors.secondaryBackgroundColor,
         elevation: 0,
-        title: Text(
+        title: const Text(
           'Slash Hub.',
           style: TextStyle(
             color: OurColors.textColor,
@@ -117,11 +112,11 @@ class _ProductScreenState extends State<ProductScreen> {
           future: _product,
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return Center(child: CircularProgressIndicator());
+              return const Center(child: CircularProgressIndicator());
             } else if (snapshot.hasError) {
               return Center(child: Text('Error: ${snapshot.error}'));
             } else if (!snapshot.hasData) {
-              return Center(child: Text('Product not found'));
+              return const Center(child: Text('Product not found'));
             }
 
             final product = snapshot.data!;
@@ -331,7 +326,7 @@ class _ProductScreenState extends State<ProductScreen> {
                   SizedBox(
                     height: 20.h,
                   ),
-                  Policy(),
+                  const Policy(),
                   SizedBox(
                     height: 20.h,
                   ),
@@ -357,7 +352,7 @@ class _ProductScreenState extends State<ProductScreen> {
                               builder: (context, snapshot) {
                                 if (snapshot.connectionState ==
                                     ConnectionState.waiting) {
-                                  return Center(
+                                  return const Center(
                                       child: CircularProgressIndicator());
                                 } else if (snapshot.hasError) {
                                   return Center(
@@ -365,7 +360,7 @@ class _ProductScreenState extends State<ProductScreen> {
                                 } else if (!snapshot.hasData ||
                                     snapshot.data!.isEmpty) {
                                   return Padding(
-                                    padding: EdgeInsets.all(16),
+                                    padding: const EdgeInsets.all(16),
                                     child: SizedBox(
                                       width: double.infinity,
                                       child: ElevatedButton(
@@ -376,8 +371,8 @@ class _ProductScreenState extends State<ProductScreen> {
                                             borderRadius:
                                                 BorderRadius.circular(10.r),
                                           ),
-                                          padding:
-                                              EdgeInsets.symmetric(vertical: 0),
+                                          padding: const EdgeInsets.symmetric(
+                                              vertical: 0),
                                         ),
                                         onPressed: () {
                                           Navigator.push(
@@ -391,7 +386,7 @@ class _ProductScreenState extends State<ProductScreen> {
                                           //} Handle add to cart action
                                           // Handle add to cart action
                                         },
-                                        child: Text(
+                                        child: const Text(
                                           'Add a review',
                                           style: TextStyle(
                                             fontSize: 16,
@@ -420,14 +415,15 @@ class _ProductScreenState extends State<ProductScreen> {
                       builder: (context, snapshot) {
                         if (snapshot.connectionState ==
                             ConnectionState.waiting) {
-                          return Center(child: CircularProgressIndicator());
+                          return const Center(
+                              child: CircularProgressIndicator());
                         } else if (snapshot.hasError) {
                           return Center(
                               child: Text('Error: ${snapshot.error}'));
                         } else if (!snapshot.hasData ||
                             snapshot.data!.isEmpty) {
                           return Padding(
-                            padding: EdgeInsets.all(16),
+                            padding: const EdgeInsets.all(16),
                             child: SizedBox(
                               width: double.infinity,
                               child: ElevatedButton(
@@ -436,7 +432,8 @@ class _ProductScreenState extends State<ProductScreen> {
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(10.r),
                                   ),
-                                  padding: EdgeInsets.symmetric(vertical: 0),
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 0),
                                 ),
                                 onPressed: () {
                                   Navigator.push(
@@ -449,7 +446,7 @@ class _ProductScreenState extends State<ProductScreen> {
                                   //} Handle add to cart action
                                   // Handle add to cart action
                                 },
-                                child: Text(
+                                child: const Text(
                                   'Add a review',
                                   style: TextStyle(
                                     fontSize: 16,
@@ -485,7 +482,7 @@ class _ProductScreenState extends State<ProductScreen> {
         future: fetchLikedStatus(),
         builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return CircularProgressIndicator();
+            return const CircularProgressIndicator();
           } else if (snapshot.hasError) {
             return Text('Error: ${snapshot.error}');
           } else if (product != null) {
@@ -495,7 +492,7 @@ class _ProductScreenState extends State<ProductScreen> {
               variants: product!.variants,
             );
           }
-          return Text('Loading...');
+          return const Text('Loading...');
         },
       ),
     );

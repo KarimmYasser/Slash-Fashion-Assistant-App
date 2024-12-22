@@ -34,7 +34,8 @@ class AddSizesScreen extends StatefulWidget {
   final String category; // Category ID passed from CategorySelectionScreen
   final String categoryName; // Category name for display
 
-  AddSizesScreen({required this.category, required this.categoryName});
+  const AddSizesScreen(
+      {super.key, required this.category, required this.categoryName});
 
   @override
   State<AddSizesScreen> createState() => _AddSizesScreenState();
@@ -92,10 +93,9 @@ class _AddSizesScreenState extends State<AddSizesScreen> {
 
     try {
       final response = await HttpHelper.post(apiUrl, payload);
-      print('Response: $response');
-    } catch (e) {
-      print('Error occurred while sending size to backend: $e');
-    }
+
+      // ignore: empty_catches
+    } catch (e) {}
   }
 
   void _addSize() async {
@@ -175,8 +175,6 @@ class _AddSizesScreenState extends State<AddSizesScreen> {
         ),
       ),
     );
-
-    print("Submitting sizes: $sizes");
   }
 
   void _showError(String message) {
@@ -200,31 +198,30 @@ class _AddSizesScreenState extends State<AddSizesScreen> {
             children: [
               TextField(
                 controller: tagController,
-                decoration:
-                    InputDecoration(labelText: 'Tag (e.g., Small, Medium)'),
+                decoration: const InputDecoration(
+                    labelText: 'Tag (e.g., Small, Medium)'),
               ),
               TextField(
                 controller: quantityController,
-                decoration: InputDecoration(labelText: 'Quantity'),
+                decoration: const InputDecoration(labelText: 'Quantity'),
                 keyboardType: TextInputType.number,
               ),
               ...dynamicFields.map((field) {
                 return TextField(
                   controller: controllers[field],
-                  decoration:
-                      InputDecoration(labelText: '${_capitalize(field)}'),
+                  decoration: InputDecoration(labelText: _capitalize(field)),
                   keyboardType: TextInputType.number,
                 );
-              }).toList(),
-              SizedBox(height: 10),
+              }),
+              const SizedBox(height: 10),
               ElevatedButton(
                 onPressed: _addSize,
-                child: Text('Add Size'),
+                child: const Text('Add Size'),
               ),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               ListView.builder(
                 shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
+                physics: const NeverScrollableScrollPhysics(),
                 itemCount: sizes.length,
                 itemBuilder: (context, index) {
                   final size = sizes[index];
@@ -250,10 +247,10 @@ class _AddSizesScreenState extends State<AddSizesScreen> {
                   );
                 },
               ),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               ElevatedButton(
                 onPressed: _submitSizes,
-                child: Text('Submit Sizes'),
+                child: const Text('Submit Sizes'),
               ),
             ],
           ),

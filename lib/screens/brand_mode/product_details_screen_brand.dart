@@ -93,7 +93,7 @@ class _ProductDetailsScreenBrandState extends State<ProductDetailsScreenBrand> {
       backgroundColor: OurColors.secondaryBackgroundColor,
       appBar: AppBar(
         leading: IconButton(
-          icon: Icon(
+          icon: const Icon(
             Icons.arrow_back,
             color: OurColors.grey, // Match your text color
             size: Sizes.iconMd,
@@ -106,7 +106,7 @@ class _ProductDetailsScreenBrandState extends State<ProductDetailsScreenBrand> {
         toolbarHeight: Sizes.appBarHeight,
         backgroundColor: OurColors.secondaryBackgroundColor,
         elevation: 0,
-        title: Text(
+        title: const Text(
           'Slash Hub.',
           style: TextStyle(
             color: OurColors.textColor,
@@ -118,7 +118,7 @@ class _ProductDetailsScreenBrandState extends State<ProductDetailsScreenBrand> {
           Stack(
             children: [
               IconButton(
-                icon: Icon(
+                icon: const Icon(
                   Iconsax.notification,
                   color: Colors.black,
                   size: Sizes.iconMd,
@@ -131,12 +131,12 @@ class _ProductDetailsScreenBrandState extends State<ProductDetailsScreenBrand> {
                 right: 15,
                 top: 15,
                 child: Container(
-                  padding: EdgeInsets.all(2),
-                  decoration: BoxDecoration(
+                  padding: const EdgeInsets.all(2),
+                  decoration: const BoxDecoration(
                     color: Colors.red,
                     shape: BoxShape.circle,
                   ),
-                  constraints: BoxConstraints(
+                  constraints: const BoxConstraints(
                     minWidth: 8,
                     minHeight: 8,
                   ),
@@ -150,11 +150,11 @@ class _ProductDetailsScreenBrandState extends State<ProductDetailsScreenBrand> {
           future: _product,
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return Center(child: CircularProgressIndicator());
+              return const Center(child: CircularProgressIndicator());
             } else if (snapshot.hasError) {
               return Center(child: Text('Error: ${snapshot.error}'));
             } else if (!snapshot.hasData) {
-              return Center(child: Text('Product not found'));
+              return const Center(child: Text('Product not found'));
             }
 
             final product = snapshot.data!;
@@ -173,7 +173,7 @@ class _ProductDetailsScreenBrandState extends State<ProductDetailsScreenBrand> {
                           child: Row(
                             children: [
                               // Size of the circular image container
-                              CircleAvatar(
+                              const CircleAvatar(
                                 radius:
                                     14, // Inner circle size (smaller for border effect)
                                 backgroundImage: NetworkImage(
@@ -206,9 +206,9 @@ class _ProductDetailsScreenBrandState extends State<ProductDetailsScreenBrand> {
                                     fontSize: 18.sp,
                                     fontWeight: FontWeight.w500),
                               ),
-                              Spacer(),
+                              const Spacer(),
                               IconButton(
-                                icon: Icon(Iconsax.edit_2),
+                                icon: const Icon(Iconsax.edit_2),
                                 onPressed: () {
                                   // Implement the edit functionality here
                                 },
@@ -348,7 +348,7 @@ class _ProductDetailsScreenBrandState extends State<ProductDetailsScreenBrand> {
                   SizedBox(
                     height: 20.h,
                   ),
-                  Policy(),
+                  const Policy(),
                   SizedBox(
                     height: 20.h,
                   ),
@@ -366,14 +366,14 @@ class _ProductDetailsScreenBrandState extends State<ProductDetailsScreenBrand> {
                               builder: (context, snapshot) {
                                 if (snapshot.connectionState ==
                                     ConnectionState.waiting) {
-                                  return Center(
+                                  return const Center(
                                       child: CircularProgressIndicator());
                                 } else if (snapshot.hasError) {
                                   return Center(
                                       child: Text('Error: ${snapshot.error}'));
                                 } else if (!snapshot.hasData ||
                                     snapshot.data!.isEmpty) {
-                                  return Center(
+                                  return const Center(
                                       child: Text('No reviews available'));
                                 }
 
@@ -393,13 +393,15 @@ class _ProductDetailsScreenBrandState extends State<ProductDetailsScreenBrand> {
                       builder: (context, snapshot) {
                         if (snapshot.connectionState ==
                             ConnectionState.waiting) {
-                          return Center(child: CircularProgressIndicator());
+                          return const Center(
+                              child: CircularProgressIndicator());
                         } else if (snapshot.hasError) {
                           return Center(
                               child: Text('Error: ${snapshot.error}'));
                         } else if (!snapshot.hasData ||
                             snapshot.data!.isEmpty) {
-                          return Center(child: Text('No reviews available'));
+                          return const Center(
+                              child: Text('No reviews available'));
                         }
 
                         final reviews = snapshot.data!;

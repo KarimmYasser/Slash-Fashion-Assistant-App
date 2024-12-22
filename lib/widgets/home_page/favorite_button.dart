@@ -44,7 +44,7 @@ class _FavoriteButtonState extends State<FavoriteButton> {
       } catch (e) {
         debugPrint('Error: ${widget.productId} $e');
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Network error. Please try again.')),
+          const SnackBar(content: Text('Network error. Please try again.')),
         );
       } finally {
         if (mounted) {
@@ -68,7 +68,7 @@ class _FavoriteButtonState extends State<FavoriteButton> {
       } catch (e) {
         debugPrint('Error: ${widget.productId} $e');
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Network error. Please try again.')),
+          const SnackBar(content: Text('Network error. Please try again.')),
         );
       } finally {
         if (mounted) {

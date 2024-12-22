@@ -50,8 +50,7 @@ class _ChooseHaircutState extends State<ChooseHaircut>
     try {
       // Convert the avatar map to JSON, then decode it to SVG string
       String avatarJson = json.encode(avatarMap);
-      return await FluttermojiFunctions()
-          .decodeFluttermojifromString(avatarJson);
+      return FluttermojiFunctions().decodeFluttermojifromString(avatarJson);
     } catch (error) {
       throw Exception("Error loading avatar SVG");
     }
@@ -76,9 +75,9 @@ class _ChooseHaircutState extends State<ChooseHaircut>
                     future: loadAvatar(),
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
-                        return CircularProgressIndicator();
+                        return const CircularProgressIndicator();
                       } else if (snapshot.hasError) {
-                        return Text("Error loading avatar");
+                        return const Text("Error loading avatar");
                       } else if (snapshot.hasData &&
                           snapshot.data!.isNotEmpty) {
                         return SvgPicture.string(
@@ -86,10 +85,10 @@ class _ChooseHaircutState extends State<ChooseHaircut>
                           width: 80,
                           height: 80,
                           placeholderBuilder: (BuildContext context) =>
-                              CircularProgressIndicator(),
+                              const CircularProgressIndicator(),
                         );
                       } else {
-                        return Text("Error loading avatar");
+                        return const Text("Error loading avatar");
                       }
                     },
                   ),
@@ -97,7 +96,8 @@ class _ChooseHaircutState extends State<ChooseHaircut>
                     padding: EdgeInsets.only(bottom: 60.h),
                     child: SizedBox(
                       width: 200.w,
-                      child: QuestionPubble(message: 'What is your hair type?'),
+                      child: const QuestionPubble(
+                          message: 'What is your hair type?'),
                     ),
                   )
                 ],

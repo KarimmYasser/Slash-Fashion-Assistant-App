@@ -5,7 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 class QuestionPubble extends StatelessWidget {
   final String message;
 
-  QuestionPubble({required this.message});
+  const QuestionPubble({super.key, required this.message});
 
   @override
   Widget build(BuildContext context) {

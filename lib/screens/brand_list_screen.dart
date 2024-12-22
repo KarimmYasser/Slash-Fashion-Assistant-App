@@ -3,6 +3,8 @@ import 'package:fashion_assistant/services/brand_service.dart';
 import 'package:flutter/material.dart';
 
 class BrandListScreen extends StatefulWidget {
+  const BrandListScreen({super.key});
+
   @override
   _BrandListScreenState createState() => _BrandListScreenState();
 }
@@ -20,13 +22,13 @@ class _BrandListScreenState extends State<BrandListScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Brands'),
+        title: const Text('Brands'),
       ),
       body: FutureBuilder<List<Brand>>(
         future: _brandsFuture,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
             return Center(
               child: Text('Error: ${snapshot.error}'),
@@ -49,7 +51,7 @@ class _BrandListScreenState extends State<BrandListScreen> {
                     trailing: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(Icons.star, color: Colors.amber),
+                        const Icon(Icons.star, color: Colors.amber),
                         Text(brand.rating.toString()),
                       ],
                     ),
@@ -61,7 +63,7 @@ class _BrandListScreenState extends State<BrandListScreen> {
               },
             );
           } else {
-            return Center(child: Text('No brands found.'));
+            return const Center(child: Text('No brands found.'));
           }
         },
       ),
@@ -78,9 +80,9 @@ class _BrandListScreenState extends State<BrandListScreen> {
             mainAxisSize: MainAxisSize.min,
             children: [
               Image.network(brand.logo),
-              SizedBox(height: 8),
+              const SizedBox(height: 8),
               Text('Description: ${brand.description}'),
-              SizedBox(height: 8),
+              const SizedBox(height: 8),
               Text('Email: ${brand.email}'),
               Text('Phone: ${brand.phone}'),
               Text('Facebook: ${brand.facebook}'),
@@ -91,7 +93,7 @@ class _BrandListScreenState extends State<BrandListScreen> {
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: Text('Close'),
+              child: const Text('Close'),
             ),
           ],
         );

@@ -13,7 +13,7 @@ class SizesList extends StatelessWidget {
       children: [
         Padding(
           padding: EdgeInsets.only(left: 10.w),
-          child: Text(
+          child: const Text(
             'Sizes:',
             style: TextStyle(
                 color: OurColors.textColor,
@@ -41,8 +41,8 @@ class SizesList extends StatelessWidget {
                         borderRadius: BorderRadius.circular(8.r),
                         color: const Color.fromARGB(255, 228, 223, 223),
                       ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(4.0),
+                      child: const Padding(
+                        padding: EdgeInsets.all(4.0),
                         child: Center(
                           child: Text(
                             '80x260',

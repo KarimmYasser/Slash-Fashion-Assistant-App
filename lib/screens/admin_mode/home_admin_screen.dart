@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:fashion_assistant/constants.dart';
 import 'package:fashion_assistant/models/productcard.dart';
-import 'package:fashion_assistant/screens/brand_mode/product_details_screen_brand.dart';
 import 'package:fashion_assistant/services/get_products.dart';
 import 'package:fashion_assistant/tap_map.dart';
 import 'package:fashion_assistant/utils/http/http_client.dart';
@@ -86,11 +85,11 @@ class _HomeAdminScreenState extends State<HomeAdminScreen> {
                         context,
                         MaterialPageRoute(
                           builder: (context) =>
-                              ProductSelectionScreen(listNumber: 1),
+                              const ProductSelectionScreen(listNumber: 1),
                         ),
                       );
                     },
-                    child: Center(child: Text('Add Offer List 1')),
+                    child: const Center(child: Text('Add Offer List 1')),
                   ),
                 ),
                 SizedBox(width: 10.w),
@@ -107,11 +106,11 @@ class _HomeAdminScreenState extends State<HomeAdminScreen> {
                         context,
                         MaterialPageRoute(
                           builder: (context) =>
-                              ProductSelectionScreen(listNumber: 2),
+                              const ProductSelectionScreen(listNumber: 2),
                         ),
                       );
                     },
-                    child: Center(
+                    child: const Center(
                       child: Text('Add Offer List 2',
                           style: TextStyle(
                             color: OurColors.primaryColor,
@@ -125,9 +124,9 @@ class _HomeAdminScreenState extends State<HomeAdminScreen> {
             // Display Offer Cards
             Expanded(
               child: isLoading
-                  ? Center(child: CircularProgressIndicator())
+                  ? const Center(child: CircularProgressIndicator())
                   : offers.isEmpty
-                      ? Center(child: Text('No offers available.'))
+                      ? const Center(child: Text('No offers available.'))
                       : ListView.builder(
                           itemCount: offers.length,
                           itemBuilder: (context, index) {
@@ -153,8 +152,7 @@ class OfferCard extends StatelessWidget {
   final VoidCallback
       onDelete; // Pass a callback to refresh the list after deletion
 
-  const OfferCard({required this.offer, required this.onDelete, Key? key})
-      : super(key: key);
+  const OfferCard({required this.offer, required this.onDelete, super.key});
 
   Future<void> _deleteOffer(BuildContext context) async {
     final String offerId = offer['id'];
@@ -167,7 +165,7 @@ class OfferCard extends StatelessWidget {
 
       // Show success message
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Offer deleted successfully.')),
+        const SnackBar(content: Text('Offer deleted successfully.')),
       );
 
       // Refresh the list
@@ -219,7 +217,7 @@ class OfferCard extends StatelessWidget {
                   product['description'],
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
-                  style: TextStyle(color: Colors.grey),
+                  style: const TextStyle(color: Colors.grey),
                 ),
                 SizedBox(height: 10.h),
                 Row(
@@ -264,7 +262,7 @@ class OfferCard extends StatelessWidget {
                   style: ElevatedButton.styleFrom(
                     backgroundColor: OurColors.primaryColor,
                   ),
-                  label: Center(child: Text('Delete')),
+                  label: const Center(child: Text('Delete')),
                 ),
               ],
             ),
@@ -279,7 +277,7 @@ class OfferCard extends StatelessWidget {
 class ProductSelectionScreen extends StatefulWidget {
   final int listNumber;
 
-  ProductSelectionScreen({required this.listNumber});
+  const ProductSelectionScreen({super.key, required this.listNumber});
 
   @override
   _ProductSelectionScreenState createState() => _ProductSelectionScreenState();
@@ -380,31 +378,32 @@ class _ProductSelectionScreenState extends State<ProductSelectionScreen> {
     });
     if (selectedProduct == null) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Please select exactly one product.')),
+        const SnackBar(content: Text('Please select exactly one product.')),
       );
       return;
     }
     if (coverImage == null) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Please upload a cover image.')),
+        const SnackBar(content: Text('Please upload a cover image.')),
       );
       return;
     }
     if (_discountController.text.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Please enter a discount value.')),
+        const SnackBar(content: Text('Please enter a discount value.')),
       );
       return;
     }
     if (_startDateController.text.isEmpty || _endDateController.text.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Please select both start and end dates.')),
+        const SnackBar(
+            content: Text('Please select both start and end dates.')),
       );
       return;
     }
     if (startDate != null && endDate != null && startDate!.isAfter(endDate!)) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('End date must be after the start date.')),
+        const SnackBar(content: Text('End date must be after the start date.')),
       );
       return;
     }
@@ -412,7 +411,7 @@ class _ProductSelectionScreenState extends State<ProductSelectionScreen> {
     final discountValue = int.tryParse(_discountController.text);
     if (discountValue == null || discountValue <= 0) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Please enter a valid numeric discount.')),
+        const SnackBar(content: Text('Please enter a valid numeric discount.')),
       );
       return;
     }
@@ -429,7 +428,7 @@ class _ProductSelectionScreenState extends State<ProductSelectionScreen> {
       });
 
       final offerId = response['offer']['id'];
-      print('Offer created successfully: $offerId');
+
       String? uploadedImageUrl;
 
       // Upload the image separately
@@ -456,22 +455,14 @@ class _ProductSelectionScreenState extends State<ProductSelectionScreen> {
                 await imageResponse.stream.bytesToString();
             final imageData = json.decode(imageResponseBody);
             uploadedImageUrl = imageData['imageUrl'];
-            print('Image uploaded successfully: $uploadedImageUrl');
           } else {
-            print(
-                'Failed to upload image. Status code: ${imageResponse.statusCode}');
             final responseBody = await imageResponse.stream.bytesToString();
-            print('Response body: $responseBody');
           }
-        } catch (e) {
-          print('Error uploading image: $e');
-        }
-      } else {
-        print('No image file provided.');
-      }
+        } catch (e) {}
+      } else {}
 
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Offer created successfully!')),
+        const SnackBar(content: Text('Offer created successfully!')),
       );
       Navigator.pop(context); // Return to home page
     } catch (e) {
@@ -480,7 +471,7 @@ class _ProductSelectionScreenState extends State<ProductSelectionScreen> {
       });
       if (e.toString().contains('The product already has an offer')) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('The product already has an offer.')),
+          const SnackBar(content: Text('The product already has an offer.')),
         );
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -494,10 +485,10 @@ class _ProductSelectionScreenState extends State<ProductSelectionScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Add Offer'),
+        title: const Text('Add Offer'),
       ),
       body: isLoading
-          ? Center(child: CircularProgressIndicator())
+          ? const Center(child: CircularProgressIndicator())
           : SingleChildScrollView(
               child: Column(
                 children: [
@@ -506,7 +497,7 @@ class _ProductSelectionScreenState extends State<ProductSelectionScreen> {
                     padding: const EdgeInsets.all(8.0),
                     child: TextField(
                       onChanged: _searchProducts,
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         labelText: 'Search by product name',
                         border: OutlineInputBorder(),
                         prefixIcon: Icon(Icons.search),
@@ -558,7 +549,7 @@ class _ProductSelectionScreenState extends State<ProductSelectionScreen> {
                           coverImage == null
                               ? 'Upload Cover Image'
                               : 'Change Cover Image',
-                          style: TextStyle(color: Colors.black),
+                          style: const TextStyle(color: Colors.black),
                         ),
                       ),
                     ),
@@ -581,7 +572,7 @@ class _ProductSelectionScreenState extends State<ProductSelectionScreen> {
                       controller: _discountController,
                       keyboardType: TextInputType.number,
                       inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         labelText: 'Add Discount (%)',
                         border: OutlineInputBorder(),
                       ),
@@ -595,7 +586,7 @@ class _ProductSelectionScreenState extends State<ProductSelectionScreen> {
                       readOnly: true,
                       onTap: () =>
                           _selectDate(context, _startDateController, true),
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         labelText: 'Start Date',
                         border: OutlineInputBorder(),
                         suffixIcon: Icon(Icons.calendar_today),
@@ -610,7 +601,7 @@ class _ProductSelectionScreenState extends State<ProductSelectionScreen> {
                       readOnly: true,
                       onTap: () =>
                           _selectDate(context, _endDateController, false),
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         labelText: 'End Date',
                         border: OutlineInputBorder(),
                         suffixIcon: Icon(Icons.calendar_today),
@@ -622,7 +613,7 @@ class _ProductSelectionScreenState extends State<ProductSelectionScreen> {
                     padding: const EdgeInsets.all(16.0),
                     child: ElevatedButton(
                       onPressed: _createOffer,
-                      child: Center(child: Text('Create Offer')),
+                      child: const Center(child: Text('Create Offer')),
                     ),
                   ),
                 ],
@@ -635,6 +626,8 @@ class _ProductSelectionScreenState extends State<ProductSelectionScreen> {
 //=================================================================================================================================
 
 class DeleteOfferScreen extends StatefulWidget {
+  const DeleteOfferScreen({super.key});
+
   @override
   _DeleteOfferScreenState createState() => _DeleteOfferScreenState();
 }
@@ -652,7 +645,8 @@ class _DeleteOfferScreenState extends State<DeleteOfferScreen> {
 
   Future<void> _fetchOffers() async {
     // Simulate fetching offers from the backend
-    await Future.delayed(Duration(seconds: 2)); // Replace with actual API call
+    await Future.delayed(
+        const Duration(seconds: 2)); // Replace with actual API call
     setState(() {
       offers = ['Offer A', 'Offer B', 'Offer C']; // Replace with fetched data
       isLoading = false;
@@ -662,18 +656,19 @@ class _DeleteOfferScreenState extends State<DeleteOfferScreen> {
   void _deleteOffer() async {
     if (selectedOffer == null) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Please select an offer to delete.')),
+        const SnackBar(content: Text('Please select an offer to delete.')),
       );
       return;
     }
     // Simulate deleting the offer on the backend
-    await Future.delayed(Duration(seconds: 1)); // Replace with actual API call
+    await Future.delayed(
+        const Duration(seconds: 1)); // Replace with actual API call
     setState(() {
       offers.remove(selectedOffer);
       selectedOffer = null;
     });
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('Offer deleted successfully.')),
+      const SnackBar(content: Text('Offer deleted successfully.')),
     );
   }
 
@@ -681,10 +676,10 @@ class _DeleteOfferScreenState extends State<DeleteOfferScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Delete Offer'),
+        title: const Text('Delete Offer'),
       ),
       body: isLoading
-          ? Center(child: CircularProgressIndicator())
+          ? const Center(child: CircularProgressIndicator())
           : Column(
               children: [
                 Expanded(
@@ -710,7 +705,7 @@ class _DeleteOfferScreenState extends State<DeleteOfferScreen> {
                   padding: const EdgeInsets.all(16.0),
                   child: ElevatedButton(
                     onPressed: _deleteOffer,
-                    child: Text('Delete Offer'),
+                    child: const Text('Delete Offer'),
                   ),
                 ),
               ],

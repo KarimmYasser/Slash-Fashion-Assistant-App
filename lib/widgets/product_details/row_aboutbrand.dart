@@ -59,7 +59,7 @@ class RowAboutbrand extends StatelessWidget {
                         ),
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       width: 10, // Space between progress bar and percentage
                     ),
                     Text(

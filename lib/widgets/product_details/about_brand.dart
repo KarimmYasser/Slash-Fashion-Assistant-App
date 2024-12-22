@@ -1,9 +1,7 @@
 import 'package:fashion_assistant/constants.dart';
 import 'package:fashion_assistant/widgets/product_details/five_stars.dart';
-import 'package:fashion_assistant/widgets/product_details/row_aboutbrand.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:iconsax/iconsax.dart';
 
 class AboutBrand extends StatefulWidget {
   const AboutBrand({
@@ -36,7 +34,7 @@ class _AboutBrandState extends State<AboutBrand> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
+            const Text(
               'About the Brand',
               style: TextStyle(
                 fontSize: Sizes.fontSizeLg,
@@ -69,7 +67,7 @@ class _AboutBrandState extends State<AboutBrand> {
                     ),
                     Row(
                       children: [
-                        FiveStarRating(filledStars: 3),
+                        const FiveStarRating(filledStars: 3),
                         SizedBox(
                           width: 6.w,
                         ),

@@ -2,7 +2,6 @@ import 'package:fashion_assistant/constants.dart';
 import 'package:fashion_assistant/models/review.dart';
 import 'package:fashion_assistant/widgets/product_details/reviews.dart';
 import 'package:flutter/material.dart';
-import 'package:fashion_assistant/screens/add_review_screen.dart'; // Import the AddReviewScreen
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class ReviewsScreenBrand extends StatelessWidget {
@@ -26,9 +25,9 @@ class ReviewsScreenBrand extends StatelessWidget {
     return Scaffold(
       backgroundColor: OurColors.secondaryBackgroundColor,
       appBar: AppBar(
-        title: Text('Product ratings and reviews'),
+        title: const Text('Product ratings and reviews'),
         leading: IconButton(
-          icon: Icon(Icons.arrow_back),
+          icon: const Icon(Icons.arrow_back),
           onPressed: () {
             Navigator.pop(context);
           },
@@ -54,11 +53,11 @@ class ReviewsScreenBrand extends StatelessWidget {
                 reviews: reviews,
               ),
             ),
-            Text('Reviews',
+            const Text('Reviews',
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
             ListView.builder(
               shrinkWrap: true,
-              physics: NeverScrollableScrollPhysics(),
+              physics: const NeverScrollableScrollPhysics(),
               itemCount: reviews.length,
               itemBuilder: (context, index) {
                 return Padding(

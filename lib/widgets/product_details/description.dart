@@ -21,7 +21,7 @@ class _DescriptionState extends State<Description> {
         children: [
           Padding(
             padding: EdgeInsets.only(top: 18.h, left: 16.w),
-            child: Text(
+            child: const Text(
               'Description',
               style: TextStyle(
                   fontSize: Sizes.fontSizeLg,
@@ -37,7 +37,7 @@ class _DescriptionState extends State<Description> {
                 final textPainter = TextPainter(
                   text: TextSpan(
                     text: widget.description,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: Sizes.fontSizeMd,
                       color: OurColors.textColor,
                     ),
@@ -56,15 +56,9 @@ class _DescriptionState extends State<Description> {
                     text: isExpanded
                         ? widget.description
                         : isTextOverflowing
-                            ? widget.description.substring(
-                                    0,
-                                    textPainter
-                                        .getPositionForOffset(
-                                            Offset(constraints.maxWidth, 0))
-                                        .offset) +
-                                "..."
+                            ? "${widget.description.substring(0, textPainter.getPositionForOffset(Offset(constraints.maxWidth, 0)).offset)}..."
                             : widget.description,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: Sizes.fontSizeMd,
                       color: OurColors.textColor,
                     ),
@@ -78,7 +72,7 @@ class _DescriptionState extends State<Description> {
                           },
                           child: Text(
                             isExpanded ? ' Show less' : ' Show more',
-                            style: TextStyle(
+                            style: const TextStyle(
                                 fontSize: Sizes.fontSizeMd,
                                 color: OurColors.primaryColor,
                                 fontWeight: FontWeight.w500),

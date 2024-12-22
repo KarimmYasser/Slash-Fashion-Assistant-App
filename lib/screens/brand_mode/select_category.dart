@@ -59,7 +59,7 @@ class _SelectCategoryState extends State<SelectCategory> {
       );
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Please select a category')),
+        const SnackBar(content: Text('Please select a category')),
       );
     }
   }
@@ -67,15 +67,15 @@ class _SelectCategoryState extends State<SelectCategory> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Select Category')),
+      appBar: AppBar(title: const Text('Select Category')),
       body: Center(
         child: isLoading // Check the loading state
-            ? CircularProgressIndicator() // Show loader if loading
+            ? const CircularProgressIndicator() // Show loader if loading
             : Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   DropdownButton<String>(
-                    hint: Text('Select a category'),
+                    hint: const Text('Select a category'),
                     value: selectedCategory,
                     onChanged: (String? newValue) {
                       setState(() {
@@ -94,7 +94,7 @@ class _SelectCategoryState extends State<SelectCategory> {
                     padding: const EdgeInsets.all(50),
                     child: ElevatedButton(
                       onPressed: navigateToAddCategorySize,
-                      child: Center(child: Text('Continue')),
+                      child: const Center(child: Text('Continue')),
                     ),
                   ),
                 ],

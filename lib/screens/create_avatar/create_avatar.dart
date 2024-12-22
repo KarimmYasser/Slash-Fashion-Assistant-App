@@ -4,6 +4,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:fashion_assistant/screens/total_screen.dart';
 
 class AvatarCreationScreen extends StatefulWidget {
+  const AvatarCreationScreen({super.key});
+
   @override
   _AvatarCreationScreenState createState() => _AvatarCreationScreenState();
 }
@@ -15,17 +17,13 @@ class _AvatarCreationScreenState extends State<AvatarCreationScreen> {
 
     if (avatarData.isNotEmpty) {
       await prefs.setString('savedAvatar', avatarData);
-      print("##########################################");
-      print("Avatar saved successfully: $avatarData");
-    } else {
-      print("Error: No avatar data to save.");
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Create Your Avatar")),
+      appBar: AppBar(title: const Text("Create Your Avatar")),
       body: Column(
         children: [
           FluttermojiCircleAvatar(),
@@ -37,10 +35,10 @@ class _AvatarCreationScreenState extends State<AvatarCreationScreen> {
                 await saveAvatar();
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (_) => TotalScreens()),
+                  MaterialPageRoute(builder: (_) => const TotalScreens()),
                 );
               },
-              child: Text("Next"),
+              child: const Text("Next"),
             ),
           ),
         ],

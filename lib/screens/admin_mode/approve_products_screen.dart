@@ -1,7 +1,6 @@
 import 'package:fashion_assistant/constants.dart';
 import 'package:fashion_assistant/utils/http/http_client.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class Product {
   final String id;
@@ -60,6 +59,8 @@ class Product {
 }
 
 class ApproveProductsScreen extends StatefulWidget {
+  const ApproveProductsScreen({super.key});
+
   @override
   _ApproveProductsScreenState createState() => _ApproveProductsScreenState();
 }
@@ -86,21 +87,21 @@ class _ApproveProductsScreenState extends State<ApproveProductsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Waiting Products')),
+      appBar: AppBar(title: const Text('Waiting Products')),
       body: loading
-          ? Center(child: CircularProgressIndicator())
+          ? const Center(child: CircularProgressIndicator())
           : products.isEmpty
-              ? Center(
+              ? const Center(
                   child: Text('no prducts found'),
                 )
               : GridView.builder(
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 2,
                     childAspectRatio: 3 / 4,
                     crossAxisSpacing: 8,
                     mainAxisSpacing: 8,
                   ),
-                  padding: EdgeInsets.all(8),
+                  padding: const EdgeInsets.all(8),
                   itemCount: products.length,
                   itemBuilder: (context, index) {
                     final product = products[index];
@@ -127,7 +128,7 @@ class _ApproveProductsScreenState extends State<ApproveProductsScreen> {
                           children: [
                             Expanded(
                               child: ClipRRect(
-                                borderRadius: BorderRadius.vertical(
+                                borderRadius: const BorderRadius.vertical(
                                     top: Radius.circular(8)),
                                 child: Image.network(
                                   product.imageUrl,
@@ -142,13 +143,13 @@ class _ApproveProductsScreenState extends State<ApproveProductsScreen> {
                                 children: [
                                   Text(
                                     product.name,
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                       fontWeight: FontWeight.bold,
                                     ),
                                     maxLines: 1,
                                     overflow: TextOverflow.ellipsis,
                                   ),
-                                  SizedBox(height: 4),
+                                  const SizedBox(height: 4),
                                   Text(
                                     '\$${product.price.toStringAsFixed(2)}',
                                     style: TextStyle(color: Colors.grey[700]),
@@ -169,7 +170,7 @@ class _ApproveProductsScreenState extends State<ApproveProductsScreen> {
 class ProductDetailScreen extends StatelessWidget {
   final Product product;
 
-  ProductDetailScreen({required this.product});
+  const ProductDetailScreen({super.key, required this.product});
 
   Future<void> approveProduct(BuildContext context) async {
     await HttpHelper.get('api/admin/approve-product/${product.id}');
@@ -186,7 +187,7 @@ class ProductDetailScreen extends StatelessWidget {
   Widget buildDetailCard(String title, List<Widget> content) {
     return Card(
       elevation: 4,
-      margin: EdgeInsets.symmetric(vertical: 12),
+      margin: const EdgeInsets.symmetric(vertical: 12),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
         side: BorderSide(color: Colors.grey.shade300),
@@ -204,7 +205,7 @@ class ProductDetailScreen extends StatelessWidget {
                 color: Colors.grey.shade800,
               ),
             ),
-            SizedBox(height: 12),
+            const SizedBox(height: 12),
             ...content,
           ],
         ),
@@ -220,7 +221,7 @@ class ProductDetailScreen extends StatelessWidget {
         centerTitle: true,
       ),
       body: SingleChildScrollView(
-        padding: EdgeInsets.symmetric(horizontal: 16, vertical: 24),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
@@ -236,7 +237,7 @@ class ProductDetailScreen extends StatelessWidget {
                 ),
               ),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
 
             // Basic Information
             buildDetailCard(
@@ -277,16 +278,16 @@ class ProductDetailScreen extends StatelessWidget {
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
                       ),
-                      padding: EdgeInsets.symmetric(vertical: 16),
+                      padding: const EdgeInsets.symmetric(vertical: 16),
                     ),
-                    child: Text(
+                    child: const Text(
                       'Approve',
                       style:
                           TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                     ),
                   ),
                 ),
-                SizedBox(width: 16),
+                const SizedBox(width: 16),
                 Expanded(
                   child: ElevatedButton(
                     onPressed: () => rejectProduct(context),
@@ -295,9 +296,9 @@ class ProductDetailScreen extends StatelessWidget {
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
                       ),
-                      padding: EdgeInsets.symmetric(vertical: 16),
+                      padding: const EdgeInsets.symmetric(vertical: 16),
                     ),
-                    child: Text(
+                    child: const Text(
                       'Reject',
                       style:
                           TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
@@ -335,34 +336,6 @@ class ProductDetailScreen extends StatelessWidget {
           ),
         ],
       ),
-    );
-  }
-
-  Widget _buildChipList(String label, List<String> items) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          label,
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 16,
-            color: Colors.grey.shade800,
-          ),
-        ),
-        SizedBox(height: 8),
-        Wrap(
-          spacing: 8,
-          runSpacing: 8,
-          children: items.map((item) {
-            return Chip(
-              label: Text(item),
-              backgroundColor: Colors.grey.shade200,
-              labelStyle: TextStyle(fontSize: 14, color: Colors.grey.shade800),
-            );
-          }).toList(),
-        ),
-      ],
     );
   }
 }

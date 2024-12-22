@@ -18,7 +18,7 @@ class Policy extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
+                const Text(
                   'Refund and exchange policy',
                   style: TextStyle(
                       fontSize: Sizes.fontSizeLg,
@@ -30,7 +30,7 @@ class Policy extends StatelessWidget {
               ],
             ),
           ),
-          Padding(
+          const Padding(
             padding: EdgeInsets.all(12),
             child: Text(
               'This item cannot be exchanged or returned',

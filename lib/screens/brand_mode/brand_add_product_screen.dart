@@ -70,12 +70,12 @@ class _BrandAddProductScreenState extends State<BrandAddProductScreen> {
   }
 
   Future<void> _pickImages() async {
-    final List<XFile>? pickedImages = await _imagePicker.pickMultiImage(
+    final List<XFile> pickedImages = await _imagePicker.pickMultiImage(
       maxWidth: 800,
       maxHeight: 800,
     );
 
-    if (pickedImages != null && pickedImages.isNotEmpty) {
+    if (pickedImages.isNotEmpty) {
       setState(() {
         _selectedImages =
             pickedImages.map((image) => File(image.path)).toList();
@@ -158,19 +158,14 @@ class _BrandAddProductScreenState extends State<BrandAddProductScreen> {
                   await imageResponse.stream.bytesToString();
               final imageData = json.decode(imageResponseBody);
               uploadedImageUrl = imageData['image'];
-              print('Image uploaded successfully: $uploadedImageUrl');
             } else {
-              print(
-                  'Failed to upload image. Status code: ${imageResponse.statusCode}');
               final responseBody = await imageResponse.stream.bytesToString();
-              print('Response body: $responseBody');
             }
-          } catch (e) {
-            print('Error uploading image: $e');
-          }
+            // ignore: empty_catches
+          } catch (e) {}
         }
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Product published successfully.')),
+          const SnackBar(content: Text('Product published successfully.')),
         );
         //Navigator.of(context).pushReplacementNamed('/totalscreens');
       } catch (e) {
@@ -180,13 +175,13 @@ class _BrandAddProductScreenState extends State<BrandAddProductScreen> {
       }
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Fill all fields and upload images.')),
+        const SnackBar(content: Text('Fill all fields and upload images.')),
       );
     }
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => BrandTotalScreens(),
+        builder: (context) => const BrandTotalScreens(),
       ),
     );
   }
@@ -340,7 +335,7 @@ class _BrandAddProductScreenState extends State<BrandAddProductScreen> {
                                                 });
                                               },
                                               child: Container(
-                                                decoration: BoxDecoration(
+                                                decoration: const BoxDecoration(
                                                   shape: BoxShape.circle,
                                                   color: Colors.red,
                                                 ),
@@ -382,7 +377,7 @@ class _BrandAddProductScreenState extends State<BrandAddProductScreen> {
                                 Padding(
                                   padding: const EdgeInsets.only(top: 8.0),
                                   child: TextFormField(
-                                    decoration: InputDecoration(
+                                    decoration: const InputDecoration(
                                       labelText: 'Percentage',
                                       border: OutlineInputBorder(),
                                     ),

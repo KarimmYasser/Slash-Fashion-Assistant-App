@@ -4,7 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class ImagesContainer extends StatefulWidget {
   final List<String> imageUrls;
-  const ImagesContainer({Key? key, required this.imageUrls}) : super(key: key);
+  const ImagesContainer({super.key, required this.imageUrls});
 
   @override
   _ImagesContainerState createState() => _ImagesContainerState();
@@ -134,15 +134,15 @@ class _ImagesContainerState extends State<ImagesContainer> {
 class FullGalleryPage extends StatelessWidget {
   final List<String> imageUrls;
 
-  const FullGalleryPage({Key? key, required this.imageUrls}) : super(key: key);
+  const FullGalleryPage({super.key, required this.imageUrls});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Gallery")),
+      appBar: AppBar(title: const Text("Gallery")),
       body: GridView.builder(
-        padding: EdgeInsets.all(8.0),
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        padding: const EdgeInsets.all(8.0),
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 3,
           crossAxisSpacing: 8.0,
           mainAxisSpacing: 8.0,

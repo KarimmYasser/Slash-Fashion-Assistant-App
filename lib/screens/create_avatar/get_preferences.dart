@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:fashion_assistant/constants.dart';
-import 'package:fashion_assistant/data/authentication.repository/login_data.dart';
 import 'package:fashion_assistant/screens/create_avatar/avoiding_colors.dart';
 import 'package:fashion_assistant/screens/create_avatar/choose_body_color.dart';
 import 'package:fashion_assistant/screens/create_avatar/choose_facial_hair.dart';
@@ -13,7 +12,7 @@ import 'package:fashion_assistant/screens/create_avatar/choose_haircut.dart';
 import 'package:fashion_assistant/screens/create_avatar/choose_shirts_style.dart';
 import 'package:fashion_assistant/screens/create_avatar/get_body_measurments.dart';
 import 'package:fashion_assistant/screens/create_avatar/male_or_female.dart';
-import 'package:fashion_assistant/screens/total_screen.dart';
+
 import 'package:fashion_assistant/tap_map.dart';
 import 'package:fashion_assistant/utils/http/http_client.dart';
 import 'package:flutter/material.dart';
@@ -59,7 +58,7 @@ class _GetPreferencesState extends State<GetPreferences> {
       debugPrint("Avatar JSON: $avatarJson");
 
       avatarSvg =
-          await FluttermojiFunctions().decodeFluttermojifromString(avatarJson);
+          FluttermojiFunctions().decodeFluttermojifromString(avatarJson);
 
       // Parse the avatar JSON into a Map
       avatarData = json.decode(avatarJson) as Map<String, dynamic>;
@@ -81,7 +80,7 @@ class _GetPreferencesState extends State<GetPreferences> {
             borderRadius: BorderRadius.circular(16.0),
           ),
           child: Container(
-            padding: EdgeInsets.all(20),
+            padding: const EdgeInsets.all(20),
             height: 350.h,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -148,13 +147,11 @@ class _GetPreferencesState extends State<GetPreferences> {
                                 context, 'Please select at least one product.');
                             return;
                           }
-                          print('Selected products: $selectedColors');
                           if (selectedColors.isEmpty) {
                             _showErrorDialog(context,
                                 'Please select at least one favorite color.');
                             return;
                           }
-                          print('Selected products: $avoidedSelectedColors');
                           if (avoidedSelectedColors.isEmpty) {
                             _showErrorDialog(context,
                                 'Please select at least one avoiding color.');
@@ -167,9 +164,8 @@ class _GetPreferencesState extends State<GetPreferences> {
 
                           try {
                             kChatId = createChat();
-                          } catch (e) {
-                            print('Error initializing chat: $e');
-                          }
+                            // ignore: empty_catches
+                          } catch (e) {}
                           try {
                             final response = await HttpHelper.post(
                               'api/user/avatar',
@@ -187,7 +183,7 @@ class _GetPreferencesState extends State<GetPreferences> {
                             debugPrint('Error sending avatar data: $error');
                           }
 
-                          Get.offAll(() => BodyMeasurementsScreen());
+                          Get.offAll(() => const BodyMeasurementsScreen());
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: OurColors.containerBackgroundColor,
@@ -219,14 +215,14 @@ class _GetPreferencesState extends State<GetPreferences> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Error'),
+          title: const Text('Error'),
           content: Text(message),
           actions: [
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: Text('OK'),
+              child: const Text('OK'),
             ),
           ],
         );
@@ -258,7 +254,6 @@ class _GetPreferencesState extends State<GetPreferences> {
     try {
       final List<String> selectedIds =
           selectedProducts.map((product) => product['id'] as String).toList();
-      print('Selected IDs: $selectedIds');
 
       final payload = {
         'products': selectedIds,
@@ -270,18 +265,11 @@ class _GetPreferencesState extends State<GetPreferences> {
 
       // Check the response content instead of relying on `statusCode`
       if (response['message'] == 'Style preferences set successfully') {
-        print(
-            '=================================================================');
-        print(selectedIds);
-        print('Sent successfully');
-        print(
-            '=================================================================');
       } else {
         throw Exception('Unexpected response: ${response.toString()}');
       }
-    } catch (error) {
-      print('Error saving selected products: $error');
-    }
+      // ignore: empty_catches
+    } catch (error) {}
   }
 
   void _nextPage() {
@@ -334,9 +322,9 @@ class _GetPreferencesState extends State<GetPreferences> {
           ChooseFavColor(
             onSelection: _nextPage,
           ),
-          ChooseFavColors(),
-          AvoidingColors(),
-          ChooseStyle(),
+          const ChooseFavColors(),
+          const AvoidingColors(),
+          const ChooseStyle(),
         ],
       ),
       bottomSheet: Padding(
@@ -355,8 +343,8 @@ class _GetPreferencesState extends State<GetPreferences> {
               child: IconButton(
                 onPressed: _activeScreen > 0
                     ? _previousPage
-                    : () => Get.offAll(() => MaleOrFemale()),
-                icon: Icon(
+                    : () => Get.offAll(() => const MaleOrFemale()),
+                icon: const Icon(
                   Iconsax.arrow_left,
                   color: OurColors.primaryColor,
                 ),
@@ -382,7 +370,7 @@ class _GetPreferencesState extends State<GetPreferences> {
                     _showAvatarPopup(context);
                   }
                 },
-                icon: Icon(
+                icon: const Icon(
                   Iconsax.arrow_right_1,
                   color: OurColors.primaryColor,
                 ),

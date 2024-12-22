@@ -38,15 +38,10 @@ class _ChatScreenState extends State<ChatScreen> {
       if (chatList.isNotEmpty) {
         setState(() {
           chatId = chatList[0]['id'];
-          print('==================================');
-          print(chatList[0]['id']);
-          print('==================================');
         });
       }
 
       await _fetchPreviousMessages();
-    } catch (e) {
-      print('Error initializing chat: $e');
     } finally {
       if (mounted) {
         setState(() {
@@ -82,9 +77,8 @@ class _ChatScreenState extends State<ChatScreen> {
 
       // Scroll to the bottom after loading messages
       _scrollToBottom();
-    } catch (e) {
-      print('Error fetching messages: $e');
-    }
+      // ignore: empty_catches
+    } catch (e) {}
   }
 
   Future<Map<String, dynamic>?> sendMessage({
@@ -93,9 +87,6 @@ class _ChatScreenState extends State<ChatScreen> {
     String? file,
   }) async {
     const url = 'api/chat/message';
-    print('=============================================');
-    print('chatId: $chatId');
-    print('=============================================');
 
     final response = await HttpHelper.post(
       url,
@@ -135,9 +126,8 @@ class _ChatScreenState extends State<ChatScreen> {
         // Scroll to the bottom after receiving bot's response
         _scrollToBottom();
       }
-    } catch (e) {
-      print('Error sending message: $e');
-    }
+      // ignore: empty_catches
+    } catch (e) {}
   }
 
   void _scrollToBottom({Duration delay = const Duration(milliseconds: 300)}) {
@@ -145,7 +135,7 @@ class _ChatScreenState extends State<ChatScreen> {
       if (_scrollController.hasClients) {
         _scrollController.animateTo(
           _scrollController.position.maxScrollExtent,
-          duration: Duration(milliseconds: 300),
+          duration: const Duration(milliseconds: 300),
           curve: Curves.easeOut,
         );
       }
@@ -262,14 +252,14 @@ class _ChatScreenState extends State<ChatScreen> {
               color: Colors.grey.withOpacity(0.5),
               spreadRadius: 2,
               blurRadius: 5,
-              offset: Offset(0, 3), // Changes position of shadow
+              offset: const Offset(0, 3), // Changes position of shadow
             ),
           ],
         ),
         child: Column(
           children: [
             ClipRRect(
-              borderRadius: BorderRadius.only(
+              borderRadius: const BorderRadius.only(
                 topLeft: Radius.circular(15.0),
                 topRight: Radius.circular(15.0),
               ),
@@ -296,9 +286,9 @@ class _ChatScreenState extends State<ChatScreen> {
                     );
                   },
                   style: ElevatedButton.styleFrom(
-                    padding:
-                        EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
-                    textStyle: TextStyle(fontSize: 14),
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 10.0, horizontal: 20.0),
+                    textStyle: const TextStyle(fontSize: 14),
                   ),
                   child: const Text('View Product'),
                 ),

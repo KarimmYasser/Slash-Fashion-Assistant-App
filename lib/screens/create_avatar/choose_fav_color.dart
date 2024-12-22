@@ -18,10 +18,11 @@ class ChooseFavColor extends StatefulWidget {
 class _ChooseFavColorState extends State<ChooseFavColor>
     with AutomaticKeepAliveClientMixin {
   Map<String, dynamic> getMap() {
-    if (isMale)
+    if (isMale) {
       return avatarsMap['male']!;
-    else
+    } else {
       return avatarsMap['female']!;
+    }
   }
 
   String? avatarSvg;
@@ -40,8 +41,7 @@ class _ChooseFavColorState extends State<ChooseFavColor>
     try {
       // Convert the avatar map to JSON, then decode it to SVG string
       String avatarJson = json.encode(avatarMap);
-      return await FluttermojiFunctions()
-          .decodeFluttermojifromString(avatarJson);
+      return FluttermojiFunctions().decodeFluttermojifromString(avatarJson);
     } catch (error) {
       throw Exception("Error loading avatar SVG");
     }
@@ -64,19 +64,19 @@ class _ChooseFavColorState extends State<ChooseFavColor>
                   future: loadAvatar(),
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
-                      return CircularProgressIndicator();
+                      return const CircularProgressIndicator();
                     } else if (snapshot.hasError) {
-                      return Text("Error loading avatar");
+                      return const Text("Error loading avatar");
                     } else if (snapshot.hasData && snapshot.data!.isNotEmpty) {
                       return SvgPicture.string(
                         snapshot.data!,
                         width: 80,
                         height: 80,
                         placeholderBuilder: (BuildContext context) =>
-                            CircularProgressIndicator(),
+                            const CircularProgressIndicator(),
                       );
                     } else {
-                      return Text("Error loading avatar");
+                      return const Text("Error loading avatar");
                     }
                   },
                 ),
@@ -84,7 +84,7 @@ class _ChooseFavColorState extends State<ChooseFavColor>
                   padding: EdgeInsets.only(bottom: 60.h),
                   child: SizedBox(
                     width: 200.w,
-                    child: QuestionPubble(
+                    child: const QuestionPubble(
                         message: 'What is your favorite color in clothes?'),
                   ),
                 )
@@ -108,7 +108,7 @@ class _ChooseFavColorState extends State<ChooseFavColor>
                   });
                   widget.onSelection();
                 },
-                child: ColorCircle(
+                child: const ColorCircle(
                   color: Color(0xff65C9FF),
                 ),
               ),
@@ -126,7 +126,7 @@ class _ChooseFavColorState extends State<ChooseFavColor>
                   });
                   widget.onSelection();
                 },
-                child: ColorCircle(
+                child: const ColorCircle(
                   color: Color(0xff5099E4),
                 ),
               ),
@@ -144,7 +144,7 @@ class _ChooseFavColorState extends State<ChooseFavColor>
                   });
                   widget.onSelection();
                 },
-                child: ColorCircle(
+                child: const ColorCircle(
                   color: Color(0xffFFFFB1),
                 ),
               ),
@@ -162,7 +162,7 @@ class _ChooseFavColorState extends State<ChooseFavColor>
                   });
                   widget.onSelection();
                 },
-                child: ColorCircle(
+                child: const ColorCircle(
                   color: Color(0xffA7FFC4),
                 ),
               ),
@@ -185,7 +185,7 @@ class _ChooseFavColorState extends State<ChooseFavColor>
                   });
                   widget.onSelection();
                 },
-                child: ColorCircle(
+                child: const ColorCircle(
                   color: Color(0xff929598),
                 ),
               ),
@@ -203,7 +203,7 @@ class _ChooseFavColorState extends State<ChooseFavColor>
                   });
                   widget.onSelection();
                 },
-                child: ColorCircle(
+                child: const ColorCircle(
                   color: Colors.black,
                 ),
               ),
@@ -221,7 +221,7 @@ class _ChooseFavColorState extends State<ChooseFavColor>
                   });
                   widget.onSelection();
                 },
-                child: ColorCircle(
+                child: const ColorCircle(
                   color: Color(0xff27557C),
                 ),
               ),
@@ -239,7 +239,7 @@ class _ChooseFavColorState extends State<ChooseFavColor>
                   });
                   widget.onSelection();
                 },
-                child: ColorCircle(
+                child: const ColorCircle(
                   color: Color(0xffE6E6E6),
                 ),
               ),
@@ -262,7 +262,7 @@ class _ChooseFavColorState extends State<ChooseFavColor>
                   });
                   widget.onSelection();
                 },
-                child: ColorCircle(
+                child: const ColorCircle(
                   color: Color(0xff3D4E5C),
                 ),
               ),
@@ -280,7 +280,7 @@ class _ChooseFavColorState extends State<ChooseFavColor>
                   });
                   widget.onSelection();
                 },
-                child: ColorCircle(
+                child: const ColorCircle(
                   color: Color(0xffFFDEB5),
                 ),
               ),
@@ -298,7 +298,7 @@ class _ChooseFavColorState extends State<ChooseFavColor>
                   });
                   widget.onSelection();
                 },
-                child: ColorCircle(
+                child: const ColorCircle(
                   color: Color(0xffFFAFB9),
                 ),
               ),
@@ -316,7 +316,7 @@ class _ChooseFavColorState extends State<ChooseFavColor>
                   });
                   widget.onSelection();
                 },
-                child: ColorCircle(
+                child: const ColorCircle(
                   color: Color(0xffFF488E),
                 ),
               ),
@@ -338,7 +338,7 @@ class _ChooseFavColorState extends State<ChooseFavColor>
                   });
                   widget.onSelection();
                 },
-                child: ColorCircle(
+                child: const ColorCircle(
                   color: Color(0xffFF5C5C),
                 ),
               ),
@@ -356,8 +356,8 @@ class _ChooseFavColorState extends State<ChooseFavColor>
                   });
                   widget.onSelection();
                 },
-                child: ColorCircle(
-                  color: const Color.fromARGB(255, 252, 251, 251),
+                child: const ColorCircle(
+                  color: Color.fromARGB(255, 252, 251, 251),
                 ),
               ),
             ],
