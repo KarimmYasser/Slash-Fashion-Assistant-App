@@ -1,5 +1,6 @@
 import 'package:fashion_assistant/constants.dart';
 import 'package:fashion_assistant/models/productcard.dart';
+import 'package:fashion_assistant/screens/product_screen.dart';
 import 'package:fashion_assistant/utils/http/http_client.dart';
 import 'package:fashion_assistant/widgets/product/product_card.dart';
 import 'package:flutter/material.dart';
@@ -15,48 +16,64 @@ class FavoriteScreen extends StatefulWidget {
 
 class _FavoriteScreenState extends State<FavoriteScreen> {
   final ScrollController _scrollController = ScrollController();
+  final TextEditingController _searchController = TextEditingController();
   bool _showScrollToTopButton = false;
   late Future<List<ProductCardModel>> _products;
+  List<ProductCardModel> _filteredProducts = [];
+  List<ProductCardModel> _productsList = [];
   bool _isLoading = true;
 
   @override
   void initState() {
     super.initState();
     _products = fetchProducts();
+    _products.then((products) {
+      setState(() {
+        _productsList = products; // Store the full product list
+        _filteredProducts = products; // Initialize the filtered list
+        _isLoading = false;
+      });
+    });
     _scrollController.addListener(() {
       setState(() {
         _showScrollToTopButton = _scrollController.offset >= 200;
       });
     });
+    _searchController.addListener(_filterProducts);
   }
 
   @override
   void dispose() {
     _scrollController.dispose();
+    _searchController.dispose();
     super.dispose();
   }
 
   Future<List<ProductCardModel>> fetchProducts() async {
     try {
-      final response = await HttpHelper.get(
-        'api/wishlist',
-      );
-
+      final response = await HttpHelper.get('api/wishlist');
       final List<dynamic> data = response['products'] as List<dynamic>;
 
-      setState(() {
-        _isLoading = false;
-
-        ;
-      });
       return data.map((json) => ProductCardModel.fromJson(json)).toList();
     } catch (e) {
       print('Error: $e');
-      if (mounted) {
-        setState(() => _isLoading = false);
-      }
+      return [];
     }
-    return [];
+  }
+
+  void _filterProducts() {
+    final query = _searchController.text.toLowerCase();
+    setState(() {
+      if (query.isEmpty) {
+        // Reset the filtered list to the original list of products
+        _filteredProducts = _productsList;
+      } else {
+        // Filter the products based on the query
+        _filteredProducts = _productsList
+            .where((product) => product.name.toLowerCase().contains(query))
+            .toList();
+      }
+    });
   }
 
   void _scrollToTop() {
@@ -88,60 +105,57 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
           ? const Center(
               child: CircularProgressIndicator(),
             )
-          : FutureBuilder<List<ProductCardModel>>(
-              future: _products,
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(
-                    child: CircularProgressIndicator(),
-                  );
-                } else if (snapshot.hasError) {
-                  return Center(
-                    child: Text(
-                      'Error: ${snapshot.error}',
-                      style: TextStyle(
-                        color: Colors.grey,
-                        fontSize: 18.sp,
-                      ),
+          : SafeArea(
+              child: Column(
+                children: [
+                  // Search Bar
+                  Container(
+                    margin:
+                        EdgeInsets.symmetric(horizontal: 16.w, vertical: 10.h),
+                    decoration: BoxDecoration(
+                      color: OurColors.containerBackgroundColor,
+                      borderRadius: BorderRadius.circular(50.r),
                     ),
-                  );
-                } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                  return Center(
-                    child: Text(
-                      'No items in your favorites list.',
-                      style: TextStyle(
-                        color: Colors.grey,
-                        fontSize: 18.sp,
-                      ),
-                    ),
-                  );
-                } else {
-                  return SafeArea(
-                    child: ListView(
-                      controller: _scrollController,
-                      children: [
-                        // Search Bar
-                        Container(
-                          decoration: BoxDecoration(
-                            color: OurColors.containerBackgroundColor,
-                            borderRadius: BorderRadius.circular(50.r),
-                          ),
-                          child: TextField(
-                            decoration: InputDecoration(
-                              hintText: 'Search...',
-                              prefixIcon: Icon(Iconsax.search_favorite,
-                                  color: OurColors.primaryColor),
-                              border: InputBorder.none,
-                              contentPadding:
-                                  EdgeInsets.symmetric(vertical: 14.h),
-                            ),
-                          ),
+                    child: TextField(
+                      controller: _searchController,
+                      decoration: InputDecoration(
+                        hintText: 'Search...',
+                        prefixIcon: Icon(
+                          Iconsax.search_favorite,
+                          color: OurColors.primaryColor,
                         ),
-                        // Product List
-                        ...snapshot.data!.map((product) {
-                          return Row(
-                            children: [
-                              Expanded(
+                        border: InputBorder.none,
+                        contentPadding: EdgeInsets.symmetric(vertical: 14.h),
+                      ),
+                    ),
+                  ),
+                  // Product List
+                  Expanded(
+                    child: _filteredProducts.isEmpty
+                        ? Center(
+                            child: Text(
+                              'No items found.',
+                              style: TextStyle(
+                                color: Colors.grey,
+                                fontSize: 18.sp,
+                              ),
+                            ),
+                          )
+                        : ListView.builder(
+                            controller: _scrollController,
+                            itemCount: _filteredProducts.length,
+                            itemBuilder: (context, index) {
+                              final product = _filteredProducts[index];
+                              return GestureDetector(
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          ProductScreen(productID: product.id),
+                                    ),
+                                  );
+                                },
                                 child: ProductCard(
                                   productId: product.id,
                                   brandImage: product.image,
@@ -151,8 +165,7 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
                                   price: '',
                                   discound: product.discount,
                                   sold: '130',
-                                  numReviewers:
-                                      5.toString(), // Number of reviewers
+                                  numReviewers: 5.toString(),
                                   stars: '5',
                                   coin: 'EGP',
                                   liked: product.isInWishlist,
@@ -160,15 +173,12 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
                                   instock: product.inStock,
                                   rating: product.rating,
                                 ),
-                              ),
-                            ],
-                          );
-                        }).toList(),
-                      ],
-                    ),
-                  );
-                }
-              },
+                              );
+                            },
+                          ),
+                  ),
+                ],
+              ),
             ),
       floatingActionButton: _showScrollToTopButton
           ? FloatingActionButton(

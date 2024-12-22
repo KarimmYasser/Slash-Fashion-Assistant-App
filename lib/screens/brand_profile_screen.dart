@@ -1,15 +1,21 @@
+import 'package:fashion_assistant/utils/http/http_client.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class BrandProfilePage extends StatefulWidget {
+  final String brandId; // Add the brandId parameter
   final String brandName;
   final String brandImage;
   final String brandDescription;
-
+  final bool isFollowing;
   const BrandProfilePage({
     Key? key,
+    required this.brandId,
     required this.brandName,
     required this.brandImage,
     required this.brandDescription,
+    required this.isFollowing,
   }) : super(key: key);
 
   @override
@@ -18,11 +24,57 @@ class BrandProfilePage extends StatefulWidget {
 
 class _BrandProfilePageState extends State<BrandProfilePage> {
   bool isFollowing = false;
+  List<dynamic> brandProducts = []; // To store products fetched from the API
+  bool isLoading = true;
 
-  void toggleFollow() {
-    setState(() {
-      isFollowing = !isFollowing;
-    });
+  @override
+  void initState() {
+    super.initState();
+    isFollowing = widget.isFollowing; // Initialize with passed value
+    fetchBrandProducts();
+  }
+
+  Future<void> toggleFollow() async {
+    final String endpoint =
+        isFollowing ? 'api/user/unfollow-brand' : 'api/user/follow-brand';
+
+    final body = {
+      "brandId": widget.brandId,
+    };
+
+    try {
+      final response = await HttpHelper.post(endpoint, body);
+
+      setState(() {
+        isFollowing = !isFollowing; // Toggle local state
+      });
+    } catch (e) {
+      print('Error: $e');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error: Unable to update follow status.')),
+      );
+    }
+  }
+
+  Future<void> fetchBrandProducts() async {
+    final String endpoint = 'api/brand/products?brandId=${widget.brandId}';
+
+    try {
+      final response = await HttpHelper.get(endpoint);
+
+      setState(() {
+        brandProducts = response['products'];
+        isLoading = false;
+      });
+    } catch (e) {
+      print('Error: $e');
+      setState(() {
+        isLoading = false;
+      });
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error: Unable to fetch brand products.')),
+      );
+    }
   }
 
   @override
@@ -88,34 +140,55 @@ class _BrandProfilePageState extends State<BrandProfilePage> {
               ),
               const SizedBox(height: 24),
               const Text(
-                "Gallery",
+                "Products",
                 style: TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
                 ),
               ),
               const SizedBox(height: 8),
-              GridView.builder(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                itemCount: 6, // Replace with actual number of gallery items
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 3,
-                  crossAxisSpacing: 8.0,
-                  mainAxisSpacing: 8.0,
-                ),
-                itemBuilder: (context, index) {
-                  return Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(8.0),
-                      image: DecorationImage(
-                        image: NetworkImage(widget.brandImage),
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                  );
-                },
-              ),
+              isLoading
+                  ? const Center(
+                      child: CircularProgressIndicator(),
+                    )
+                  : brandProducts.isEmpty
+                      ? const Center(
+                          child: Text(
+                            "No products found for this brand.",
+                            style: TextStyle(
+                              fontSize: 16,
+                              color: Colors.grey,
+                            ),
+                          ),
+                        )
+                      : GridView.builder(
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemCount: brandProducts.length,
+                          gridDelegate:
+                              const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2,
+                            crossAxisSpacing: 8.0,
+                            mainAxisSpacing: 8.0,
+                          ),
+                          itemBuilder: (context, index) {
+                            final product = brandProducts[index];
+                            return GestureDetector(
+                              onTap: () {
+                                // Navigate to product details
+                              },
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(8.0),
+                                  image: DecorationImage(
+                                    image: NetworkImage(product['image']),
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                              ),
+                            );
+                          },
+                        ),
             ],
           ),
         ),

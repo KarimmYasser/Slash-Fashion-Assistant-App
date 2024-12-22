@@ -1,8 +1,10 @@
 import 'package:fashion_assistant/constants.dart';
 import 'package:fashion_assistant/models/product.dart';
+import 'package:fashion_assistant/screens/add_review_screen.dart';
 import 'package:fashion_assistant/screens/reviews_screen.dart';
 import 'package:fashion_assistant/services/get_products.dart';
 import 'package:fashion_assistant/services/get_reviews.dart';
+import 'package:fashion_assistant/utils/http/http_client.dart';
 import 'package:fashion_assistant/widgets/home_page/hm_hzt_list.dart';
 import 'package:fashion_assistant/widgets/product_details/about_brand.dart';
 import 'package:fashion_assistant/widgets/product_details/add_cart_widget.dart';
@@ -13,6 +15,8 @@ import 'package:fashion_assistant/widgets/product_details/reviews.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class ProductScreen extends StatefulWidget {
   const ProductScreen({super.key, required this.productID});
@@ -28,7 +32,7 @@ class _ProductScreenState extends State<ProductScreen> {
   bool? liked;
   Product? product;
   late Future<List<Map<String, dynamic>>> _reviews;
-
+  bool isFollowing = false;
   @override
   void initState() {
     super.initState();
@@ -37,6 +41,7 @@ class _ProductScreenState extends State<ProductScreen> {
       setState(() {
         product = value;
         liked = product!.isInWishlist;
+        isFollowing = product!.isFollowing;
       });
     });
     _reviews = ReviewService().getReviews(widget.productID);
@@ -44,6 +49,33 @@ class _ProductScreenState extends State<ProductScreen> {
 
   Future<bool> fetchLikedStatus() async {
     return liked ?? false;
+  }
+
+  Future<void> _toggleFollowBrand() async {
+    if (product == null) return;
+
+    final url = product!.isFollowing
+        ? 'api/user/unfollow-brand'
+        : 'api/user/follow-brand';
+
+    try {
+      final response = await HttpHelper.post(
+        url,
+        {
+          'brandId': product!.brand.id,
+        },
+      );
+
+      // Log the response to check if the operation succeeded
+      print('Response: ${response['message']}');
+
+      setState(() {
+        product!.isFollowing = !product!.isFollowing;
+        isFollowing = product!.isFollowing;
+      });
+    } catch (e) {
+      print('Error: $e');
+    }
   }
 
   @override
@@ -72,37 +104,6 @@ class _ProductScreenState extends State<ProductScreen> {
             fontSize: 20,
           ),
         ),
-        actions: [
-          Stack(
-            children: [
-              IconButton(
-                icon: Icon(
-                  Iconsax.notification,
-                  color: Colors.black,
-                  size: Sizes.iconMd,
-                ),
-                onPressed: () {
-                  // Handle notification click
-                },
-              ),
-              Positioned(
-                right: 15,
-                top: 15,
-                child: Container(
-                  padding: EdgeInsets.all(2),
-                  decoration: BoxDecoration(
-                    color: Colors.red,
-                    shape: BoxShape.circle,
-                  ),
-                  constraints: BoxConstraints(
-                    minWidth: 8,
-                    minHeight: 8,
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ],
       ),
       body: FutureBuilder<Product>(
           future: _product,
@@ -272,19 +273,29 @@ class _ProductScreenState extends State<ProductScreen> {
                                       children: [
                                         Text('Size: ${size.size}',
                                             style: TextStyle(fontSize: 14.sp)),
-                                        if (size.waist != null)
+                                        if (size.waist != null &&
+                                            size.waist != 0)
                                           Text('Waist: ${size.waist}',
                                               style:
                                                   TextStyle(fontSize: 12.sp)),
-                                        Text('Length: ${size.length}',
-                                            style: TextStyle(fontSize: 12.sp)),
-                                        Text('Chest: ${size.chest}',
-                                            style: TextStyle(fontSize: 12.sp)),
-                                        Text('Arm Length: ${size.armLength}',
-                                            style: TextStyle(fontSize: 12.sp)),
-                                        Text('Bicep: ${size.bicep}',
-                                            style: TextStyle(fontSize: 12.sp)),
-                                        if (size.footLength != null)
+                                        if (size.length != 0)
+                                          Text('Length: ${size.length}',
+                                              style:
+                                                  TextStyle(fontSize: 12.sp)),
+                                        if (size.chest != 0)
+                                          Text('Chest: ${size.chest}',
+                                              style:
+                                                  TextStyle(fontSize: 12.sp)),
+                                        if (size.armLength != 0)
+                                          Text('Arm Length: ${size.armLength}',
+                                              style:
+                                                  TextStyle(fontSize: 12.sp)),
+                                        if (size.bicep != 0)
+                                          Text('Bicep: ${size.bicep}',
+                                              style:
+                                                  TextStyle(fontSize: 12.sp)),
+                                        if (size.footLength != null &&
+                                            size.footLength != 0)
                                           Text(
                                               'Foot Length: ${size.footLength}',
                                               style:
@@ -317,6 +328,8 @@ class _ProductScreenState extends State<ProductScreen> {
                     height: 20.h,
                   ),
                   AboutBrand(
+                    isFollowed: isFollowing,
+                    onFollowTap: _toggleFollowBrand,
                     rate: product.brand.rating,
                     name: product.brand.name,
                     description: product.brand.description,
@@ -343,8 +356,44 @@ class _ProductScreenState extends State<ProductScreen> {
                                       child: Text('Error: ${snapshot.error}'));
                                 } else if (!snapshot.hasData ||
                                     snapshot.data!.isEmpty) {
-                                  return Center(
-                                      child: Text('No reviews available'));
+                                  return Padding(
+                                    padding: EdgeInsets.all(16),
+                                    child: SizedBox(
+                                      width: double.infinity,
+                                      child: ElevatedButton(
+                                        style: ElevatedButton.styleFrom(
+                                          backgroundColor:
+                                              OurColors.primaryColor,
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(10.r),
+                                          ),
+                                          padding:
+                                              EdgeInsets.symmetric(vertical: 0),
+                                        ),
+                                        onPressed: () {
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    AddReviewScreen(
+                                                      productId: product.id,
+                                                    )),
+                                          );
+                                          //} Handle add to cart action
+                                          // Handle add to cart action
+                                        },
+                                        child: Text(
+                                          'Add a review',
+                                          style: TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w500,
+                                            color: Colors.white,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  );
                                 }
 
                                 final reviews = snapshot.data!;
@@ -369,7 +418,40 @@ class _ProductScreenState extends State<ProductScreen> {
                               child: Text('Error: ${snapshot.error}'));
                         } else if (!snapshot.hasData ||
                             snapshot.data!.isEmpty) {
-                          return Center(child: Text('No reviews available'));
+                          return Padding(
+                            padding: EdgeInsets.all(16),
+                            child: SizedBox(
+                              width: double.infinity,
+                              child: ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: OurColors.primaryColor,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10.r),
+                                  ),
+                                  padding: EdgeInsets.symmetric(vertical: 0),
+                                ),
+                                onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => AddReviewScreen(
+                                              productId: product.id,
+                                            )),
+                                  );
+                                  //} Handle add to cart action
+                                  // Handle add to cart action
+                                },
+                                child: Text(
+                                  'Add a review',
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w500,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          );
                         }
 
                         final reviews = snapshot.data!;
@@ -385,7 +467,7 @@ class _ProductScreenState extends State<ProductScreen> {
                   ),
                   HorizontalList(
                     title: 'You may also like',
-                    endpouint: 'api/product',
+                    endpouint: 'api/product/get-similar-products/${product.id}',
                   ),
                 ],
               ),
@@ -401,11 +483,11 @@ class _ProductScreenState extends State<ProductScreen> {
           } else if (product != null) {
             return AddCartAppBar(
               productId: widget.productID,
-              liked: snapshot.data!,
+              liked: product!.isInWishlist,
               variants: product!.variants,
             );
           }
-          return Text('no response');
+          return Text('Loading...');
         },
       ),
     );

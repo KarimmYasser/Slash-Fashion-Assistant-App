@@ -23,10 +23,12 @@ class _BrandModeScreenState extends State<BrandModeScreen> {
   String brandName = '';
   String? brandLogoUrl;
   double rating = 0;
+  int followersCount = 0;
   @override
   void initState() {
     super.initState();
     fetchBrandData();
+    fetchFollowersCount();
   }
 
   Future<void> fetchBrandData() async {
@@ -39,6 +41,20 @@ class _BrandModeScreenState extends State<BrandModeScreen> {
         brandName = data['brand']['name'];
         brandLogoUrl = data['brand']['logo'];
         rating = data['brand']['rating'] ?? 0;
+      });
+    } else {
+      // Handle error
+    }
+  }
+
+  Future<void> fetchFollowersCount() async {
+    final response = await http.get(
+        Uri.parse('$baseURL/api/brand/followers/${BrandData.brandData!.id}'));
+
+    if (response.statusCode == 200) {
+      final data = jsonDecode(response.body);
+      setState(() {
+        followersCount = data['followersCount'];
       });
     } else {
       // Handle error
@@ -61,40 +77,6 @@ class _BrandModeScreenState extends State<BrandModeScreen> {
             fontSize: 20,
           ),
         ),
-        actions: [
-          // Points Container
-
-          // Notification Icon with Red Dot
-          Stack(
-            children: [
-              IconButton(
-                icon: const Icon(
-                  Iconsax.notification,
-                  color: Colors.black,
-                  size: Sizes.iconMd,
-                ),
-                onPressed: () {
-                  // Handle notification click
-                },
-              ),
-              Positioned(
-                right: 15,
-                top: 15,
-                child: Container(
-                  padding: const EdgeInsets.all(2),
-                  decoration: const BoxDecoration(
-                    color: Colors.red,
-                    shape: BoxShape.circle,
-                  ),
-                  constraints: const BoxConstraints(
-                    minWidth: 8,
-                    minHeight: 8,
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ],
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -103,6 +85,7 @@ class _BrandModeScreenState extends State<BrandModeScreen> {
               brandName: brandName,
               logo: brandLogoUrl,
               rating: rating,
+              followers: followersCount,
             )
           ],
         ),
@@ -116,10 +99,12 @@ class BrandDetails extends StatelessWidget {
       {super.key,
       required this.brandName,
       required this.logo,
-      required this.rating});
+      required this.rating,
+      required this.followers});
   final String brandName;
   final String? logo;
   final double rating;
+  final int followers;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -180,7 +165,7 @@ class BrandDetails extends StatelessWidget {
                   padding: const EdgeInsets.all(4.0),
                   child: Center(
                     child: Text(
-                      '1k Followers',
+                      '$followers Followers',
                       style: TextStyle(
                           fontWeight: FontWeight.bold, fontSize: 16.sp),
                     ),

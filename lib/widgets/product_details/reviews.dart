@@ -1,6 +1,7 @@
 import 'package:fashion_assistant/constants.dart';
 import 'package:fashion_assistant/models/review.dart';
 import 'package:fashion_assistant/screens/reviews_screen.dart';
+import 'package:fashion_assistant/utils/http/http_client.dart';
 import 'package:fashion_assistant/widgets/product_details/five_stars.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -10,6 +11,7 @@ class ReviewsWidget extends StatelessWidget {
   const ReviewsWidget({super.key, required this.rate, required this.reviews});
   final double rate;
   final List<Map<String, dynamic>> reviews;
+
   @override
   Widget build(BuildContext context) {
     int fiveStarCount =
@@ -396,31 +398,39 @@ class ReviewCard extends StatefulWidget {
 }
 
 class _ReviewCardState extends State<ReviewCard> {
-  int isHelpfulClicked = 0;
+  bool isHelpfulClicked = false;
+  int likesCount = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    isHelpfulClicked = widget.review.liked;
+    likesCount = widget.review.likes;
+  }
 
   void _toggleHelpfulCount() async {
-    // ignore: unused_local_variable
-    int helpfulCount = widget.review.likes;
-    if (isHelpfulClicked == 1) {
-      helpfulCount -= 1;
-    } else {
-      helpfulCount += 1;
-    }
-    isHelpfulClicked = isHelpfulClicked == 1 ? 0 : 1;
+    final reviewId = widget.review.id;
+    final url = 'api/review/like';
 
-    // final reviewId = widget.review.id; // Replace with actual review ID
-    // final url = 'api/review/$reviewId'; // Replace with actual endpoint
+    final response = await HttpHelper.post(
+      url,
+      {
+        'reviewId': reviewId,
+      },
+    );
 
-    // final response = await HttpHelper.put(
-    //   url,
-    //   {
-    //     'like': helpfulCount,
-    //   },
-
-    //   // Handle error response
-    // );
-    // print('Failed to update review: ${response['body']}');
-    setState(() {});
+    setState(() {
+      if (isHelpfulClicked) {
+        if (likesCount > 0) {
+          likesCount -= 1;
+        }
+      } else {
+        if (likesCount < widget.review.likes + 1) {
+          likesCount += 1;
+        }
+      }
+      isHelpfulClicked = !isHelpfulClicked;
+    });
   }
 
   void _navigateToReviewsPage() {
@@ -456,7 +466,7 @@ class _ReviewCardState extends State<ReviewCard> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      'toqa samir',
+                      "${widget.review.firstname} ${widget.review.lastname}",
                       style:
                           TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                     ),
@@ -495,12 +505,15 @@ class _ReviewCardState extends State<ReviewCard> {
                     children: [
                       Spacer(),
                       Icon(Iconsax.lamp_on4,
-                          color: OurColors.darkGrey, size: 16),
+                          color: isHelpfulClicked
+                              ? Colors.green
+                              : OurColors.darkGrey,
+                          size: 16),
                       SizedBox(width: 4),
                       Text(
-                        "Helpful (${widget.review.likes + isHelpfulClicked})",
+                        "Helpful ($likesCount)",
                         style: TextStyle(
-                          color: isHelpfulClicked == 1
+                          color: isHelpfulClicked
                               ? Colors.green
                               : OurColors.darkGrey,
                           fontSize: 14,
