@@ -96,7 +96,7 @@ class _ChooseHaircutState extends State<ChooseHaircut>
                   Padding(
                     padding: EdgeInsets.only(bottom: 60.h),
                     child: SizedBox(
-                      width: 220.w,
+                      width: 200.w,
                       child: QuestionPubble(message: 'What is your hair type?'),
                     ),
                   )

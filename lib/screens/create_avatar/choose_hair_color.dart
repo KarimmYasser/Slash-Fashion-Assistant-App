@@ -84,7 +84,7 @@ class _ChooseHairColorState extends State<ChooseHairColor>
                 Padding(
                   padding: EdgeInsets.only(bottom: 60.h),
                   child: SizedBox(
-                    width: 220.w,
+                    width: 200.w,
                     child: QuestionPubble(message: 'what is your hair color?'),
                   ),
                 )
