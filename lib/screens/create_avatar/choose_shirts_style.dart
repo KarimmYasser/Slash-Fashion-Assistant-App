@@ -147,7 +147,7 @@ class _ChooseStyleState extends State<ChooseStyle>
                       },
                     ),
                     SizedBox(
-                      width: 230.w,
+                      width: 200.w,
                       child: QuestionPubble(
                           message: 'Choose your favorite styles!'),
                     ),

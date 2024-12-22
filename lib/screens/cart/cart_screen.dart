@@ -1,3 +1,4 @@
+import 'package:fashion_assistant/data/authentication.repository/login_data.dart';
 import 'package:fashion_assistant/utils/popups/loaders.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -24,6 +25,10 @@ class CartScreen extends StatelessWidget {
           return const Center(child: CircularProgressIndicator());
         } else if (controller.cartItems.isEmpty) {
           return const Center(child: Text('Your cart is empty'));
+        } else if (UserData.userData == null) {
+          return const Center(
+            child: Text('Please login to view your cart'),
+          );
         } else {
           return Column(
             children: [

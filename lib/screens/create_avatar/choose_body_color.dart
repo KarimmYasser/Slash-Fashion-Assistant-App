@@ -87,7 +87,7 @@ class _ChooseBodyColorState extends State<ChooseBodyColor>
                 Padding(
                   padding: EdgeInsets.only(bottom: 60.h),
                   child: SizedBox(
-                    width: 240.w,
+                    width: 200.w,
                     child: QuestionPubble(
                         message: 'What is the closest color to your skin?'),
                   ),

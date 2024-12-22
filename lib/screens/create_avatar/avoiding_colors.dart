@@ -83,7 +83,7 @@ class _AvoidingColorsState extends State<AvoidingColors>
                 Padding(
                   padding: EdgeInsets.only(bottom: 60.h),
                   child: SizedBox(
-                    width: 240.w,
+                    width: 200.w,
                     child: QuestionPubble(
                         message: 'What is your favorite colors?'),
                   ),
