@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:fashion_assistant/constants.dart';
+import 'package:fashion_assistant/data/authentication.repository/login_data.dart';
 import 'package:fashion_assistant/screens/create_avatar/avoiding_colors.dart';
 import 'package:fashion_assistant/screens/create_avatar/choose_body_color.dart';
 import 'package:fashion_assistant/screens/create_avatar/choose_facial_hair.dart';
@@ -10,6 +11,7 @@ import 'package:fashion_assistant/screens/create_avatar/choose_favorite_colors.d
 import 'package:fashion_assistant/screens/create_avatar/choose_hair_color.dart';
 import 'package:fashion_assistant/screens/create_avatar/choose_haircut.dart';
 import 'package:fashion_assistant/screens/create_avatar/choose_shirts_style.dart';
+import 'package:fashion_assistant/screens/create_avatar/get_body_measurments.dart';
 import 'package:fashion_assistant/screens/create_avatar/male_or_female.dart';
 import 'package:fashion_assistant/screens/total_screen.dart';
 import 'package:fashion_assistant/tap_map.dart';
@@ -140,6 +142,25 @@ class _GetPreferencesState extends State<GetPreferences> {
                       // Okay Button
                       ElevatedButton(
                         onPressed: () async {
+                          // Validation checks
+                          if (selectedProducts.isEmpty) {
+                            _showErrorDialog(
+                                context, 'Please select at least one product.');
+                            return;
+                          }
+                          print('Selected products: $selectedColors');
+                          if (selectedColors.isEmpty) {
+                            _showErrorDialog(context,
+                                'Please select at least one favorite color.');
+                            return;
+                          }
+                          print('Selected products: $avoidedSelectedColors');
+                          if (avoidedSelectedColors.isEmpty) {
+                            _showErrorDialog(context,
+                                'Please select at least one avoiding color.');
+                            return;
+                          }
+
                           // Close the dialog
                           _sendColorsToBackend();
                           saveSelectedProducts('generalProduct');
@@ -166,7 +187,7 @@ class _GetPreferencesState extends State<GetPreferences> {
                             debugPrint('Error sending avatar data: $error');
                           }
 
-                          Get.offAll(() => TotalScreens());
+                          Get.offAll(() => BodyMeasurementsScreen());
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: OurColors.containerBackgroundColor,
@@ -193,11 +214,31 @@ class _GetPreferencesState extends State<GetPreferences> {
     );
   }
 
+  void _showErrorDialog(BuildContext context, String message) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Error'),
+          content: Text(message),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text('OK'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   Future<void> _sendColorsToBackend() async {
-    final url = 'color_perefrereneces';
+    const url = 'api/user/colour-preferences';
     final body = {
-      'avoidedColors': avoidedSelectedColors,
-      'selectedColors': selectedColors,
+      'avoidedColours': avoidedSelectedColors,
+      'colours': selectedColors,
     };
 
     try {
@@ -321,7 +362,6 @@ class _GetPreferencesState extends State<GetPreferences> {
                 ),
               ),
             ),
-            // Next button
             // Next button
             Container(
               width: 50.w,

@@ -37,12 +37,18 @@ class _HorizontalListState extends State<HorizontalList> {
   }
 
   void _fetchProducts() {
-    _products = ProductService().getAllProducts(widget.endpouint);
-    _products.then((products) {
-      setState(() {
-        _filteredProducts = products;
+    try {
+      _products = ProductService().getAllProducts(widget.endpouint);
+      _products.then((products) {
+        setState(() {
+          _filteredProducts = products;
+        });
       });
-    });
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('An error occurred. Please try again.')),
+      );
+    }
   }
 
   void _filterProducts() {

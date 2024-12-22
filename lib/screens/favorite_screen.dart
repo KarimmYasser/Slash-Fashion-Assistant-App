@@ -56,9 +56,11 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
 
       return data.map((json) => ProductCardModel.fromJson(json)).toList();
     } catch (e) {
-      print('Error: $e');
-      return [];
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('An error occurred. Please try again.')),
+      );
     }
+    return [];
   }
 
   void _filterProducts() {

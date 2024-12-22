@@ -77,6 +77,45 @@ class _ChooseStyleState extends State<ChooseStyle>
             'category': item['category']['name'],
           };
         }).toList();
+        products += (response["Jackets"] as List<dynamic>).map((item) {
+          return {
+            'id': item['id'],
+            'name': item['name'],
+            'price': item['price'],
+            'discount': item['discount'],
+            'rating': item['rating'],
+            'material': item['material'],
+            'returnPeriod': item['returnPeriod'],
+            'image': item['image'],
+            'category': item['category']['name'],
+          };
+        }).toList();
+        products += (response["Dresses"] as List<dynamic>).map((item) {
+          return {
+            'id': item['id'],
+            'name': item['name'],
+            'price': item['price'],
+            'discount': item['discount'],
+            'rating': item['rating'],
+            'material': item['material'],
+            'returnPeriod': item['returnPeriod'],
+            'image': item['image'],
+            'category': item['category']['name'],
+          };
+        }).toList();
+        products += (response["Shorts"] as List<dynamic>).map((item) {
+          return {
+            'id': item['id'],
+            'name': item['name'],
+            'price': item['price'],
+            'discount': item['discount'],
+            'rating': item['rating'],
+            'material': item['material'],
+            'returnPeriod': item['returnPeriod'],
+            'image': item['image'],
+            'category': item['category']['name'],
+          };
+        }).toList();
       } else {
         throw Exception('No products found under "Shirts"');
       }
@@ -104,9 +143,6 @@ class _ChooseStyleState extends State<ChooseStyle>
       }
     });
   }
-
-  /// Save selected products to backend/// Save selected products to backend in the format { "shirts": selectedItems }
-  /// Save selected products to backend in the format { "generalProduct": "shirts", "selectedIds": [list of selected product ids] }
 
   @override
   Widget build(BuildContext context) {
@@ -147,7 +183,7 @@ class _ChooseStyleState extends State<ChooseStyle>
                       },
                     ),
                     SizedBox(
-                      width: 230.w,
+                      width: 220.w,
                       child: QuestionPubble(
                           message: 'Choose your favorite styles!'),
                     ),

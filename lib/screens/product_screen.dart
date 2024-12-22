@@ -36,7 +36,15 @@ class _ProductScreenState extends State<ProductScreen> {
   @override
   void initState() {
     super.initState();
-    _product = ProductService().getProductById(widget.productID);
+    try {
+      _product = ProductService().getProductById(widget.productID);
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('An error occurred. Please try again.')),
+        );
+      }
+    }
     _product.then((value) {
       setState(() {
         product = value;

@@ -11,7 +11,7 @@ class Brand {
   final String website;
   final String createdAt;
   final String updatedAt;
-  final bool isFollowed;
+  bool isFollowed;
 
   Brand({
     required this.isFollowed,

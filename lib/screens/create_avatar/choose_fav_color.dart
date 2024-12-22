@@ -83,7 +83,7 @@ class _ChooseFavColorState extends State<ChooseFavColor>
                 Padding(
                   padding: EdgeInsets.only(bottom: 60.h),
                   child: SizedBox(
-                    width: 240.w,
+                    width: 220.w,
                     child: QuestionPubble(
                         message: 'What is your favorite color in clothes?'),
                   ),

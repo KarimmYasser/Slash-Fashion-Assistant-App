@@ -22,7 +22,7 @@ bool inHome = true;
 bool isMale = true;
 
 const String baseURL =
-    'https://744d-2c0f-fc89-8032-fa5d-3de6-99c7-ca43-cd2a.ngrok-free.app';
+    'https://7da4-2c0f-fc89-8032-69be-f18e-6f70-89bf-bd75.ngrok-free.app';
 
 Future<String>? kChatId;
 final List<Map<String, dynamic>> screenDetails = [

@@ -5,9 +5,12 @@ class BrandService {
   static const String baseUrl = 'api/brand';
 
   Future<List<Brand>> fetchBrands() async {
-    final response = await HttpHelper.get(baseUrl);
+    try {
+      final response = await HttpHelper.get(baseUrl);
 
-    List<dynamic> brandsJson = response['brands'] as List<dynamic>;
-    return brandsJson.map((json) => Brand.fromJson(json)).toList();
+      List<dynamic> brandsJson = response['brands'] as List<dynamic>;
+      return brandsJson.map((json) => Brand.fromJson(json)).toList();
+    } catch (e) {}
+    return [];
   }
 }

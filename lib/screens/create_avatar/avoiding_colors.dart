@@ -1,5 +1,6 @@
 import 'dart:convert';
-
+import 'package:fashion_assistant/utils/http/http_client.dart';
+import 'package:http/http.dart' as http;
 import 'package:fashion_assistant/screens/create_avatar/get_preferences.dart';
 import 'package:fashion_assistant/tap_map.dart';
 import 'package:flutter/material.dart';
@@ -19,6 +20,7 @@ class AvoidingColors extends StatefulWidget {
 class _AvoidingColorsState extends State<AvoidingColors>
     with AutomaticKeepAliveClientMixin {
   bool isLoading = true;
+  List<Map<String, dynamic>> colors = [];
 
   Map<String, dynamic> getMap() {
     if (isMale) {
@@ -34,6 +36,16 @@ class _AvoidingColorsState extends State<AvoidingColors>
   void initState() {
     super.initState();
     avatarMap = getMap();
+    fetchColors();
+  }
+
+  Future<void> fetchColors() async {
+    final response = await HttpHelper.get('api/constants/colours');
+
+    setState(() {
+      colors = List<Map<String, dynamic>>.from(response['colours']);
+      isLoading = false;
+    });
   }
 
   Future<String> loadAvatar() async {
@@ -50,69 +62,68 @@ class _AvoidingColorsState extends State<AvoidingColors>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 30.w),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          SizedBox(
-            width: double.infinity, // Give the Row a defined width
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                FutureBuilder<String>(
-                  future: loadAvatar(),
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return CircularProgressIndicator();
-                    } else if (snapshot.hasError) {
-                      return Text("Error loading avatar");
-                    } else if (snapshot.hasData && snapshot.data!.isNotEmpty) {
-                      return SvgPicture.string(
-                        snapshot.data!,
-                        width: 80,
-                        height: 80,
-                        placeholderBuilder: (BuildContext context) =>
-                            CircularProgressIndicator(),
-                      );
-                    } else {
-                      return Text("Error loading avatar");
-                    }
-                  },
-                ),
-                Padding(
-                  padding: EdgeInsets.only(bottom: 60.h),
-                  child: SizedBox(
-                    width: 240.w,
-                    child: QuestionPubble(
-                        message: 'What is your favorite colors?'),
-                  ),
-                )
-              ],
+    return SingleChildScrollView(
+      child: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 30.w),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            SizedBox(
+              height: 70.h,
             ),
-          ),
-          SizedBox(height: 20.h),
-          Wrap(
-            spacing: 20.w,
-            runSpacing: 20.h,
-            children: [
-              _buildColorCircle(Color(0xff65C9FF), 'Blue'),
-              _buildColorCircle(Color(0xff5099E4), 'Dark Blue'),
-              _buildColorCircle(Color(0xffFFFFB1), 'Yellow'),
-              _buildColorCircle(Color(0xffA7FFC4), 'Light Green'),
-              _buildColorCircle(Color(0xff929598), 'Gray'),
-              _buildColorCircle(Colors.black, 'Black'),
-              _buildColorCircle(Color(0xff27557C), 'Navy'),
-              _buildColorCircle(Color(0xffE6E6E6), 'Light Gray'),
-              _buildColorCircle(Color(0xff3D4E5C), 'Dark Gray'),
-              _buildColorCircle(Color(0xffFFDEB5), 'Peach'),
-              _buildColorCircle(Color(0xffFFAFB9), 'Pink'),
-              _buildColorCircle(Color(0xffFF488E), 'Hot Pink'),
-              _buildColorCircle(Color(0xffFF5C5C), 'Red'),
-              _buildColorCircle(Color.fromARGB(255, 252, 251, 251), 'White'),
-            ],
-          ),
-        ],
+            SizedBox(
+              width: double.infinity, // Give the Row a defined width
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  FutureBuilder<String>(
+                    future: loadAvatar(),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return CircularProgressIndicator();
+                      } else if (snapshot.hasError) {
+                        return Text("Error loading avatar");
+                      } else if (snapshot.hasData &&
+                          snapshot.data!.isNotEmpty) {
+                        return SvgPicture.string(
+                          snapshot.data!,
+                          width: 80,
+                          height: 80,
+                          placeholderBuilder: (BuildContext context) =>
+                              CircularProgressIndicator(),
+                        );
+                      } else {
+                        return Text("Error loading avatar");
+                      }
+                    },
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(bottom: 60.h),
+                    child: SizedBox(
+                      width: 220.w,
+                      child: QuestionPubble(
+                          message: 'What is your avoiding colors?'),
+                    ),
+                  )
+                ],
+              ),
+            ),
+            SizedBox(height: 20.h),
+            isLoading
+                ? CircularProgressIndicator()
+                : Wrap(
+                    spacing: 20.w,
+                    runSpacing: 20.h,
+                    children: colors.map((color) {
+                      return _buildColorCircle(
+                          Color(int.parse(color['hex'].substring(1, 7),
+                                  radix: 16) +
+                              0xFF000000),
+                          color['name']);
+                    }).toList(),
+                  ),
+          ],
+        ),
       ),
     );
   }

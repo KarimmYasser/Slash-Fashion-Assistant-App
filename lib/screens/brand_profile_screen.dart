@@ -1,3 +1,4 @@
+import 'package:fashion_assistant/screens/product_screen.dart';
 import 'package:fashion_assistant/utils/http/http_client.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -50,14 +51,17 @@ class _BrandProfilePageState extends State<BrandProfilePage> {
       });
     } catch (e) {
       print('Error: $e');
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error: Unable to update follow status.')),
-      );
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error: Unable to update follow status.')),
+        );
+      }
     }
   }
 
   Future<void> fetchBrandProducts() async {
-    final String endpoint = 'api/brand/products?brandId=${widget.brandId}';
+    final String endpoint =
+        'api/product/get-products-of-brand/${widget.brandId}';
 
     try {
       final response = await HttpHelper.get(endpoint);
@@ -175,7 +179,14 @@ class _BrandProfilePageState extends State<BrandProfilePage> {
                             final product = brandProducts[index];
                             return GestureDetector(
                               onTap: () {
-                                // Navigate to product details
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => ProductScreen(
+                                      productID: product['id'],
+                                    ),
+                                  ),
+                                ); // Navigate to product details
                               },
                               child: Container(
                                 decoration: BoxDecoration(

@@ -85,7 +85,7 @@ class _ChooseFacialHairState extends State<ChooseFacialHair>
                 Padding(
                   padding: EdgeInsets.only(bottom: 60.h),
                   child: SizedBox(
-                    width: 240.w,
+                    width: 220.w,
                     child: QuestionPubble(
                         message: 'what type of facial hair do you have?'),
                   ),
