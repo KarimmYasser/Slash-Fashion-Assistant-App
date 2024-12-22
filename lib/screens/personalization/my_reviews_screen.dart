@@ -74,109 +74,117 @@ class _MyReviewsScreenState extends State<MyReviewsScreen> {
           ),
           showBackButton: true,
         ),
-        body: Column(
-          children: [
-            if (isLoadingReviews)
-              const Center(child: CircularProgressIndicator())
-            else if (reviews.isEmpty)
-              const Padding(
-                padding: EdgeInsets.all(Sizes.defaultSpace),
-                child: Center(child: Text('No reviews found')),
-              )
-            else
-              ...reviews.map<Widget>((review) {
-                return Card(
-                  color: Colors.white,
-                  margin: const EdgeInsets.only(bottom: 10),
-                  elevation: 3,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10)),
-                  child: Padding(
-                    padding: const EdgeInsets.all(10),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        // Review Comment
-                        if (review['comment'] != null)
-                          Text(
-                            'Comment: ${review['comment']}',
-                            style: const TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                        const SizedBox(height: 5),
-
-                        // Review Ratings
-                        Text('Rating: ${review['rating']}'),
-                        Text('Accuracy Rate: ${review['accuracy_rate']}'),
-                        Text('Quality Rate: ${review['quality_rate']}'),
-                        Text('Shipping Rate: ${review['shipping_rate']}'),
-                        Text(
-                            'Value for Money Rate: ${review['valueForMoney_rate']}'),
-                        const SizedBox(height: 10),
-
-                        // Product Information
-                        if (review['product'] != null)
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              // Product Image
-                              if (review['product']['image'] != null)
-                                Image.network(
-                                  review['product']['image'],
-                                  width: 50,
-                                  height: 50,
-                                  fit: BoxFit.cover,
-                                ),
-                              const SizedBox(width: 10),
-
-                              // Product Details
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      review['product']['name'] ??
-                                          'No product name',
-                                      style: const TextStyle(
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                    Text(
-                                        'Price: \$${review['product']['price']}'),
-                                    Text(
-                                        'Material: ${review['product']['material']}'),
-                                    Text(
-                                        'Rating: ${review['product']['rating']}'),
-                                    if (review['product']['description'] !=
-                                        null)
-                                      Text(
-                                        review['product']['description'],
-                                        maxLines: 2,
-                                        overflow: TextOverflow.ellipsis,
-                                        style: const TextStyle(fontSize: 12),
-                                      ),
-                                  ],
-                                ),
+        body: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(Sizes.defaultSpace),
+            child: Column(
+              children: [
+                if (isLoadingReviews)
+                  const Center(child: CircularProgressIndicator())
+                else if (reviews.isEmpty)
+                  const Padding(
+                    padding: EdgeInsets.all(Sizes.defaultSpace),
+                    child: Center(child: Text('No reviews found')),
+                  )
+                else
+                  ...reviews.map<Widget>((review) {
+                    return Card(
+                      color: Colors.white,
+                      margin: const EdgeInsets.only(bottom: 10),
+                      elevation: 3,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10)),
+                      child: Padding(
+                        padding: const EdgeInsets.all(10),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            // Review Comment
+                            if (review['comment'] != null)
+                              Text(
+                                'Comment: ${review['comment']}',
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.bold),
                               ),
-                            ],
-                          ),
-                        const SizedBox(height: 10),
+                            const SizedBox(height: 5),
 
-                        // Delete Button
-                        Align(
-                          alignment: Alignment.centerRight,
-                          child: IconButton(
-                            icon: const Icon(Icons.delete,
-                                color: OurColors.primaryColor),
-                            onPressed: () {
-                              _deleteReview(review['id'], review['image']);
-                            },
-                          ),
+                            // Review Ratings
+                            Text('Rating: ${review['rating']}'),
+                            Text('Accuracy Rate: ${review['accuracy_rate']}'),
+                            Text('Quality Rate: ${review['quality_rate']}'),
+                            Text('Shipping Rate: ${review['shipping_rate']}'),
+                            Text(
+                                'Value for Money Rate: ${review['valueForMoney_rate']}'),
+                            const SizedBox(height: 10),
+
+                            // Product Information
+                            if (review['product'] != null)
+                              Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  // Product Image
+                                  if (review['product']['image'] != null)
+                                    Image.network(
+                                      review['product']['image'],
+                                      width: 50,
+                                      height: 50,
+                                      fit: BoxFit.cover,
+                                    ),
+                                  const SizedBox(width: 10),
+
+                                  // Product Details
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          review['product']['name'] ??
+                                              'No product name',
+                                          style: const TextStyle(
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                        Text(
+                                            'Price: \$${review['product']['price']}'),
+                                        Text(
+                                            'Material: ${review['product']['material']}'),
+                                        Text(
+                                            'Rating: ${review['product']['rating']}'),
+                                        if (review['product']['description'] !=
+                                            null)
+                                          Text(
+                                            review['product']['description'],
+                                            maxLines: 2,
+                                            overflow: TextOverflow.ellipsis,
+                                            style:
+                                                const TextStyle(fontSize: 12),
+                                          ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            const SizedBox(height: 10),
+
+                            // Delete Button
+                            Align(
+                              alignment: Alignment.centerRight,
+                              child: IconButton(
+                                icon: const Icon(Icons.delete,
+                                    color: OurColors.primaryColor),
+                                onPressed: () {
+                                  _deleteReview(review['id'], review['image']);
+                                },
+                              ),
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
-                  ),
-                );
-              }).toList(),
-          ],
+                      ),
+                    );
+                  }).toList(),
+              ],
+            ),
+          ),
         ));
   }
 }
