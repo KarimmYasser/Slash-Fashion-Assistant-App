@@ -9,7 +9,6 @@ import 'package:fashion_assistant/widgets/home_page/hm_hzt_list.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:iconsax/iconsax.dart';
 
 final List<String> imagesPaths = [
   "https://media.istockphoto.com/id/1398610798/photo/young-woman-in-linen-shirt-shorts-and-high-heels-pointing-to-the-side-and-talking.jpg?s=1024x1024&w=is&k=20&c=IdY440I0pLdmANsNZRXhjSS7K9Q-Xxvnwf4YzH9qQbQ=",
@@ -84,9 +83,8 @@ class _HomeScreenState extends State<HomeScreen> {
             .toList()
             .cast<Map<String, dynamic>>();
       });
-    } catch (e) {
-      print('Error: $e');
-    }
+      // ignore: empty_catches
+    } catch (e) {}
   }
 
   @override
@@ -148,7 +146,7 @@ class _HomeScreenState extends State<HomeScreen> {
             SizedBox(
               height: 16.h,
             ),
-            BrandCarousel(),
+            const BrandCarousel(),
             SizedBox(
               height: 16.h,
             ),
@@ -166,7 +164,7 @@ class _HomeScreenState extends State<HomeScreen> {
             // SizedBox(
             //   height: 16.h,
             // ),
-            HorizontalList(
+            const HorizontalList(
               title: 'Special for You',
               endpouint: 'api/product',
             ),

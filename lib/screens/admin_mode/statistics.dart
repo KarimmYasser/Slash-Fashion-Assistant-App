@@ -3,13 +3,15 @@ import 'package:fashion_assistant/utils/http/http_client.dart';
 import 'package:flutter/material.dart';
 
 class StatisticsScreen extends StatefulWidget {
+  const StatisticsScreen({super.key});
+
   @override
   _StatisticsScreenState createState() => _StatisticsScreenState();
 }
 
 class _StatisticsScreenState extends State<StatisticsScreen> {
   Future<Map<String, dynamic>> fetchStatistics() async {
-    final url = 'api/analysis/statistics';
+    const url = 'api/analysis/statistics';
     final response = await HttpHelper.get(url);
     return response;
   }
@@ -78,13 +80,13 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Statistics'),
+        title: const Text('Statistics'),
       ),
       body: FutureBuilder<Map<String, dynamic>>(
         future: fetchStatistics(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
             return Center(child: Text('Error: ${snapshot.error}'));
           } else if (snapshot.hasData) {
@@ -92,7 +94,7 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
             final categorizedData = categorizeData(data);
 
             return ListView(
-              padding: EdgeInsets.all(10),
+              padding: const EdgeInsets.all(10),
               children: categorizedData.entries.map((category) {
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -102,7 +104,7 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                       padding: const EdgeInsets.symmetric(vertical: 10),
                       child: Text(
                         category.key,
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
                         ),
@@ -114,7 +116,7 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                       crossAxisSpacing: 10,
                       mainAxisSpacing: 10,
                       shrinkWrap: true,
-                      physics: NeverScrollableScrollPhysics(),
+                      physics: const NeverScrollableScrollPhysics(),
                       children: category.value.map((item) {
                         return StatisticsCard(
                           title: formatTitle(item['key']),
@@ -129,7 +131,7 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
               }).toList(),
             );
           } else {
-            return Center(child: Text('No data available'));
+            return const Center(child: Text('No data available'));
           }
         },
       ),
@@ -143,6 +145,7 @@ class StatisticsCard extends StatelessWidget {
   final IconData icon;
 
   const StatisticsCard({
+    super.key,
     required this.title,
     required this.value,
     required this.icon,
@@ -151,7 +154,7 @@ class StatisticsCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      shape: CircleBorder(
+      shape: const CircleBorder(
         side: BorderSide(
             color: OurColors.primaryColor, width: 2), // Circular border
       ),
@@ -169,15 +172,15 @@ class StatisticsCard extends StatelessWidget {
             Text(
               title,
               textAlign: TextAlign.center,
-              style: TextStyle(
+              style: const TextStyle(
                 fontWeight: FontWeight.bold,
                 color: Colors.black, // Text color
               ),
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             Text(
               value,
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 20,
                 color: Colors.black,
               ),

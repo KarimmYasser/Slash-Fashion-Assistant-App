@@ -3,10 +3,8 @@ import 'dart:convert';
 import 'package:fashion_assistant/constants.dart';
 import 'package:fashion_assistant/data/authentication.repository/login_data.dart';
 import 'package:fashion_assistant/tap_map.dart';
-import 'package:fashion_assistant/utils/http/http_client.dart';
 import 'package:fashion_assistant/widgets/brand_mode/products_list.dart';
 import 'package:fashion_assistant/widgets/product_details/five_stars.dart';
-import 'package:fashion_assistant/widgets/product_details/row_aboutbrand.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:iconsax/iconsax.dart';
@@ -115,7 +113,7 @@ class BrandDetails extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
+            const Text(
               'About Your Brand',
               style: TextStyle(
                   fontSize: Sizes.fontSizeLg,
@@ -130,8 +128,9 @@ class BrandDetails extends StatelessWidget {
                 // Size of the circular image container
                 CircleAvatar(
                   radius: 28, // Inner circle size (smaller for border effect)
-                  backgroundImage:
-                      logo != null ? NetworkImage(logo!) : NetworkImage(''),
+                  backgroundImage: logo != null
+                      ? NetworkImage(logo!)
+                      : const NetworkImage(''),
                   backgroundColor: Colors.transparent,
                 ),
                 SizedBox(

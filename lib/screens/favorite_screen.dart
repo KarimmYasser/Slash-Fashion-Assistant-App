@@ -57,7 +57,7 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
       return data.map((json) => ProductCardModel.fromJson(json)).toList();
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('An error occurred. Please try again.')),
+        const SnackBar(content: Text('An error occurred. Please try again.')),
       );
     }
     return [];
@@ -122,7 +122,7 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
                       controller: _searchController,
                       decoration: InputDecoration(
                         hintText: 'Search...',
-                        prefixIcon: Icon(
+                        prefixIcon: const Icon(
                           Iconsax.search_favorite,
                           color: OurColors.primaryColor,
                         ),

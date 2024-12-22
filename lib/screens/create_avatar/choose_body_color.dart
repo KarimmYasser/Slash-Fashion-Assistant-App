@@ -22,10 +22,11 @@ class _ChooseBodyColorState extends State<ChooseBodyColor>
       seleceted3 = false,
       seleceted4 = false;
   Map<String, dynamic> getMap() {
-    if (isMale)
+    if (isMale) {
       return avatarsMap['male']!;
-    else
+    } else {
       return avatarsMap['female']!;
+    }
   }
 
   String? avatarSvg;
@@ -44,8 +45,7 @@ class _ChooseBodyColorState extends State<ChooseBodyColor>
     try {
       // Convert the avatar map to JSON, then decode it to SVG string
       String avatarJson = json.encode(avatarMap);
-      return await FluttermojiFunctions()
-          .decodeFluttermojifromString(avatarJson);
+      return FluttermojiFunctions().decodeFluttermojifromString(avatarJson);
     } catch (error) {
       throw Exception("Error loading avatar SVG");
     }
@@ -68,19 +68,19 @@ class _ChooseBodyColorState extends State<ChooseBodyColor>
                   future: loadAvatar(),
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
-                      return CircularProgressIndicator();
+                      return const CircularProgressIndicator();
                     } else if (snapshot.hasError) {
-                      return Text("Error loading avatar");
+                      return const Text("Error loading avatar");
                     } else if (snapshot.hasData && snapshot.data!.isNotEmpty) {
                       return SvgPicture.string(
                         snapshot.data!,
                         width: 80,
                         height: 80,
                         placeholderBuilder: (BuildContext context) =>
-                            CircularProgressIndicator(),
+                            const CircularProgressIndicator(),
                       );
                     } else {
-                      return Text("Error loading avatar");
+                      return const Text("Error loading avatar");
                     }
                   },
                 ),
@@ -88,7 +88,7 @@ class _ChooseBodyColorState extends State<ChooseBodyColor>
                   padding: EdgeInsets.only(bottom: 60.h),
                   child: SizedBox(
                     width: 200.w,
-                    child: QuestionPubble(
+                    child: const QuestionPubble(
                         message: 'What is the closest color to your skin?'),
                   ),
                 )
@@ -114,7 +114,7 @@ class _ChooseBodyColorState extends State<ChooseBodyColor>
               widget.onSelection();
             },
             child: ChooseColorCard(
-              color: Color(0xffFFDBB4),
+              color: const Color(0xffFFDBB4),
               data: 'White',
               selected: selected1,
             ),
@@ -138,7 +138,7 @@ class _ChooseBodyColorState extends State<ChooseBodyColor>
               widget.onSelection();
             },
             child: ChooseColorCard(
-              color: Color(0xffEDB98A),
+              color: const Color(0xffEDB98A),
               data: 'Wheaty',
               selected: selected2,
             ),
@@ -162,7 +162,7 @@ class _ChooseBodyColorState extends State<ChooseBodyColor>
               widget.onSelection();
             },
             child: ChooseColorCard(
-              color: Color(0xffD08B5A),
+              color: const Color(0xffD08B5A),
               data: 'Brown',
               selected: seleceted3,
             ),
@@ -186,7 +186,7 @@ class _ChooseBodyColorState extends State<ChooseBodyColor>
               widget.onSelection();
             },
             child: ChooseColorCard(
-              color: Color(0xff604235),
+              color: const Color(0xff604235),
               data: 'Dark Brwon',
               selected: seleceted4,
             ),

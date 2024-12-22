@@ -33,7 +33,7 @@ class ReviewsWidget extends StatelessWidget {
         children: [
           Padding(
             padding: EdgeInsets.only(top: 18.h, left: 16.w),
-            child: Text(
+            child: const Text(
               'Product Rating & Reviews',
               style: TextStyle(
                 fontSize: Sizes.fontSizeLg,
@@ -107,7 +107,7 @@ class StarsSection extends StatelessWidget {
             children: [
               Text(
                 stars.toStringAsFixed(1),
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: Sizes.fontSizeLg * 1.5,
                   color: OurColors.textColor,
                   fontWeight: FontWeight.bold,
@@ -118,7 +118,7 @@ class StarsSection extends StatelessWidget {
               SizedBox(height: 4.h),
               Text(
                 'Based on $sum reviews',
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: Sizes.fontSizeSm,
                   color: OurColors.darkGrey,
                 ),
@@ -202,7 +202,7 @@ class RatingBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Text('$stars', style: TextStyle(fontSize: Sizes.fontSizeSm)),
+        Text('$stars', style: const TextStyle(fontSize: Sizes.fontSizeSm)),
         SizedBox(width: 4.w),
         Icon(Iconsax.star1, size: 16.sp, color: color),
         SizedBox(width: 8.w),
@@ -220,7 +220,8 @@ class RatingBar extends StatelessWidget {
           ),
         ),
         SizedBox(width: 4.w),
-        Text('$percentage%', style: TextStyle(fontSize: Sizes.fontSizeSm)),
+        Text('$percentage%',
+            style: const TextStyle(fontSize: Sizes.fontSizeSm)),
       ],
     );
   }
@@ -229,7 +230,7 @@ class RatingBar extends StatelessWidget {
 class RatingsCardsList extends StatelessWidget {
   final List<Map<String, dynamic>> reviews;
 
-  RatingsCardsList({super.key, required this.reviews});
+  const RatingsCardsList({super.key, required this.reviews});
 
   Map<String, dynamic> getAverageRatings() {
     double qualitySum = 0;
@@ -331,7 +332,7 @@ class Reviews extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
+        const Text(
           'Reviews',
           style: TextStyle(
             fontSize: Sizes.fontSizeLg,
@@ -410,7 +411,7 @@ class _ReviewCardState extends State<ReviewCard> {
 
   void _toggleHelpfulCount() async {
     final reviewId = widget.review.id;
-    final url = 'api/review/like';
+    const url = 'api/review/like';
 
     final response = await HttpHelper.post(
       url,
@@ -450,7 +451,8 @@ class _ReviewCardState extends State<ReviewCard> {
     return GestureDetector(
       onTap: _navigateToReviewsPage,
       child: Container(
-        constraints: BoxConstraints(maxWidth: 300), // Ensure max width only
+        constraints:
+            const BoxConstraints(maxWidth: 300), // Ensure max width only
         child: Card(
           color: OurColors.white,
           shape: RoundedRectangleBorder(
@@ -467,18 +469,18 @@ class _ReviewCardState extends State<ReviewCard> {
                   children: [
                     Text(
                       "${widget.review.firstname} ${widget.review.lastname}",
-                      style:
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                      style: const TextStyle(
+                          fontWeight: FontWeight.bold, fontSize: 16),
                     ),
                     Text(
                       widget.review.createdAt.toString(),
-                      style: TextStyle(color: Colors.grey, fontSize: 14),
+                      style: const TextStyle(color: Colors.grey, fontSize: 14),
                     ),
                   ],
                 ),
-                SizedBox(height: 8),
+                const SizedBox(height: 8),
                 FiveStarRating(filledStars: widget.review.rating.toInt()),
-                SizedBox(height: 8),
+                const SizedBox(height: 8),
                 if (widget.review.image != '')
                   ClipRRect(
                     borderRadius: BorderRadius.circular(8),
@@ -489,27 +491,27 @@ class _ReviewCardState extends State<ReviewCard> {
                       fit: BoxFit.cover,
                     ),
                   ),
-                SizedBox(height: 8),
+                const SizedBox(height: 8),
                 Text(
                   widget.review.comment,
-                  style: TextStyle(fontSize: 14),
+                  style: const TextStyle(fontSize: 14),
                   maxLines: widget.isExpanded ? null : 2, // Dynamically adjust
                   overflow: widget.isExpanded
                       ? TextOverflow.visible
                       : TextOverflow.ellipsis,
                 ),
-                SizedBox(height: 12),
+                const SizedBox(height: 12),
                 GestureDetector(
                   onTap: _toggleHelpfulCount,
                   child: Row(
                     children: [
-                      Spacer(),
+                      const Spacer(),
                       Icon(Iconsax.lamp_on4,
                           color: isHelpfulClicked
                               ? Colors.green
                               : OurColors.darkGrey,
                           size: 16),
-                      SizedBox(width: 4),
+                      const SizedBox(width: 4),
                       Text(
                         "Helpful ($likesCount)",
                         style: TextStyle(

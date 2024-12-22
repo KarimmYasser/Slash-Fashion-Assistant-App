@@ -97,7 +97,7 @@ class _AddColorsScreenState extends State<AddColorsScreen> {
             ),
             ElevatedButton(
               onPressed: () => Navigator.pop(context, _colors),
-              child: Center(child: const Text("Save")),
+              child: const Center(child: Text("Save")),
             ),
           ],
         ),

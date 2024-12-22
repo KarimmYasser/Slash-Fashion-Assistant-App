@@ -1,8 +1,6 @@
 import 'package:fashion_assistant/screens/product_screen.dart';
 import 'package:fashion_assistant/utils/http/http_client.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
 
 class BrandProfilePage extends StatefulWidget {
   final String brandId; // Add the brandId parameter
@@ -11,13 +9,13 @@ class BrandProfilePage extends StatefulWidget {
   final String brandDescription;
   final bool isFollowing;
   const BrandProfilePage({
-    Key? key,
+    super.key,
     required this.brandId,
     required this.brandName,
     required this.brandImage,
     required this.brandDescription,
     required this.isFollowing,
-  }) : super(key: key);
+  });
 
   @override
   _BrandProfilePageState createState() => _BrandProfilePageState();
@@ -50,10 +48,10 @@ class _BrandProfilePageState extends State<BrandProfilePage> {
         isFollowing = !isFollowing; // Toggle local state
       });
     } catch (e) {
-      print('Error: $e');
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error: Unable to update follow status.')),
+          const SnackBar(
+              content: Text('Error: Unable to update follow status.')),
         );
       }
     }
@@ -71,12 +69,11 @@ class _BrandProfilePageState extends State<BrandProfilePage> {
         isLoading = false;
       });
     } catch (e) {
-      print('Error: $e');
       setState(() {
         isLoading = false;
       });
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error: Unable to fetch brand products.')),
+        const SnackBar(content: Text('Error: Unable to fetch brand products.')),
       );
     }
   }

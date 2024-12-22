@@ -25,12 +25,11 @@ class _AddReviewScreenState extends State<AddReviewScreen> {
   bool? _recommendProduct;
   bool _isLoading = false;
   Future<void> _pickImages() async {
-    final List<XFile>? images = await _picker.pickMultiImage();
-    if (images != null) {
-      setState(() {
-        _selectedImages.addAll(images);
-      });
-    }
+    final List<XFile> images = await _picker.pickMultiImage();
+
+    setState(() {
+      _selectedImages.addAll(images);
+    });
   }
 
   void _removeImage(int index) {
@@ -130,7 +129,7 @@ class _AddReviewScreenState extends State<AddReviewScreen> {
         setState(() {
           _isLoading = false;
         });
-        print("Error: $e");
+
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text('Failed to submit the review. Please try again.'),
@@ -165,7 +164,7 @@ class _AddReviewScreenState extends State<AddReviewScreen> {
         ),
       ),
       body: _isLoading
-          ? CircularProgressIndicator()
+          ? const CircularProgressIndicator()
           : SingleChildScrollView(
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
@@ -181,14 +180,14 @@ class _AddReviewScreenState extends State<AddReviewScreen> {
                     ),
                     SizedBox(height: 16.h),
                     // "Your Review" Section
-                    Text(
+                    const Text(
                       "Your review",
                       style:
                           TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                     ),
                     const SizedBox(height: 8),
                     Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 10),
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
                       child: TextField(
                         controller: _reviewController,
                         decoration: InputDecoration(
@@ -196,24 +195,24 @@ class _AddReviewScreenState extends State<AddReviewScreen> {
                           filled: true,
                           hintText:
                               'What did you like or dislike? How did you use the product? What should others know before buying?',
-                          hintStyle: TextStyle(
+                          hintStyle: const TextStyle(
                               color: Colors.grey), // Change hint color
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(
                                 20), // Make border circular
-                            borderSide: BorderSide(
+                            borderSide: const BorderSide(
                                 color: Colors.grey), // Change border color
                           ),
                           enabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(
                                 20), // Make border circular
-                            borderSide: BorderSide(
+                            borderSide: const BorderSide(
                                 color: Colors.grey), // Change border color
                           ),
                           focusedBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(
                                 20), // Make border circular
-                            borderSide: BorderSide(
+                            borderSide: const BorderSide(
                                 color: Colors
                                     .blue), // Change border color when focused
                           ),
@@ -224,7 +223,7 @@ class _AddReviewScreenState extends State<AddReviewScreen> {
                     const SizedBox(height: 16),
 
                     // Enhanced Photo Upload Widget for Multiple Images
-                    Text(
+                    const Text(
                       "Upload images (Optional)",
                       style:
                           TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
@@ -243,12 +242,12 @@ class _AddReviewScreenState extends State<AddReviewScreen> {
                           ),
                           borderRadius: BorderRadius.circular(8),
                         ),
-                        child: Column(
+                        child: const Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Icon(Icons.camera_alt_outlined,
                                 size: 40, color: Colors.grey),
-                            const SizedBox(height: 8),
+                            SizedBox(height: 8),
                             Text(
                               "Upload",
                               style: TextStyle(color: Colors.grey),
@@ -283,7 +282,7 @@ class _AddReviewScreenState extends State<AddReviewScreen> {
                               GestureDetector(
                                 onTap: () => _removeImage(index),
                                 child: Container(
-                                  decoration: BoxDecoration(
+                                  decoration: const BoxDecoration(
                                     color: Colors.red,
                                     shape: BoxShape.circle,
                                   ),
@@ -338,8 +337,7 @@ class _AddReviewScreenState extends State<AddReviewScreen> {
 class RecommendProductWidget extends StatefulWidget {
   final Function(bool) onRecommendUpdate;
 
-  const RecommendProductWidget({Key? key, required this.onRecommendUpdate})
-      : super(key: key);
+  const RecommendProductWidget({super.key, required this.onRecommendUpdate});
 
   @override
   State<RecommendProductWidget> createState() => _RecommendProductWidgetState();

@@ -34,13 +34,14 @@ class AddCartAppBar extends StatelessWidget {
                       borderRadius: BorderRadius.circular(14.r),
                       color: const Color.fromARGB(255, 242, 242, 245)),
                   child: IconButton(
-                    icon: Icon(Iconsax.share, color: OurColors.primaryColor),
+                    icon: const Icon(Iconsax.share,
+                        color: OurColors.primaryColor),
                     onPressed: () {
                       // Handle share action
                     },
                   ),
                 ),
-                SizedBox(width: 8),
+                const SizedBox(width: 8),
                 Container(
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(14.r),
@@ -67,12 +68,12 @@ class AddCartAppBar extends StatelessWidget {
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10.r),
                     ),
-                    padding: EdgeInsets.symmetric(vertical: 0),
+                    padding: const EdgeInsets.symmetric(vertical: 0),
                   ),
                   onPressed: () {
                     _showAddToCartDialog(context, productId, variants);
                   },
-                  child: Text(
+                  child: const Text(
                     'Add to Cart',
                     style: TextStyle(
                       fontSize: 16,
@@ -104,7 +105,8 @@ class AddToCartDialog extends StatefulWidget {
   final String productId;
   final List<Variant> variants;
 
-  const AddToCartDialog({required this.productId, required this.variants});
+  const AddToCartDialog(
+      {super.key, required this.productId, required this.variants});
 
   @override
   _AddToCartDialogState createState() => _AddToCartDialogState();
@@ -117,13 +119,13 @@ class _AddToCartDialogState extends State<AddToCartDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text('Select Variant and Enter Quantity'),
+      title: const Text('Select Variant and Enter Quantity'),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           DropdownButtonFormField<String>(
             value: selectedVariant,
-            hint: Text('Select Variant'),
+            hint: const Text('Select Variant'),
             items: widget.variants.map((Variant variant) {
               return DropdownMenuItem<String>(
                 value: variant.productVariantId,
@@ -137,12 +139,12 @@ class _AddToCartDialogState extends State<AddToCartDialog> {
               });
             },
           ),
-          SizedBox(height: 16),
+          const SizedBox(height: 16),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               IconButton(
-                icon: Icon(Icons.remove),
+                icon: const Icon(Icons.remove),
                 onPressed: () {
                   setState(() {
                     if (quantity > 1) {
@@ -151,9 +153,9 @@ class _AddToCartDialogState extends State<AddToCartDialog> {
                   });
                 },
               ),
-              Text('$quantity', style: TextStyle(fontSize: 18)),
+              Text('$quantity', style: const TextStyle(fontSize: 18)),
               IconButton(
-                icon: Icon(Icons.add),
+                icon: const Icon(Icons.add),
                 onPressed: () {
                   setState(() {
                     if (selectedVariant != null) {
@@ -172,13 +174,13 @@ class _AddToCartDialogState extends State<AddToCartDialog> {
       ),
       actions: <Widget>[
         TextButton(
-          child: Text('Cancel'),
+          child: const Text('Cancel'),
           onPressed: () {
             Navigator.of(context).pop();
           },
         ),
         TextButton(
-          child: Text('Add'),
+          child: const Text('Add'),
           onPressed: () {
             if (selectedVariant != null) {
               _addToCart(quantity, selectedVariant!);
@@ -194,7 +196,7 @@ class _AddToCartDialogState extends State<AddToCartDialog> {
 }
 
 void _addToCart(int quantity, String productId) async {
-  final String url = "api/cart/add";
+  const String url = "api/cart/add";
 
   // ignore: unused_local_variable
   final response = await HttpHelper.post(url, {

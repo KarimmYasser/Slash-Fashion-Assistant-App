@@ -26,9 +26,9 @@ class ReviewsScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: OurColors.secondaryBackgroundColor,
       appBar: AppBar(
-        title: Text('Product ratings and reviews'),
+        title: const Text('Product ratings and reviews'),
         leading: IconButton(
-          icon: Icon(Icons.arrow_back),
+          icon: const Icon(Icons.arrow_back),
           onPressed: () {
             Navigator.pop(context);
           },
@@ -55,7 +55,7 @@ class ReviewsScreen extends StatelessWidget {
               ),
             ),
             Padding(
-              padding: EdgeInsets.all(16),
+              padding: const EdgeInsets.all(16),
               child: SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
@@ -64,7 +64,7 @@ class ReviewsScreen extends StatelessWidget {
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10.r),
                     ),
-                    padding: EdgeInsets.symmetric(vertical: 0),
+                    padding: const EdgeInsets.symmetric(vertical: 0),
                   ),
                   onPressed: () {
                     Navigator.push(
@@ -77,7 +77,7 @@ class ReviewsScreen extends StatelessWidget {
                     //} Handle add to cart action
                     // Handle add to cart action
                   },
-                  child: Text(
+                  child: const Text(
                     'Add a review',
                     style: TextStyle(
                       fontSize: 16,
@@ -88,11 +88,11 @@ class ReviewsScreen extends StatelessWidget {
                 ),
               ),
             ),
-            Text('Reviews',
+            const Text('Reviews',
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
             ListView.builder(
               shrinkWrap: true,
-              physics: NeverScrollableScrollPhysics(),
+              physics: const NeverScrollableScrollPhysics(),
               itemCount: reviews.length,
               itemBuilder: (context, index) {
                 return Padding(

@@ -39,15 +39,15 @@ class _HorizontalListBrandState extends State<HorizontalListBrand> {
     });
   }
 
-  void _filterProducts(String query) {
-    _products.then((products) {
-      setState(() {
-        _filteredProducts = products.where((product) {
-          return product.name.toLowerCase().contains(query.toLowerCase());
-        }).toList();
-      });
-    });
-  }
+  // void _filterProducts(String query) {
+  //   _products.then((products) {
+  //     setState(() {
+  //       _filteredProducts = products.where((product) {
+  //         return product.name.toLowerCase().contains(query.toLowerCase());
+  //       }).toList();
+  //     });
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -59,7 +59,7 @@ class _HorizontalListBrandState extends State<HorizontalListBrand> {
           padding: EdgeInsets.only(left: 10.w),
           child: Text(
             widget.title,
-            style: TextStyle(
+            style: const TextStyle(
                 color: OurColors.textColor,
                 fontWeight: FontWeight.w500,
                 fontSize: Sizes.fontSizeLg),
@@ -71,11 +71,11 @@ class _HorizontalListBrandState extends State<HorizontalListBrand> {
             future: _products,
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
-                return Center(child: CircularProgressIndicator());
+                return const Center(child: CircularProgressIndicator());
               } else if (snapshot.hasError) {
                 return Center(child: Text('Error: ${snapshot.error}'));
               } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                return Center(child: Text('No products available'));
+                return const Center(child: Text('No products available'));
               }
 
               return ListView.builder(

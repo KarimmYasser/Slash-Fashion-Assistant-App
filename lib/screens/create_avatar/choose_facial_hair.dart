@@ -42,8 +42,7 @@ class _ChooseFacialHairState extends State<ChooseFacialHair>
     try {
       // Convert the avatar map to JSON, then decode it to SVG string
       String avatarJson = json.encode(avatarMap);
-      return await FluttermojiFunctions()
-          .decodeFluttermojifromString(avatarJson);
+      return FluttermojiFunctions().decodeFluttermojifromString(avatarJson);
     } catch (error) {
       throw Exception("Error loading avatar SVG");
     }
@@ -66,19 +65,19 @@ class _ChooseFacialHairState extends State<ChooseFacialHair>
                   future: loadAvatar(),
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
-                      return CircularProgressIndicator();
+                      return const CircularProgressIndicator();
                     } else if (snapshot.hasError) {
-                      return Text("Error loading avatar");
+                      return const Text("Error loading avatar");
                     } else if (snapshot.hasData && snapshot.data!.isNotEmpty) {
                       return SvgPicture.string(
                         snapshot.data!,
                         width: 80,
                         height: 80,
                         placeholderBuilder: (BuildContext context) =>
-                            CircularProgressIndicator(),
+                            const CircularProgressIndicator(),
                       );
                     } else {
-                      return Text("Error loading avatar");
+                      return const Text("Error loading avatar");
                     }
                   },
                 ),
@@ -86,7 +85,7 @@ class _ChooseFacialHairState extends State<ChooseFacialHair>
                   padding: EdgeInsets.only(bottom: 60.h),
                   child: SizedBox(
                     width: 200.w,
-                    child: QuestionPubble(
+                    child: const QuestionPubble(
                         message: 'what type of facial hair do you have?'),
                   ),
                 )

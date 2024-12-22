@@ -7,7 +7,6 @@ class ReviewService {
     );
 
     // Debugging: Print the response to inspect its format
-    print('Response: $response');
 
     if (response['reviews'] is List) {
       return (response['reviews'] as List)

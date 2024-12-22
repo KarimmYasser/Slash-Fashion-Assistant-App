@@ -66,7 +66,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
         throw Exception("Invalid avatar data received from backend.");
       }
     } catch (error) {
-      print("Error fetching avatar: $error");
       avatarSvg = null;
     } finally {
       if (mounted) {

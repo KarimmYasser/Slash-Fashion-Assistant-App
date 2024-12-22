@@ -65,9 +65,8 @@ class _CustomCarousalSlidersState extends State<CustomCarousalSliders> {
                             ),
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(20),
-                              child: Container(
-                                  child: ImagePlaceholder(
-                                      imagePath: offer['image'])),
+                              child:
+                                  ImagePlaceholder(imagePath: offer['image']),
                             ),
                           ),
                         );

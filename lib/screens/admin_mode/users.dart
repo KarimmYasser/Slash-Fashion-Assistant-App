@@ -81,11 +81,12 @@ class _UsersState extends State<Users> {
   // Delete a review
   Future<void> _deleteReview(String reviewId, String? image) async {
     try {
-      if (image != null)
+      if (image != null) {
         await HttpHelper.delete('api/review/image', {"reviewId": reviewId});
+      }
       await HttpHelper.delete('api/review/$reviewId', {});
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Review deleted successfully')),
+        const SnackBar(content: Text('Review deleted successfully')),
       );
       _fetchUsers(); // Refresh the users list
     } catch (e) {
@@ -394,7 +395,7 @@ class _UserCardState extends State<UserCard> {
                             ),
                           ),
                         );
-                      }).toList(),
+                      }),
                   ],
                 ),
               ),
@@ -493,5 +494,3 @@ class UserStatitics extends StatelessWidget {
     );
   }
 }
-
-

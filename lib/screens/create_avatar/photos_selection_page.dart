@@ -100,14 +100,14 @@ class ConfirmationPage extends StatelessWidget {
   final VoidCallback onSubmit;
 
   const ConfirmationPage({
-    Key? key,
+    super.key,
     required this.selectedPhotos,
     required this.onSubmit,
-  }) : super(key: key);
+  });
 
   void sendToBackend() {
     // Simulate sending data to the backend
-    print("Sending to backend: $selectedPhotos");
+
     onSubmit();
   }
 

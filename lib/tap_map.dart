@@ -48,10 +48,10 @@ final List<Map<String, dynamic>> screenDetailsSuperAdmin = [
     'screenName': const HomeAdminScreen(),
   },
   {
-    'screenName': StatisticsScreen(),
+    'screenName': const StatisticsScreen(),
   },
   {
-    'screenName': ApproveProductsScreen(),
+    'screenName': const ApproveProductsScreen(),
   },
   {
     'screenName': const ApproveBrandsScreen(),
@@ -66,7 +66,7 @@ final List<Map<String, dynamic>> screenDetailsSuperAdmin = [
 
 final List<Map<String, dynamic>> screenDetailsBrandAdmin = [
   {
-    'screenName': ApproveProductsScreen(),
+    'screenName': const ApproveProductsScreen(),
   },
   {
     'screenName': const ApproveBrandsScreen(),

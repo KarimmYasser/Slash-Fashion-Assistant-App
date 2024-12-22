@@ -40,8 +40,7 @@ class _ChooseStyleState extends State<ChooseStyle>
     try {
       // Convert the avatar map to JSON, then decode it to SVG string
       String avatarJson = json.encode(avatarMap);
-      return await FluttermojiFunctions()
-          .decodeFluttermojifromString(avatarJson);
+      return FluttermojiFunctions().decodeFluttermojifromString(avatarJson);
     } catch (error) {
       throw Exception("Error loading avatar SVG");
     }
@@ -136,10 +135,8 @@ class _ChooseStyleState extends State<ChooseStyle>
           .indexWhere((selected) => selected['id'] == product['id']);
       if (existingIndex >= 0) {
         selectedProducts.removeAt(existingIndex);
-        print('Removed product with ID: ${product['id']}');
       } else {
         selectedProducts.add(product);
-        print('Added product with ID: ${product['id']}');
       }
     });
   }
@@ -165,9 +162,9 @@ class _ChooseStyleState extends State<ChooseStyle>
                       builder: (context, snapshot) {
                         if (snapshot.connectionState ==
                             ConnectionState.waiting) {
-                          return CircularProgressIndicator();
+                          return const CircularProgressIndicator();
                         } else if (snapshot.hasError) {
-                          return Text("Error loading avatar");
+                          return const Text("Error loading avatar");
                         } else if (snapshot.hasData &&
                             snapshot.data!.isNotEmpty) {
                           return SvgPicture.string(
@@ -175,16 +172,16 @@ class _ChooseStyleState extends State<ChooseStyle>
                             width: 80,
                             height: 80,
                             placeholderBuilder: (BuildContext context) =>
-                                CircularProgressIndicator(),
+                                const CircularProgressIndicator(),
                           );
                         } else {
-                          return Text("Error loading avatar");
+                          return const Text("Error loading avatar");
                         }
                       },
                     ),
                     SizedBox(
                       width: 200.w,
-                      child: QuestionPubble(
+                      child: const QuestionPubble(
                           message: 'Choose your favorite styles!'),
                     ),
                   ],
@@ -214,12 +211,12 @@ class _ChooseStyleState extends State<ChooseStyle>
               height: 30.h,
             ),
             isLoading
-                ? Center(child: CircularProgressIndicator())
+                ? const Center(child: CircularProgressIndicator())
                 : errorMessage != null
                     ? Center(child: Text(errorMessage!))
                     : products.isNotEmpty
                         ? GridView.builder(
-                            physics: NeverScrollableScrollPhysics(),
+                            physics: const NeverScrollableScrollPhysics(),
                             shrinkWrap: true,
                             gridDelegate:
                                 SliverGridDelegateWithFixedCrossAxisCount(
@@ -239,7 +236,7 @@ class _ChooseStyleState extends State<ChooseStyle>
                               );
                             },
                           )
-                        : Center(child: Text('No products available'))
+                        : const Center(child: Text('No products available'))
           ],
         ),
       ),
@@ -258,12 +255,12 @@ class ProductCircle extends StatelessWidget {
   final bool small; // Add this parameter
 
   const ProductCircle({
-    Key? key,
+    super.key,
     required this.imageUrl,
     required this.isSelected,
     required this.onTap,
     this.small = false, // Default is false for normal size
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -293,7 +290,7 @@ class ProductCircle extends StatelessWidget {
                   if (loadingProgress == null) {
                     return child;
                   }
-                  return Center(child: CircularProgressIndicator());
+                  return const Center(child: CircularProgressIndicator());
                 },
                 errorBuilder: (context, error, stackTrace) => Center(
                   child: Icon(

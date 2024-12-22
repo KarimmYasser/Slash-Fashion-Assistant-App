@@ -14,16 +14,7 @@ Future<void> sendDataToBackend(Map<String, dynamic> data) async {
       },
       body: jsonEncode(data), // Convert the data to JSON
     );
-
-    if (response.statusCode == 200) {
-      // Handle successful response
-      print('Data sent successfully: ${response.body}');
-    } else {
-      // Handle error response
-      print('Failed to send data: ${response.statusCode}');
-    }
   } catch (error) {
     // Handle any errors during the request
-    print('Error sending data: $error');
   }
 }

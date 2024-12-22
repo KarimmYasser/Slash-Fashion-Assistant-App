@@ -2,12 +2,9 @@ import 'package:fashion_assistant/screens/total_screen.dart';
 import 'package:fashion_assistant/utils/http/http_client.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
 
 class BodyMeasurementsScreen extends StatefulWidget {
-  const BodyMeasurementsScreen({Key? key}) : super(key: key);
+  const BodyMeasurementsScreen({super.key});
 
   @override
   _BodyMeasurementsScreenState createState() => _BodyMeasurementsScreenState();
@@ -51,10 +48,10 @@ class _BodyMeasurementsScreenState extends State<BodyMeasurementsScreen> {
       );
 
       // On success, navigate to TotalScreens
-      Get.offAll(() => TotalScreens());
+      Get.offAll(() => const TotalScreens());
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('An error occurred. Please try again.')),
+        const SnackBar(content: Text('An error occurred. Please try again.')),
       );
     } finally {
       setState(() {
@@ -67,7 +64,7 @@ class _BodyMeasurementsScreenState extends State<BodyMeasurementsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Body Measurements'),
+        title: const Text('Body Measurements'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -79,7 +76,7 @@ class _BodyMeasurementsScreenState extends State<BodyMeasurementsScreen> {
                 TextFormField(
                   controller: _waistController,
                   keyboardType: TextInputType.number,
-                  decoration: InputDecoration(labelText: 'Waist (cm)'),
+                  decoration: const InputDecoration(labelText: 'Waist (cm)'),
                   validator: (value) {
                     if (value == null ||
                         value.isEmpty ||
@@ -92,7 +89,7 @@ class _BodyMeasurementsScreenState extends State<BodyMeasurementsScreen> {
                 TextFormField(
                   controller: _heightController,
                   keyboardType: TextInputType.number,
-                  decoration: InputDecoration(labelText: 'Height (cm)'),
+                  decoration: const InputDecoration(labelText: 'Height (cm)'),
                   validator: (value) {
                     if (value == null ||
                         value.isEmpty ||
@@ -105,7 +102,7 @@ class _BodyMeasurementsScreenState extends State<BodyMeasurementsScreen> {
                 TextFormField(
                   controller: _chestController,
                   keyboardType: TextInputType.number,
-                  decoration: InputDecoration(labelText: 'Chest (cm)'),
+                  decoration: const InputDecoration(labelText: 'Chest (cm)'),
                   validator: (value) {
                     if (value == null ||
                         value.isEmpty ||
@@ -118,7 +115,7 @@ class _BodyMeasurementsScreenState extends State<BodyMeasurementsScreen> {
                 TextFormField(
                   controller: _weightController,
                   keyboardType: TextInputType.number,
-                  decoration: InputDecoration(labelText: 'Weight (kg)'),
+                  decoration: const InputDecoration(labelText: 'Weight (kg)'),
                   validator: (value) {
                     if (value == null ||
                         value.isEmpty ||
@@ -131,7 +128,8 @@ class _BodyMeasurementsScreenState extends State<BodyMeasurementsScreen> {
                 TextFormField(
                   controller: _shoulderWidthController,
                   keyboardType: TextInputType.number,
-                  decoration: InputDecoration(labelText: 'Shoulder Width (cm)'),
+                  decoration:
+                      const InputDecoration(labelText: 'Shoulder Width (cm)'),
                   validator: (value) {
                     if (value == null ||
                         value.isEmpty ||
@@ -144,7 +142,8 @@ class _BodyMeasurementsScreenState extends State<BodyMeasurementsScreen> {
                 TextFormField(
                   controller: _footLengthController,
                   keyboardType: TextInputType.number,
-                  decoration: InputDecoration(labelText: 'Foot Length (cm)'),
+                  decoration:
+                      const InputDecoration(labelText: 'Foot Length (cm)'),
                   validator: (value) {
                     if (value == null ||
                         value.isEmpty ||
@@ -157,7 +156,7 @@ class _BodyMeasurementsScreenState extends State<BodyMeasurementsScreen> {
                 TextFormField(
                   controller: _shapeController,
                   keyboardType: TextInputType.text,
-                  decoration: InputDecoration(labelText: 'Body Shape'),
+                  decoration: const InputDecoration(labelText: 'Body Shape'),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Please enter a valid body shape';
@@ -165,12 +164,12 @@ class _BodyMeasurementsScreenState extends State<BodyMeasurementsScreen> {
                     return null;
                   },
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 _isLoading
-                    ? CircularProgressIndicator()
+                    ? const CircularProgressIndicator()
                     : ElevatedButton(
                         onPressed: _saveMeasurements,
-                        child: Text('Save Measurements'),
+                        child: const Text('Save Measurements'),
                       ),
               ],
             ),

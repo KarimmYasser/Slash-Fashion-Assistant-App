@@ -46,7 +46,7 @@ class _HorizontalListState extends State<HorizontalList> {
       });
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('An error occurred. Please try again.')),
+        const SnackBar(content: Text('An error occurred. Please try again.')),
       );
     }
   }
@@ -81,10 +81,10 @@ class _HorizontalListState extends State<HorizontalList> {
             controller: _searchController,
             decoration: InputDecoration(
               hintText: 'Search for a product',
-              prefixIcon: Icon(Icons.search, color: OurColors.textColor),
+              prefixIcon: const Icon(Icons.search, color: OurColors.textColor),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(10),
-                borderSide: BorderSide(color: OurColors.textColor),
+                borderSide: const BorderSide(color: OurColors.textColor),
               ),
             ),
           ),
@@ -93,7 +93,7 @@ class _HorizontalListState extends State<HorizontalList> {
           padding: EdgeInsets.only(left: 10.w),
           child: Text(
             widget.title,
-            style: TextStyle(
+            style: const TextStyle(
                 color: OurColors.textColor,
                 fontWeight: FontWeight.w500,
                 fontSize: Sizes.fontSizeLg),
@@ -105,11 +105,11 @@ class _HorizontalListState extends State<HorizontalList> {
             future: _products,
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
-                return Center(child: CircularProgressIndicator());
+                return const Center(child: CircularProgressIndicator());
               } else if (snapshot.hasError) {
                 return Center(child: Text('Error: ${snapshot.error}'));
               } else if (_filteredProducts.isEmpty) {
-                return Center(child: Text('No products found'));
+                return const Center(child: Text('No products found'));
               }
 
               return ListView.builder(

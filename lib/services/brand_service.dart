@@ -10,6 +10,7 @@ class BrandService {
 
       List<dynamic> brandsJson = response['brands'] as List<dynamic>;
       return brandsJson.map((json) => Brand.fromJson(json)).toList();
+      // ignore: empty_catches
     } catch (e) {}
     return [];
   }

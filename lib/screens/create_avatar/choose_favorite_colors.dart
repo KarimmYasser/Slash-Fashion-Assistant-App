@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'package:fashion_assistant/utils/http/http_client.dart';
-import 'package:http/http.dart' as http;
 import 'package:fashion_assistant/screens/create_avatar/get_preferences.dart';
 import 'package:fashion_assistant/tap_map.dart';
 import 'package:fashion_assistant/widgets/create_avatar/color_circle.dart';
@@ -54,8 +53,7 @@ class _ChooseFavColorsState extends State<ChooseFavColors>
     try {
       // Convert the avatar map to JSON, then decode it to SVG string
       String avatarJson = json.encode(avatarMap);
-      return await FluttermojiFunctions()
-          .decodeFluttermojifromString(avatarJson);
+      return FluttermojiFunctions().decodeFluttermojifromString(avatarJson);
     } catch (error) {
       throw Exception("Error loading avatar SVG");
     }
@@ -82,9 +80,9 @@ class _ChooseFavColorsState extends State<ChooseFavColors>
                     future: loadAvatar(),
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
-                        return CircularProgressIndicator();
+                        return const CircularProgressIndicator();
                       } else if (snapshot.hasError) {
-                        return Text("Error loading avatar");
+                        return const Text("Error loading avatar");
                       } else if (snapshot.hasData &&
                           snapshot.data!.isNotEmpty) {
                         return SvgPicture.string(
@@ -92,10 +90,10 @@ class _ChooseFavColorsState extends State<ChooseFavColors>
                           width: 80,
                           height: 80,
                           placeholderBuilder: (BuildContext context) =>
-                              CircularProgressIndicator(),
+                              const CircularProgressIndicator(),
                         );
                       } else {
-                        return Text("Error loading avatar");
+                        return const Text("Error loading avatar");
                       }
                     },
                   ),
@@ -103,7 +101,7 @@ class _ChooseFavColorsState extends State<ChooseFavColors>
                     padding: EdgeInsets.only(bottom: 60.h),
                     child: SizedBox(
                       width: 220.w,
-                      child: QuestionPubble(
+                      child: const QuestionPubble(
                           message: 'What is your favorite colors?'),
                     ),
                   )
@@ -112,7 +110,7 @@ class _ChooseFavColorsState extends State<ChooseFavColors>
             ),
             SizedBox(height: 20.h),
             isLoading
-                ? CircularProgressIndicator()
+                ? const CircularProgressIndicator()
                 : Wrap(
                     spacing: 20.w,
                     runSpacing: 20.h,

@@ -50,7 +50,7 @@ class _BrandCarouselState extends State<BrandCarousel> {
       future: _brandsFuture,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return Center(child: CircularProgressIndicator());
+          return const Center(child: CircularProgressIndicator());
         } else if (snapshot.hasError) {
           return Center(
             child: Text('Error: ${snapshot.error}'),
@@ -76,7 +76,7 @@ class _BrandCarouselState extends State<BrandCarousel> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => BrandListScreen(),
+                            builder: (context) => const BrandListScreen(),
                           ),
                         ); // Action for "See more"
                       },

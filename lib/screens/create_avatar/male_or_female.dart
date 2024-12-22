@@ -84,7 +84,7 @@ class _MaleOrFemaleState extends State<MaleOrFemale> {
             color: OurColors.primaryColor,
           ),
           child: IconButton(
-              onPressed: () => Get.offAll(() => GetPreferences()),
+              onPressed: () => Get.offAll(() => const GetPreferences()),
               icon: Text(
                 'Next',
                 style: TextStyle(color: OurColors.white, fontSize: 20.sp),

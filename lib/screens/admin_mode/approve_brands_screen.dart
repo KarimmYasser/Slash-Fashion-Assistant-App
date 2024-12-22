@@ -130,8 +130,8 @@ class BrandCard extends StatelessWidget {
   const BrandCard({
     required this.brand,
     required this.onBlockToggle,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {

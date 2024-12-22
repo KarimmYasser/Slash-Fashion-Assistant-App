@@ -46,7 +46,7 @@ class _AvatarCardState extends State<AvatarCard> {
       // Convert the avatar map to JSON and then decode it to SVG
       String avatarJson = json.encode(avatarMap);
       avatarSvg =
-          await FluttermojiFunctions().decodeFluttermojifromString(avatarJson);
+          FluttermojiFunctions().decodeFluttermojifromString(avatarJson);
 
       setState(() {
         isLoading = false;
@@ -80,16 +80,16 @@ class _AvatarCardState extends State<AvatarCard> {
           ),
           Center(
             child: isLoading
-                ? CircularProgressIndicator()
+                ? const CircularProgressIndicator()
                 : avatarSvg != null && avatarSvg!.isNotEmpty
                     ? SvgPicture.string(
                         avatarSvg!,
                         width: 100,
                         height: 100,
                         placeholderBuilder: (BuildContext context) =>
-                            CircularProgressIndicator(),
+                            const CircularProgressIndicator(),
                       )
-                    : Text("Error loading"),
+                    : const Text("Error loading"),
           ),
           SizedBox(
             height: 5.h,

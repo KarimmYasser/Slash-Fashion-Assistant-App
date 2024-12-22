@@ -7,12 +7,12 @@ class FiveStarRating extends StatelessWidget {
   final double starSize; // Size of each star
 
   const FiveStarRating({
-    Key? key,
+    super.key,
     required this.filledStars,
     this.filledStarAsset = 'assets/icons/star.png',
     this.unfilledStarAsset = 'assets/icons/borderstar.png',
     this.starSize = 16,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
