@@ -1,3 +1,4 @@
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:fashion_assistant/screens/admin_mode/admin_profile_screen.dart';
 import 'package:fashion_assistant/screens/admin_mode/approve_brands_screen.dart';
 import 'package:fashion_assistant/screens/admin_mode/approve_products_screen.dart';
@@ -21,8 +22,7 @@ import 'package:fashion_assistant/screens/personalization/profile_screen.dart';
 bool inHome = true;
 bool isMale = true;
 
-const String baseURL =
-    'https://7da4-2c0f-fc89-8032-69be-f18e-6f70-89bf-bd75.ngrok-free.app';
+final baseURL = dotenv.env['BACKEND_URL'] ?? 'Error';
 
 Future<String>? kChatId;
 final List<Map<String, dynamic>> screenDetails = [

@@ -47,3 +47,4 @@ app.*.map.json
 /linux/flutter
 /macos/flutter
 windows/flutter/generated_plugins.cmake
+.env

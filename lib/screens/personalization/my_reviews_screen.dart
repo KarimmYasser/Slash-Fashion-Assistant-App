@@ -91,7 +91,7 @@ class _MyReviewsScreenState extends State<MyReviewsScreen> {
                     return Card(
                       color: Colors.white,
                       margin: const EdgeInsets.only(bottom: 10),
-                      elevation: 3,
+                      elevation: 6,
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10)),
                       child: Padding(

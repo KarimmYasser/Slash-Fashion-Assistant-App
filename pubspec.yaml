@@ -61,6 +61,7 @@ dependencies:
   image_picker: ^0.8.4+4
   google_fonts: ^6.2.1
   fl_chart: ^0.69.2
+  flutter_dotenv: ^5.2.1
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -88,6 +89,7 @@ flutter:
     - assets/logo/
     - assets/onboarding_images/
     - assets/images/
+    - .env
 
     - assets/animations/
 

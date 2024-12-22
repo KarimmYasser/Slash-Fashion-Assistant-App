@@ -3,7 +3,7 @@ import 'package:fashion_assistant/tap_map.dart';
 import 'package:http/http.dart' as http;
 
 class HttpHelper {
-  static const String _baseUrl = baseURL;
+  static final String _baseUrl = baseURL;
   static String? token;
 
   // Helper method to make a GET request
