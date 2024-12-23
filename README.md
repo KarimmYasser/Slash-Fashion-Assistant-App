@@ -1,90 +1,158 @@
 # Fashion Assistant App
 
-Welcome to the **Fashion Assistant App**, a modern solution designed to enhance your shopping experience with advanced customization and seamless interaction. This app connects users with local fashion brands, allowing them to explore, personalize, and purchase items tailored to their preferences.
+The **Fashion Assistant App** is an all-in-one platform designed to enhance the shopping experience for users while empowering local fashion brands. Combining innovative technology with user-centric design, the app provides features like avatar creation, AI-driven recommendations, and streamlined brand management interfaces.
 
-## Features
+---
 
-- **User Registration and Customization:**
-  - Collects user sizes during registration, featuring an interactive visual interface to guide measurements.
-  - Integrates Ready Player Me for users to create and display personalized avatars.
+## Key Features
 
-- **Fashion Assistant:**
-  - A smart assistant that interacts with users to understand preferences and suggest suitable items and brands.
-  - AI-powered search functionality for image-based item suggestions (future enhancement).
+### User Features:
+- **Interactive Registration**:
+  - Collects user measurements with a guided interface that visually highlights body areas.
+  - Integration with [Ready Player Me](https://readyplayer.me) for creating personalized avatars.
 
-- **Modes for Users and Brands:**
-  - **User Mode:** Explore and purchase items from local brands.
-  - **Brand Mode:** Post and manage inventory for sale.
+- **Personalized Recommendations**:
+  - A chatbot assistant that learns user preferences and suggests tailored fashion items.
+  - AI-powered search for text-based and image-based queries.
 
-- **Chat Assistant:**
-  - Assists users in finding specific items based on input.
+- **Product Browsing**:
+  - Horizontally scrollable product rows under an animated app bar.
+  - Interactive product cards with detailed information and quick actions.
 
-- **Product Browsing:**
-  - Interactive product cards under an animated app bar, organized in scrollable horizontal rows.
+- **Shopping Features**:
+  - Add items to a wishlist or directly to the cart.
+  - Secure and seamless checkout process.
 
-- **Dark and Light Modes:**
-  - Easily toggle between themes for a personalized experience.
+- **Customer Support**:
+  - A dedicated chat interface for resolving user inquiries.
 
-## Tech Stack
+### Brand Features:
+- **Product Management**:
+  - Add, update, and manage products with ease.
+  - Upload product images, descriptions, and pricing details.
 
-- **Frontend:** Flutter
-- **Backend:** Node.js with Express.js
-- **Database:** PostgreSQL
+- **Offer Management**:
+  - Create and manage promotional offers directly within the app.
 
-## Screenshots
+- **Insights & Engagement**:
+  - View user interactions and respond to inquiries.
 
-### Home Screen
-![Home Screen](screenshots/home_screen.png)
+### Admin Features:
+- **User & Brand Oversight**:
+  - Manage user accounts, brand registrations, and permissions.
 
-### Avatar Creation
-![Avatar Creation](screenshots/avatar_creation.png)
+- **Offer Approvals**:
+  - Review and approve offers submitted by brands.
 
-### Product Listing
-![Product Listing](screenshots/product_listing.png)
+- **System Monitoring**:
+  - Oversee app performance and resolve escalated issues.
 
-### Fashion Assistant Interaction
-![Fashion Assistant](screenshots/fashion_assistant.png)
+---
 
-### Brand Mode Interface
-![Brand Mode](screenshots/brand_mode.png)
+## Technology Stack
 
-## Installation
+- **Frontend**: Flutter for a smooth cross-platform experience.
+- **Backend**: Node.js with Express.js for robust API handling.
+- **Database**: PostgreSQL for secure and efficient data management.
+- **Avatar Integration**: Ready Player Me for avatar creation and customization.
+- **AI Features**: Custom algorithms for tailored recommendations and searches.
 
-1. Clone the repository:
+---
+
+## Setup Instructions
+
+1. **Clone the Repository**:
    ```bash
    git clone https://github.com/yarafarouk/fashion-assistant-app.git
-   ```
-
-2. Navigate to the project directory:
-   ```bash
    cd fashion-assistant-app
    ```
 
-3. Install dependencies:
+2. **Install Dependencies**:
    ```bash
    flutter pub get
+   npm install
    ```
 
-4. Set up the backend:
-   - Follow the instructions in the [backend repository](https://github.com/yarafarouk/fashion-assistant-backend).
+3. **Setup Database**:
+   - Create a PostgreSQL database.
+   - Run the provided migration scripts to set up tables.
 
-5. Run the app:
-   ```bash
-   flutter run
-   ```
+4. **Run the Application**:
+   - Start the backend:
+     ```bash
+     npm start
+     ```
+   - Run the frontend:
+     ```bash
+     flutter run
+     ```
 
-## Contribution
+---
 
-We welcome contributions! Please follow these steps:
+## Screenshots
+
+### User Screens
+- **Home Screen**:
+  ![Home Screen](screenshots/home_screen.png)
+
+- **Avatar Creation**:
+  <div style="display: flex; justify-content: space-between;">
+  <img src="![Screenshot_20241223_154030_com example fashion_assistant](https://github.com/user-attachments/assets/c36b896e-b1cd-49bd-ac05-1b628089b352)" alt="Home Screen" width="30%"/>
+  <img src="![Screenshot_20241223_154041_com example fashion_assistant](https://github.com/user-attachments/assets/c48cf6d3-8e41-40b8-919b-4e87e3d15113)" alt="Avatar Creation" width="30%"/>
+  <img src="![Screenshot_20241223_154107_com example fashion_assistant](https://github.com/user-attachments/assets/ef488a3f-eb51-4624-95e5-6e4ecfa537ae)" alt="Fashion Suggestions" width="30%"/>
+</div>
+<div style="display: flex; justify-content: space-between;">
+  <img src="![Screenshot_20241223_154134_com example fashion_assistant](https://github.com/user-attachments/assets/98817841-f2f0-43a5-8186-4ec65124125c)" alt="Home Screen" width="30%"/>
+  <img src="!![Screenshot_20241223_154217_com example fashion_assistant](https://github.com/user-attachments/assets/fffb994b-89c5-4277-bc6f-4bd5f7421d4f)" alt="Avatar Creation" width="30%"/>
+ </div>
+
+- **Fashion Suggestions**:
+  ![Fashion Suggestions](screenshots/fashion_suggestions.png)
+
+- **Product Listing**:
+  ![Product Listing](screenshots/product_listing.png)
+
+- **Cart and Checkout**:
+  ![Cart and Checkout](screenshots/cart_checkout.png)
+
+### Brand Screens
+- **Dashboard**:
+  ![Brand Dashboard](screenshots/brand_dashboard.png)
+
+- **Add Product**:
+  ![Add Product](screenshots/add_product.png)
+
+- **Manage Offers**:
+  ![Manage Offers](screenshots/manage_offers.png)
+
+### Admin Screens
+- **Admin Dashboard**:
+  ![Admin Dashboard](screenshots/admin_dashboard.png)
+
+- **User Management**:
+  ![User Management](screenshots/user_management.png)
+
+- **Offer Approval**:
+  ![Offer Approval](screenshots/offer_approval.png)
+
+### Customer Service Screens
+- **Chat Interface**:
+  ![Customer Service Chat](screenshots/customer_service_chat.png)
+
+---
+
+## Contribution Guidelines
+
+We welcome contributions from the community. To contribute:
 
 1. Fork the repository.
-2. Create a new branch:
+2. Create a new branch for your feature:
    ```bash
    git checkout -b feature-name
    ```
 3. Commit your changes:
    ```bash
-   git commit -m "Add your feature"
+   git commit -m "Add feature description"
    ```
 4. Push to the branch:
    ```bash
@@ -92,17 +160,6 @@ We welcome contributions! Please follow these steps:
    ```
 5. Open a pull request.
 
-## License
-
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
-
-## Contact
-
-For inquiries or support, please contact:
-
-- **Yara Ahmed**
-- GitHub: [yarafarouk](https://github.com/yarafarouk)
-
 ---
 
-Enjoy a seamless and personalized shopping experience with the Fashion Assistant App!
+Enjoy a seamless shopping experience and empower your fashion brand with the **Fashion Assistant App**!
