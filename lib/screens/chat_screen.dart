@@ -264,7 +264,7 @@ class _ChatScreenState extends State<ChatScreen> {
                 topRight: Radius.circular(15.0),
               ),
               child: Image.network(
-                "https://media.istockphoto.com/id/1398610798/photo/young-woman-in-linen-shirt-shorts-and-high-heels-pointing-to-the-side-and-talking.jpg?s=1024x1024&w=is&k=20&c=IdY440I0pLdmANsNZRXhjSS7K9Q-Xxvnwf4YzH9qQbQ=",
+                product['image'],
                 height: 190,
                 fit: BoxFit.cover,
               ),
@@ -280,7 +280,7 @@ class _ChatScreenState extends State<ChatScreen> {
                       context,
                       MaterialPageRoute(
                         builder: (context) => ProductScreen(
-                          productID: product['id'],
+                          productID: product['product_id'],
                         ),
                       ),
                     );
