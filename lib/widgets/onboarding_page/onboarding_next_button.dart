@@ -21,7 +21,7 @@ class OnBoardingNextButton extends StatelessWidget {
             backgroundColor: OurColors.black,
             side: const BorderSide(color: OurColors.black)),
         onPressed: () => OnboardingController.instance.nextPage(),
-        child: const Icon(Iconsax.arrow_right_3),
+        child: const Icon(Iconsax.arrow_right_3, color: OurColors.white),
       ),
     );
   }
