@@ -64,7 +64,7 @@ class _BrandInfoScreenState extends State<BrandInfoScreen> {
 
     if (result != null && result.isNotEmpty) {
       try {
-        await HttpHelper.put('api/user', {
+        await HttpHelper.put('api/brand', {
           field: result,
         });
         onUpdate(result);
@@ -76,6 +76,7 @@ class _BrandInfoScreenState extends State<BrandInfoScreen> {
             BrandData.brandData!.description = result;
             break;
         }
+        setState(() {});
         Loaders.successSnackBar(title: 'Success', message: 'Updated $title');
       } catch (e) {
         String errorMessage = e.toString();
