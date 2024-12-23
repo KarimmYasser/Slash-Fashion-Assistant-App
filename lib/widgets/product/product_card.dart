@@ -23,6 +23,7 @@ class ProductCard extends StatelessWidget {
     required this.instock,
     required this.rating,
   });
+
   final String brandName,
       brandImage,
       brandShowcase,
@@ -36,6 +37,7 @@ class ProductCard extends StatelessWidget {
   final double prevprice, rating;
   final int discound;
   final bool liked, instock;
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -168,30 +170,32 @@ class ProductCard extends StatelessWidget {
                           ),
                         ),
                         SizedBox(width: 4.w),
-                        Padding(
-                          padding: EdgeInsets.only(top: 10.h),
-                          child: Text(
-                            "$discound% off",
+                        if (discound != 0)
+                          Padding(
+                            padding: EdgeInsets.only(top: 10.h),
+                            child: Text(
+                              "$discound% off",
+                              style: TextStyle(
+                                  fontSize: 14.sp,
+                                  color: OurColors.primaryColor,
+                                  fontWeight: FontWeight.w500),
+                            ),
+                          ),
+                      ],
+                    ),
+                    if (discound != 0)
+                      Row(
+                        children: [
+                          Text(
+                            '$prevprice',
                             style: TextStyle(
-                                fontSize: 14.sp,
-                                color: OurColors.primaryColor,
-                                fontWeight: FontWeight.w500),
+                              fontSize: 12.sp,
+                              color: Colors.grey,
+                              decoration: TextDecoration.lineThrough,
+                            ),
                           ),
-                        ),
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        Text(
-                          '$prevprice',
-                          style: TextStyle(
-                            fontSize: 12.sp,
-                            color: Colors.grey,
-                            decoration: TextDecoration.lineThrough,
-                          ),
-                        ),
-                      ],
-                    ),
+                        ],
+                      ),
                   ],
                 ),
                 // Cart Icon

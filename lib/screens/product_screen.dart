@@ -17,6 +17,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class ProductScreen extends StatefulWidget {
   const ProductScreen({super.key, required this.productID});
+
   final String productID;
 
   @override
@@ -30,6 +31,7 @@ class _ProductScreenState extends State<ProductScreen> {
   Product? product;
   late Future<List<Map<String, dynamic>>> _reviews;
   bool isFollowing = false;
+
   @override
   void initState() {
     super.initState();
@@ -205,31 +207,33 @@ class _ProductScreenState extends State<ProductScreen> {
                                         ),
                                       ),
                                       SizedBox(width: 4.w),
-                                      Padding(
-                                        padding: EdgeInsets.only(top: 10.h),
-                                        child: Text(
-                                          "${product.discount}% off",
+                                      if (product.discount != 0)
+                                        Padding(
+                                          padding: EdgeInsets.only(top: 10.h),
+                                          child: Text(
+                                            "${product.discount}% off",
+                                            style: TextStyle(
+                                                fontSize: 14.sp,
+                                                color: OurColors.primaryColor,
+                                                fontWeight: FontWeight.w500),
+                                          ),
+                                        ),
+                                    ],
+                                  ),
+                                  if (product.discount != 0)
+                                    Row(
+                                      children: [
+                                        Text(
+                                          '${product.price}',
                                           style: TextStyle(
-                                              fontSize: 14.sp,
-                                              color: OurColors.primaryColor,
-                                              fontWeight: FontWeight.w500),
+                                            fontSize: 12.sp,
+                                            color: Colors.grey,
+                                            decoration:
+                                                TextDecoration.lineThrough,
+                                          ),
                                         ),
-                                      ),
-                                    ],
-                                  ),
-                                  Row(
-                                    children: [
-                                      Text(
-                                        '${product.price}',
-                                        style: TextStyle(
-                                          fontSize: 12.sp,
-                                          color: Colors.grey,
-                                          decoration:
-                                              TextDecoration.lineThrough,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
+                                      ],
+                                    ),
                                 ],
                               ),
                             ],

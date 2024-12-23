@@ -74,7 +74,8 @@ class DeleteAdminScreen extends StatelessWidget {
                         ),
                         TextButton(
                           onPressed: () {
-                            Navigator.of(context).pop(true);
+                            Navigator.of(context).pop(false);
+                            controller.deleteAdmin(index, admin.username!);
                           },
                           child: const Text('Delete'),
                         ),
@@ -82,12 +83,6 @@ class DeleteAdminScreen extends StatelessWidget {
                     );
                   },
                 );
-              },
-              onDismissed: (direction) {
-                controller.deleteAdmin(index);
-                Loaders.successSnackBar(
-                    title: '${admin.username} deleted',
-                    message: 'Admin deleted successfully');
               },
               background: Container(
                 decoration: BoxDecoration(
@@ -175,15 +170,21 @@ class DeleteAdminController extends GetxController {
     }
   }
 
-  void deleteAdmin(int index) async {
+  void deleteAdmin(int index, String username) async {
     try {
       await HttpHelper.delete('api/admin/${adminList[index].id}', {
         'id': adminList[index].id,
       });
       adminList.removeAt(index);
+      Loaders.successSnackBar(
+          title: '$username deleted', message: 'Admin deleted successfully');
     } catch (e) {
+      String errorMessage = e.toString();
+      if (errorMessage.startsWith('Exception: ')) {
+        errorMessage = errorMessage.replaceFirst('Exception: ', '');
+      }
       Loaders.errorSnackBar(
-          title: 'Failed to delete admin', message: 'Please try again');
+          title: 'Failed to delete admin', message: errorMessage);
     }
   }
 }

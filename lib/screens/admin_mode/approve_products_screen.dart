@@ -92,7 +92,7 @@ class _ApproveProductsScreenState extends State<ApproveProductsScreen> {
           ? const Center(child: CircularProgressIndicator())
           : products.isEmpty
               ? const Center(
-                  child: Text('no prducts found'),
+                  child: Text('no products found'),
                 )
               : GridView.builder(
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
