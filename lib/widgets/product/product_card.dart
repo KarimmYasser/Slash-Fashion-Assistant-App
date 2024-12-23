@@ -139,33 +139,7 @@ class ProductCard extends StatelessWidget {
             ),
             const SizedBox(height: 4),
             // Brand Name
-            Row(
-              children: [
-                Text(
-                  "By ",
-                  style: TextStyle(
-                    fontSize: 12.sp,
-                    color: Colors.grey,
-                  ),
-                ),
-                // Size of the circular image container
-                CircleAvatar(
-                  radius: 10.r, // Inner circle size (smaller for border effect)
-                  backgroundImage: NetworkImage(brandImage),
-                  backgroundColor: Colors.transparent,
-                ),
-                SizedBox(
-                  width: 5.w,
-                ),
-                Text(
-                  brandName,
-                  style: TextStyle(
-                    fontSize: 12.sp,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ],
-            ),
+
             const SizedBox(height: 8),
             // Price and Discount
             Row(
@@ -225,24 +199,6 @@ class ProductCard extends StatelessWidget {
             ),
             const SizedBox(height: 8),
             // Sold Recently Text
-            Row(
-              children: [
-                Image.asset(
-                  'assets/icons/add_cartred.png',
-                  scale: 2,
-                ),
-                SizedBox(
-                  width: 5.w,
-                ),
-                Text(
-                  "$sold+ Sold Recently",
-                  style: const TextStyle(
-                    fontSize: 12,
-                    color: OurColors.textColor,
-                  ),
-                ),
-              ],
-            ),
           ],
         ),
       ),
