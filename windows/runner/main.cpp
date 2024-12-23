@@ -26,15 +26,15 @@ int APIENTRY wWinMain(_In_ HINSTANCE instance, _In_opt_ HINSTANCE prev,
 
   FlutterWindow window(project);
   Win32Window::Point origin(10, 10);
-  Win32Window::Size size(500, 1042);
-  // Win32Window::Size size(455, 950);
+  // Win32Window::Size size(500, 1042);
+  Win32Window::Size size(455, 950);
   if (!window.Create(L"fashion_assistant", origin, size)) {
     return EXIT_FAILURE;
   }
   // After window creation, change the style to make the window non-resizable
-// LONG_PTR style = GetWindowLongPtr(window.GetHandle(), GWL_STYLE);
-// style &= ~(WS_THICKFRAME);  // Remove resize and maximize options
-// SetWindowLongPtr(window.GetHandle(), GWL_STYLE, style);
+LONG_PTR style = GetWindowLongPtr(window.GetHandle(), GWL_STYLE);
+style &= ~(WS_THICKFRAME);  // Remove resize and maximize options
+SetWindowLongPtr(window.GetHandle(), GWL_STYLE, style);
   window.SetQuitOnClose(true);
 
   ::MSG msg;

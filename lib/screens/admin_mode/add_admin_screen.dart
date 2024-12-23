@@ -14,79 +14,81 @@ class AddAdminScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Add Admin'),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Form(
-          key: controller.formKey,
-          child: Column(
-            children: [
-              TextFormField(
-                controller: controller.usernameController,
-                decoration: const InputDecoration(
-                  floatingLabelBehavior: FloatingLabelBehavior.always,
-                  hintText: 'Username',
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Form(
+            key: controller.formKey,
+            child: Column(
+              children: [
+                TextFormField(
+                  controller: controller.usernameController,
+                  decoration: const InputDecoration(
+                    floatingLabelBehavior: FloatingLabelBehavior.always,
+                    hintText: 'Username',
+                  ),
+                  validator: (value) =>
+                      Validator.validateEmptyText('Username', value),
                 ),
-                validator: (value) =>
-                    Validator.validateEmptyText('Username', value),
-              ),
-              const SizedBox(height: Sizes.spaceBtwInputFields),
-              TextFormField(
-                controller: controller.emailController,
-                decoration: const InputDecoration(
-                  floatingLabelBehavior: FloatingLabelBehavior.always,
-                  hintText: 'Email',
+                const SizedBox(height: Sizes.spaceBtwInputFields),
+                TextFormField(
+                  controller: controller.emailController,
+                  decoration: const InputDecoration(
+                    floatingLabelBehavior: FloatingLabelBehavior.always,
+                    hintText: 'Email',
+                  ),
+                  validator: (value) => Validator.validateEmail(value),
                 ),
-                validator: (value) => Validator.validateEmail(value),
-              ),
-              const SizedBox(height: Sizes.spaceBtwInputFields),
-              Obx(() => TextFormField(
-                    controller: controller.passwordController,
-                    decoration: InputDecoration(
-                      floatingLabelBehavior: FloatingLabelBehavior.always,
-                      hintText: 'Password',
-                      suffixIcon: IconButton(
-                        icon: Padding(
-                          padding: const EdgeInsets.all(.0),
-                          child: Icon(controller.isPasswordVisible.value
-                              ? Icons.visibility
-                              : Icons.visibility_off),
+                const SizedBox(height: Sizes.spaceBtwInputFields),
+                Obx(() => TextFormField(
+                      controller: controller.passwordController,
+                      decoration: InputDecoration(
+                        floatingLabelBehavior: FloatingLabelBehavior.always,
+                        hintText: 'Password',
+                        suffixIcon: IconButton(
+                          icon: Padding(
+                            padding: const EdgeInsets.all(.0),
+                            child: Icon(controller.isPasswordVisible.value
+                                ? Icons.visibility
+                                : Icons.visibility_off),
+                          ),
+                          onPressed: controller.togglePasswordVisibility,
                         ),
-                        onPressed: controller.togglePasswordVisibility,
                       ),
-                    ),
-                    obscureText: !controller.isPasswordVisible.value,
-                    validator: (value) => Validator.validatePassword(value),
-                  )),
-              const SizedBox(height: Sizes.spaceBtwInputFields),
-              DropdownButtonFormField<String>(
-                icon: const Icon(Icons.info_rounded),
-                items: const [
-                  DropdownMenuItem(
-                      value: 'CustomerService',
-                      child: Center(child: Text('Customer Service'))),
-                  DropdownMenuItem(
-                      value: 'BrandManager',
-                      child: Center(child: Text('Brand Manager'))),
-                  DropdownMenuItem(
-                      value: 'SystemAdmin',
-                      child: Center(child: Text('System Admin'))),
-                ],
-                validator: (value) =>
-                    Validator.validateEmptyText('Field', value),
-                onChanged: (value) {
-                  controller.roleController = value;
-                },
-                hint: const Text('Admin Role'),
-              ),
-              const SizedBox(height: Sizes.spaceBtwSections),
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: controller.addAdmin,
-                  child: const Text('Add Admin'),
+                      obscureText: !controller.isPasswordVisible.value,
+                      validator: (value) => Validator.validatePassword(value),
+                    )),
+                const SizedBox(height: Sizes.spaceBtwInputFields),
+                DropdownButtonFormField<String>(
+                  icon: const Icon(Icons.info_rounded),
+                  items: const [
+                    DropdownMenuItem(
+                        value: 'CustomerService',
+                        child: Center(child: Text('Customer Service'))),
+                    DropdownMenuItem(
+                        value: 'BrandManager',
+                        child: Center(child: Text('Brand Manager'))),
+                    DropdownMenuItem(
+                        value: 'SystemAdmin',
+                        child: Center(child: Text('System Admin'))),
+                  ],
+                  validator: (value) =>
+                      Validator.validateEmptyText('Field', value),
+                  onChanged: (value) {
+                    controller.roleController = value;
+                  },
+                  hint: const Text('Admin Role'),
                 ),
-              ),
-            ],
+                const SizedBox(height: Sizes.spaceBtwSections),
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: controller.addAdmin,
+                    child: const Text('Add Admin'),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),

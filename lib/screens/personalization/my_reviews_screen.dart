@@ -181,7 +181,7 @@ class _MyReviewsScreenState extends State<MyReviewsScreen> {
                         ),
                       ),
                     );
-                  }).toList(),
+                  }),
               ],
             ),
           ),
