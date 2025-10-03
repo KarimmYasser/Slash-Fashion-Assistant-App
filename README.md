@@ -1,5 +1,7 @@
 # Fashion Assistant App
 
+![App Cover](fashion_assistant.jpg)
+
 The **Fashion Assistant App** is an all-in-one platform designed to enhance the shopping experience for users while empowering local fashion brands. Combining innovative technology with user-centric design, the app provides features like avatar creation, AI-driven recommendations, and streamlined brand management interfaces.
 
 ---
